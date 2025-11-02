@@ -78,7 +78,32 @@ app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
+//Render login page
+app.get('/login', (req,res) => {
+  res.render('pages/login');
+})
 
+//Handle when users attempt to login
+//NOT COMPLETED YET BECAUSE NO DATABASE SETUP
+app.post('/login', async(req,res) => {
+  const username=req.body.username;
+  const password=req.body.password;
+
+  //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
+  
+  //Check if username exists in DB:
+  //If username doesn't exist, redirect to register page with error message saying: "Username doesn't exist, please register"
+
+  //If it exists, hash the password entered and compare with the hashed password in DB
+  //If password is incorrect, render the login page with error message saying: "Incorrect password, please try again"
+
+  //If both are correct then set session variables:
+  //req.session.user = user;
+  //req.session.save();
+
+  //Redirect to home page:
+  //res.redirect('/home');
+})
 
 
 ///////////////////////////////////////////////////////////
