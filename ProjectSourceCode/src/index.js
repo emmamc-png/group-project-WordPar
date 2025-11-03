@@ -77,8 +77,17 @@ app.use(express.static(path.join(__dirname, 'resources')));
 ///////////////////////////////////////////////////////////
 
 app.get('/', (req, res) => {
+    res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+app.get('/login', (req, res) => {
     res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
+
+app.get('/registration', (req, res) => {
+    res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
 
 
 

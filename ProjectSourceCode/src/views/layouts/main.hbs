@@ -2,13 +2,13 @@
 <html lang="en">
     <!-- Header Contains: Link to Bootstrap, Link to style sheet, Connection to title -->
     {{> header}}
-    <main>
         <!-- Body -->
-        <body class="h-100 d-flex flex-column {{bodyClass}}"> <!-- the {{bodyClass}} handlebar allows the body style to be chosen in index.js -->
+    <body class="h-100 d-flex flex-column {{bodyClass}}"> <!-- the {{bodyClass}} handlebar allows the body style to be chosen in index.js -->
+        <main>
             {{{body}}}
+        </main>
 
-            <!-- Footer Contains: Link to bootstrap java script, and copy right text -->
-            {{> footer}}
-        </body>
-    </main>
+        <!-- Footer Contains: Link to bootstrap java script, and copy right text -->
+        {{> footer}}
+    </body>
 </html>

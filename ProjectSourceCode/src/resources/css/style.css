@@ -2,6 +2,10 @@ body.auth-page { /*Used to rerpresent the login pages*/
     background-color: rgba(232, 212, 183, 0.8); /*rgba represents (red, green, blue, alpha), alpha represents the opacity of the color. Does not affect child elements*/
 }
 
+body.home-page{
+    
+}
+
 a { /*Removes the underline form all HTML links*/
     text-decoration: none;
 }
@@ -22,12 +26,18 @@ a { /*Removes the underline form all HTML links*/
  * provided you do not sell the font by itself.
 */
 
-
-
 .loginTitle{
     color: #934790;
     font-family: 'Coiny', sans-serif;
     padding-top: 150px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.registerTitle{
+    color: #934790;
+    font-family: 'Coiny', sans-serif;
+    padding-top: 100px;
     text-align: center;
     text-transform: uppercase;
 }
@@ -37,7 +47,7 @@ a { /*Removes the underline form all HTML links*/
 }
 
 .usernameForm{
-    margin: 0px auto 5px auto; /*Note this is the order of the shorthand margin: top right bottom left*/
+    margin: 0px auto 10px auto; /*Note this is the order of the shorthand margin: top right bottom left*/
     width: 14%;
     height: 35px;
     border-radius: 4px;
@@ -46,7 +56,7 @@ a { /*Removes the underline form all HTML links*/
 }
 
 .passwordForm{
-    margin: 5px auto 0px auto;
+    margin: 0px auto 0px auto;
     width: 14%;
     height: 35px;
     border-radius: 4px;
@@ -75,7 +85,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     width: 7%;
     color: white;
     border: none;
-    transition: background-color 0.4s ease;
+    transition: background-color 0.2s ease;
 }
 
 .custom-btn:hover {
