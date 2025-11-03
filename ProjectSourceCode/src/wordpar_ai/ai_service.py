@@ -6,18 +6,23 @@
 # Usage:
 # - set environment variables: OPENAI_API_KEY, DB_* if you later use Postgres
 # - run: python ai_service.py
-
+import openai
 import os
 import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import openai
 from sentence_transformers import SentenceTransformer, util
+from dotenv import load_dotenv
 
+load_dotenv()  # load .env if present
 # -------------------------
 # Configuration (env vars)
 # -------------------------
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # required for generation route
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise ValueError("OpenAI API key not set in environment")
+ # required for generation route
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # change if needed
 
 # -------------------------
@@ -83,13 +88,14 @@ def generate_word():
     # if OPENAI_API_KEY available, try to generate
     if OPENAI_API_KEY:
         try:
-            resp = openai.ChatCompletion.create(
+            client = openai.OpenAI(api_key=OPENAI_API_KEY)
+            resp = client.chat.completions.create(
                 model=OPENAI_MODEL,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.6,
                 max_tokens=10,
             )
-            text = resp["choices"][0]["message"]["content"].strip()
+            text = resp.choices[0].message.content
             word = sanitize_one_word(text)
             if not word:
                 raise ValueError("OpenAI returned empty or invalid word")
