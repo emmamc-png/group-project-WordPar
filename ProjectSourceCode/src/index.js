@@ -69,9 +69,16 @@ app.use(
   })
 );
 
+//Sets up the connection to use the style sheet
+app.use(express.static(path.join(__dirname, 'resources')));
+
 ///////////////////////////////////////////////////////////
 /////------------------- API/Routes -----------------//////
 ///////////////////////////////////////////////////////////
+
+app.get('/', (req, res) => {
+    res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
 
 
 
