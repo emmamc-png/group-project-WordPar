@@ -12,6 +12,6 @@
     },
     "scripts": {
         "prestart": "npm install",
-        "start": "nodemon -L index.js"
+        "start": "nodemon -L src/index.js"
     }
 }

@@ -69,28 +69,31 @@ app.use(
   })
 );
 
+//Sets up the connection to use the style sheet
+app.use(express.static(path.join(__dirname, 'resources')));
+
 ///////////////////////////////////////////////////////////
 /////------------------- API/Routes -----------------//////
 ///////////////////////////////////////////////////////////
 
-//Redirect to login page
-app.get('/', (req, res) => {
-  res.redirect('/login');
+//Render login page
+app.get('/login', (req, res) => {
+    res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
-//Render login page
-app.get('/login', (req,res) => {
-  res.render('pages/login');
-})
+//Render registration page
+app.get('/registration', (req, res) => {
+    res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
 
-//Handle when users attempt to login
-//NOT COMPLETED YET BECAUSE NO DATABASE SETUP
+//Handle when users attempt to login`
 app.post('/login', async(req,res) => {
   const username=req.body.username;
   const password=req.body.password;
 
   //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
-  
+  //const query=' ';
+
   //Check if username exists in DB:
   //If username doesn't exist, redirect to register page with error message saying: "Username doesn't exist, please register"
 
@@ -98,13 +101,27 @@ app.post('/login', async(req,res) => {
   //If password is incorrect, render the login page with error message saying: "Incorrect password, please try again"
 
   //If both are correct then set session variables:
-  //req.session.user = user;
-  //req.session.save();
+  req.session.user = user;
+  req.session.save();
 
   //Redirect to home page:
-  //res.redirect('/home');
+  res.redirect('/');
 })
 
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  console.log("auth has been called!");
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+//Render home page
+app.get('/', (req, res) => {
+    res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
 
 ///////////////////////////////////////////////////////////
 /////---------- Open Server/Listen to port ----------//////
