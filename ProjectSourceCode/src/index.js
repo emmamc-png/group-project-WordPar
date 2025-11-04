@@ -152,7 +152,7 @@ app.post('/login', async(req,res) => {
   */
 
   //TEMP FIX
-  req.session.user = 'bob';
+  req.session.user = 'tempuser';
   req.session.save();
   //Redirect to home page:
   res.redirect('/');
