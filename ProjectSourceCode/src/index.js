@@ -88,7 +88,48 @@ app.get('/registration', (req, res) => {
     res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
+app.post('/registration', async(req,res)=> {
+    username=req.body.username;
+    //Might need to be changed depending on name given on forms 
+    /*
+    password1=req.body.password1;
+    password2=req.body.password2;
+    */
+    email=req.body.email;
 
+    //Add check to compare the passwords to ensure they're the same
+    /*
+    if(password1!=password2) {
+        const error=true;
+        res.render('pages/register', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
+        return;
+    }
+    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
+    if(!username || !password) {
+        const error=true;
+        res.render('pages/register', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
+        return;
+    }
+
+    //hash the password
+    const hash=await bcrypt.hash(req.body.password,10);
+    console.log("Hashed password: "+hash);
+    const query='INSERT INTO users(username, password) VALUES($1, $2)';
+    try {
+        await db.none(query, [username, hash]);
+        console.log("User registered");
+        res.redirect('/login');
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render("pages/register", { bodyClass: 'auth-page', message: "Username already exists.", error, });
+    }
+    */
+
+    //Temporary response
+    res.redirect('/login');
+})
 
 
 
