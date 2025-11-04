@@ -1,5 +1,7 @@
-// const buttonContainer = document.getElementsByClassName('btn');
+// const buttonContainer = document.getElementById('buttonContainer');
+
 // let buttonInputs = [];
+
 
 
 //   buttonContainer.addEventListener('click', function(event) {

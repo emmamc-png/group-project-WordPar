@@ -276,10 +276,13 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 /* Custom CSS to override Bootstrap's default btn-secondary hover styles */
 .btn-outline-secondary:hover {
-  background-color: #01a305; /* Your desired hover background color */
-  border-color: #934790; /* Your desired hover border color */
-  /* You can also change text color if needed */
-  /* color: #ffffff; */
+  background-color: #01a305;
+  border-color: #934790; 
+}
+
+.simulate-btn-hover {
+  background-color: #01a305;
+  border-color: #934790; 
 }
 
 .keyboard_row{
@@ -298,12 +301,4 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 #top-left-game{
   padding: 20%;
-}
-
-#bottom-left-game{
-  padding: 5%;
-  /* display: flex; 
-  justify-content: center; 
-  align-items: center;  */
-  height: 200px;
 }

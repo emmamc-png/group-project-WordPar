@@ -1,3 +1,5 @@
+{{!-- <script src="../../script.js"></script> --}}
+
 <div class="row">
     <div class="col-7" style="border: 2px solid black;">
         <div id="top-left-game" class="row" style="border: 2px solid black;">
@@ -12,42 +14,38 @@
         </div>
         <div id="buttonContainer" class="row" style="border: 2px solid black;">
             <div class="keyboard_row">
-                {{!-- <div class="col-3" style="padding-right:1%"></div>
-                <div class="col-7"> --}}
-                <button type="button" class="btn btn-outline-secondary btn-lg">q</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">w</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">e</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">r</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">t</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">y</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">u</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">i</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">o</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">p</button>
-                {{!-- </div>
-                <div class="col-2"></div> --}}
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="q">q</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="w">w</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="e">e</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="r">r</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="t">t</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="y">y</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="u">u</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="i">i</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="o">o</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="p">p</button>
             </div>
             <div class="keyboard_row">
-                <button type="button" class="btn btn-outline-secondary btn-lg">a</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">s</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">d</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">f</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">g</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">h</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">j</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">k</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">l</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="a">a</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="s">s</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="d">d</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="f">f</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="g">g</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="h">h</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="j">j</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="k">k</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="l">l</button>
             </div>
             <div class="keyboard_row">
-                <button type="button" class="btn btn-outline-secondary btn-lg">ENTER</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">z</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">x</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">c</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">v</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">b</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">n</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">m</button>
-                <button type="button" class="btn btn-outline-secondary btn-lg">
+                <button id="enter" type="button" class="btn btn-outline-secondary btn-lg" value="Enter">ENTER</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="z">z</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="x">x</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="c">c</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="v">v</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="b">b</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="n">n</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" value="m">m</button>
+                <button id="back" type="button" class="btn btn-outline-secondary btn-lg"  value="Back">
                     {{!-- Following Code was taken from Bootstrap --}}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">
                         <path d="M5.83 5.146a.5.5 0 0 0 0 .708L7.975 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z"/>
@@ -64,3 +62,54 @@
     </div>  
     </div>
 </div>
+
+
+<script>
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    let buttonInputs = [];
+
+    let filled = true;
+
+    function buttonPressed(event) {
+        if (filled)
+        {   
+            // Check if the clicked element is a button
+            if (event.target.tagName === 'BUTTON') {
+                if(event.target.id === 'enter') {
+                    console.log('im here')
+                    filled = false;
+                    console.log(filled)
+                }
+                else if (event.target.id === 'back') {
+                    buttonInputs.pop();
+                    console.log(buttonInputs);
+                } else {
+                    buttonInputs.push(event.target.value);
+                    console.log(buttonInputs);
+                }
+            }
+            } else {
+                console.log('worked!')
+            }
+        };
+
+        buttonContainer.addEventListener('click', buttonPressed)
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key.length === 1 && (event.key.match(/[a-z]/i) || event.key === 'Enter')) {
+                event.preventDefault();
+                console.log('here')
+        /*        if (event.key === 'Enter') {
+                    const keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} }
+                }
+                else {
+        */
+                    const keyTap = { target: {tagName: 'BUTTON', value: event.key } }
+                buttonPressed(keyTap);
+                console.log('here2')
+            }
+        });
+  
+
+</script>
