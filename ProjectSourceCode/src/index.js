@@ -91,17 +91,59 @@ app.post('/login', async(req,res) => {
   const username=req.body.username;
   const password=req.body.password;
 
+  if(!username || !password) {
+        const error=true;
+        res.render('pages/login',{ bodyClass: 'auth-page' }, {message: "Please enter your username and password.", error});
+        return;
+  }
   //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
-  //const query=' ';
+  //const query='SELECT * FROM users WHERE username=$1'; ';
+  //let user;
 
   //Check if username exists in DB:
   //If username doesn't exist, redirect to register page with error message saying: "Username doesn't exist, please register"
+  /*
+    try {
+        // check if username exists in DB
+        user=await db.one(query, [username]);
+        console.log("User exists: "+user.username);
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render('pages/register',{ bodyClass: 'auth-page' },{message: "Username does not exist. Please register.", error});
+        return;
+    }
+    try {
+        // check if password from request matches with password in DB
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if(!match) {
+            const error=true;
+            console.log("Incorrect password: "+password);
+            res.render("pages/login", { bodyClass: 'auth-page' },{message: "Incorrect password. Please try again.", error});
+            return;
+        }
+        console.log(user.password + " : " + match);
+        // check if password from request matches with password in DB
+        //const user=await db.one(query, [username, hash]);
+        console.log("User logged in");
+        //save user details in session like in lab 7
+        //CHANGE USERNAME TO USER ONCE DATABASE IS DONE
+        req.session.user = username;
+        req.session.save();
+        console.log("Session user set: "+req.session.user.username);
+        res.redirect('/');
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render("pages/login", {message: "An error occured. Please try again.", error});
+    }
+  */
 
-  //If it exists, hash the password entered and compare with the hashed password in DB
-  //If password is incorrect, render the login page with error message saying: "Incorrect password, please try again"
-
+  //For now, assume username and password are correct:
   //If both are correct then set session variables:
-  req.session.user = user;
+  req.session.user = username;
   req.session.save();
 
   //Redirect to home page:
@@ -117,6 +159,9 @@ const auth = (req, res, next) => {
   }
   next();
 };
+
+// Authentication Required
+app.use(auth);
 
 //Render home page
 app.get('/', (req, res) => {
