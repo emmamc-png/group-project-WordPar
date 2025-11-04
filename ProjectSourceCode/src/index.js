@@ -76,22 +76,105 @@ app.use(express.static(path.join(__dirname, 'resources')));
 /////------------------- API/Routes -----------------//////
 ///////////////////////////////////////////////////////////
 
-app.get('/', (req, res) => {
-    res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-});
-
+//Render login page
 app.get('/login', (req, res) => {
     res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
+//Render registration page
 app.get('/registration', (req, res) => {
     res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+//Handle when users attempt to login`
+app.post('/login', async(req,res) => {
+  const username=req.body.username;
+  const password=req.body.password;
+
+  //Will be added once the database is available to check if username and password are correct
+  /*
+  if(!username || !password) {
+        const error=true;
+        res.render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
+        return;
+  }
+  //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
+  const query='SELECT * FROM users WHERE username=$1';
+  let user;
+
+  //Check if username exists in DB:
+  //If username doesn't exist, redirect to register page with error message saying: "Username doesn't exist, please register"
+    try {
+        // check if username exists in DB
+        user=await db.one(query, [username]);
+        console.log("User exists: "+user.username);
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Username does not exist. Please register.", error});
+        return;
+    }
+    try {
+        // check if password from request matches with password in DB
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if(!match) {
+            const error=true;
+            console.log("Incorrect password: "+password);
+            res.render("pages/login", { bodyClass: 'auth-page', message: "Incorrect password. Please try again.", error});
+            return;
+        }
+        console.log(user.password + " : " + match);
+        // check if password from request matches with password in DB
+        //const user=await db.one(query, [username, hash]);
+        console.log("User logged in");
+        //save user details in session like in lab 7
+        //CHANGE USERNAME TO USER ONCE DATABASE IS DONE
+        req.session.user = username;
+        req.session.save();
+        console.log("Session user set: "+ req.session.user.username);
+        res.redirect('/');
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render("pages/login", { bodyClass: 'auth-page', message: "An error occured. Please try again.", error});
+    }
+
+  //For now, assume username and password are correct:
+  //If both are correct then set session variables:
+  req.session.user = user;
+  req.session.save();
+  */
+
+  //TEMP FIX
+  req.session.user = 'tempuser';
+  req.session.save();
+  //Redirect to home page:
+  res.redirect('/');
+})
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  console.log("auth has been called!");
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+// Authentication Required
+app.use(auth);
+
+//Render home page
+app.get('/', (req, res) => {
+    res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
 app.get('/game', (req, res) => {
     res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
-
 
 
 ///////////////////////////////////////////////////////////
