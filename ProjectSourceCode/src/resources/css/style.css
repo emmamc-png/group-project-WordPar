@@ -273,3 +273,37 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* Custom CSS to override Bootstrap's default btn-secondary hover styles */
+.btn-outline-secondary:hover {
+  background-color: #01a305; /* Your desired hover background color */
+  border-color: #934790; /* Your desired hover border color */
+  /* You can also change text color if needed */
+  /* color: #ffffff; */
+}
+
+.keyboard_row{
+  padding: 1%;
+  text-align: center;
+}
+
+.btn{
+  color: #2e3030;
+}
+
+.btn-outline-secondary{
+  size: 15px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#top-left-game{
+  padding: 20%;
+}
+
+#bottom-left-game{
+  padding: 5%;
+  /* display: flex; 
+  justify-content: center; 
+  align-items: center;  */
+  height: 200px;
+}
