@@ -1,5 +1,6 @@
 flask
 flask-cors
-openai
+numpy
 sentence-transformers
-torch
+openai
+python-dotenv
