@@ -88,6 +88,11 @@ app.get('/registration', (req, res) => {
     res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
+
+app.get('/game', (req, res) => {
+    res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
 app.post('/registration', async(req,res)=> {
     username=req.body.username;
     //Might need to be changed depending on name given on forms 
@@ -130,7 +135,6 @@ app.post('/registration', async(req,res)=> {
     //Temporary response
     res.redirect('/login');
 })
-
 
 
 ///////////////////////////////////////////////////////////
