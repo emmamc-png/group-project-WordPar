@@ -111,7 +111,7 @@ app.post('/login', async(req,res) => {
     catch(err) {
         const error=true;
         console.log(err);
-        res.render('pages/register',{ bodyClass: 'auth-page' },{message: "Username does not exist. Please register.", error});
+        res.render('pages/registration',{ bodyClass: 'auth-page' },{message: "Username does not exist. Please register.", error});
         return;
     }
     try {
@@ -147,7 +147,7 @@ app.post('/login', async(req,res) => {
   req.session.save();
 
   //Redirect to home page:
-  res.redirect('/');
+  res.redirect('/login');
 })
 
 // Authentication Middleware.
