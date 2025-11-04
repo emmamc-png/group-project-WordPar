@@ -1,9 +1,13 @@
 body.auth-page { /*Used to rerpresent the login pages*/
     background-color: rgba(232, 212, 183, 0.8); /*rgba represents (red, green, blue, alpha), alpha represents the opacity of the color. Does not affect child elements*/
+    overflow: hidden; /* Prevent scrolling */
 }
 
 body.home-page{
-    
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+    background-color: rgba(232, 212, 183, 0.8);
+    font-family: sans-serif;
 }
 
 a { /*Removes the underline form all HTML links*/
@@ -25,6 +29,8 @@ a { /*Removes the underline form all HTML links*/
  * You may use, modify, and redistribute it freely, 
  * provided you do not sell the font by itself.
 */
+
+/* Login/Registration Page CSS */
 
 .loginTitle{
     color: #934790;
@@ -92,3 +98,178 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     background-color: #b34dac; /* Lighter or different shade for hover */
 }
 
+/* Home Page CSS information */
+
+.center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.page-box {
+    position: relative; /* Enables absolute positioning inside */
+    /* Possible nbackground color to add to the screen */
+    background-image: linear-gradient(to top, rgba(0, 202, 255, 1) 50%, rgba(0, 101, 248, 0.8), rgba(67, 0, 255,0.8));
+    background-blend-mode: screen;
+    width: 80%;
+    max-width: 600px;
+    height: 100vh; /* Full height */
+    padding: 2rem;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    text-align: center;
+    overflow: hidden; /* Prevent internal scroll */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center content inside */
+    /* Used to see the border */
+    /* background-color: rgba(255,255,255,0.1); */
+ }
+
+/* Top-left corner */
+.top-left {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+  
+  /* Top-center */
+.top-center {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #934790;
+  font-family: 'Coiny', sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  font-size: 50px;
+}
+  
+  /* Top-right corner */
+.top-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+  
+  /* Slightly above center */
+.above-center {
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+  
+  /* Slightly below center */
+.below-center {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-category{
+  background-color: #6A0066;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  width: 150px;
+  appearance: none; /* Removes default arrow styling (optional) */
+  cursor: pointer;
+}
+
+.btn-category:hover{
+  background-color: #6A0066; /* Lighter or different shade for hover */
+}
+
+.btn-user{
+  margin-top: 10px;
+  margin-right: 15px;
+  background-color: rgba(0, 101, 248, 0.0);
+  transition: background-color 0.2s ease;
+}
+  
+.btn-user:hover{
+  background-color: #0065F8;
+}
+
+.leaderboard-container {
+  width: 300px;
+  margin: 100px auto;
+  background-color: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+.leaderboard-title{
+  padding-top: 10px;
+}
+  
+.leaderboard-scroll {
+  max-height: 100px; /* Controls visible height */
+  overflow-y: auto;  /* Enables vertical scrolling */
+  margin-top: 1rem;
+  padding-top: 5px;
+}
+/* 
+  Custom sroll Bar for the leader board
+*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+  
+.entry {
+  padding: 0.5rem;
+  font-size: 15px;
+}
+
+.play-btn {
+  background-color: #6A0066;
+  width: 150px;
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.play-btn:hover{
+    background-color: #b34dac;
+}
+
+.play-text{
+    font-size: 30px;
+    margin: 0px;
+    text-align: center;
+}
+
+.logo-position{
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
