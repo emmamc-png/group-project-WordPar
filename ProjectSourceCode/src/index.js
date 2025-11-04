@@ -86,6 +86,10 @@ app.get('/registration', (req, res) => {
     res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
+app.get('/game', (req, res) => {
+    res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
 //Handle when users attempt to login`
 app.post('/login', async(req,res) => {
   const username=req.body.username;
@@ -171,6 +175,11 @@ app.use(auth);
 app.get('/', (req, res) => {
     res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
+
+app.get('/game', (req, res) => {
+    res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
 
 ///////////////////////////////////////////////////////////
 /////---------- Open Server/Listen to port ----------//////
