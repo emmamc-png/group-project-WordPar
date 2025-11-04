@@ -91,18 +91,19 @@ app.post('/login', async(req,res) => {
   const username=req.body.username;
   const password=req.body.password;
 
+  //Will be added once the database is available to check if username and password are correct
+  /*
   if(!username || !password) {
         const error=true;
-        res.render('pages/login',{ bodyClass: 'auth-page' }, {message: "Please enter your username and password.", error});
+        res.render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
         return;
   }
   //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
-  //const query='SELECT * FROM users WHERE username=$1'; ';
-  //let user;
+  const query='SELECT * FROM users WHERE username=$1';
+  let user;
 
   //Check if username exists in DB:
   //If username doesn't exist, redirect to register page with error message saying: "Username doesn't exist, please register"
-  /*
     try {
         // check if username exists in DB
         user=await db.one(query, [username]);
@@ -111,7 +112,7 @@ app.post('/login', async(req,res) => {
     catch(err) {
         const error=true;
         console.log(err);
-        res.render('pages/registration',{ bodyClass: 'auth-page' },{message: "Username does not exist. Please register.", error});
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Username does not exist. Please register.", error});
         return;
     }
     try {
@@ -120,7 +121,7 @@ app.post('/login', async(req,res) => {
         if(!match) {
             const error=true;
             console.log("Incorrect password: "+password);
-            res.render("pages/login", { bodyClass: 'auth-page' },{message: "Incorrect password. Please try again.", error});
+            res.render("pages/login", { bodyClass: 'auth-page', message: "Incorrect password. Please try again.", error});
             return;
         }
         console.log(user.password + " : " + match);
@@ -131,23 +132,26 @@ app.post('/login', async(req,res) => {
         //CHANGE USERNAME TO USER ONCE DATABASE IS DONE
         req.session.user = username;
         req.session.save();
-        console.log("Session user set: "+req.session.user.username);
+        console.log("Session user set: "+ req.session.user.username);
         res.redirect('/');
     }
     catch(err) {
         const error=true;
         console.log(err);
-        res.render("pages/login", {message: "An error occured. Please try again.", error});
+        res.render("pages/login", { bodyClass: 'auth-page', message: "An error occured. Please try again.", error});
     }
-  */
 
   //For now, assume username and password are correct:
   //If both are correct then set session variables:
-  req.session.user = username;
+  req.session.user = user;
   req.session.save();
+  */
 
+  //TEMP FIX
+  req.session.user = 'bob';
+  req.session.save();
   //Redirect to home page:
-  res.redirect('/login');
+  res.redirect('/');
 })
 
 // Authentication Middleware.
