@@ -10,3 +10,25 @@ Emma McArthur, Joel Gaikwad, Josiah Shehata, Reeves Cook, and Karthik Chandrasek
 
 Technology Stack:
 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Prerequisites to run the application:
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+How to run the application locally:
+In the terminal, run docker compose up and wait for everything to initalize.
+Once that is complete, you can visit localhost:3000 to interact with the application.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+How to run the tests:
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Link to the deployed application:
+
+
