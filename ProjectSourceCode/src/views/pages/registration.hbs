@@ -2,7 +2,7 @@
 <div class="logoContainer">
     <img src="/img/logoImage.png" class="logo"/>
 </div>
-<form class = "formBody" method = "POST" action="/login"> 
+<form class = "formBody" method = "POST" action="/registration"> 
     <div>
         <input class="usernameForm" type = "text" id = "username" placeholder="Username"/>
     </div>
@@ -23,3 +23,6 @@
 </form>
 
 <p class = "text-center">Already have an acccount<a href="/login"> login!</a></p>
+<div class="container-fluid w-25">
+    {{>message}}
+</div>

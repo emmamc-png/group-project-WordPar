@@ -351,3 +351,58 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   color: black;
   background: white;
 }
+/* Custom CSS to override Bootstrap's default btn-secondary hover styles */
+.btn-outline-secondary:hover {
+  background-color: #01a305;
+  border-color: #934790; 
+}
+
+.keyboard_row{
+  padding: 1%;
+  text-align: center;
+}
+
+.btn{
+  color: #2e3030;
+}
+
+.btn-outline-secondary{
+  size: 15px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#top-left-game{
+  padding: 20%;
+}
+
+
+.simulate-btn-hover {
+  background-color: #01a305;
+  border-color: #934790; 
+  color: #FFFFFF;
+}
+
+.letters {
+  text-align: center;
+  margin: 0%;
+  padding: 0%;
+  /* padding: 1%; */
+}
+
+.character {
+  background-color: #01a305;
+  border-color: #000000; 
+  border-width: 5px;
+  border-style: solid;
+  color: #FFFFFF;
+  display: inline-block;
+  padding: 4%;
+  margin: 2%;
+}
+
+.character:hover {
+  background-color: #076d08;
+  border-color: #433a3d; 
+  border-width: 5px;
+  border-style: dashed;
+}

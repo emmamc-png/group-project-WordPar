@@ -1,0 +1,160 @@
+{{!-- <script src="../../script.js"></script> --}}
+
+<div class="row">
+    <div class="col-7" style="border: 2px solid black;">
+        <div id="top-left-game" class="row" style="border: 2px solid black;">
+            <br>
+            <br>
+            <br>
+            <div id="guess">
+
+            </div>
+            {{!-- <h1>User's Guess should go here:</h1> --}}
+            {{!-- <h1>__  __  __  __  __</h1> --}}
+            <br>
+            <br>
+            <br>
+        </div>
+        <div id="buttonContainer" class="row" style="border: 2px solid black;">
+            <div class="keyboard_row">
+                <button id="q" type="button" class="btn btn-outline-secondary btn-lg" value="q">q</button>
+                <button id="w" type="button" class="btn btn-outline-secondary btn-lg" value="w">w</button>
+                <button id="e" type="button" class="btn btn-outline-secondary btn-lg" value="e">e</button>
+                <button id="r" type="button" class="btn btn-outline-secondary btn-lg" value="r">r</button>
+                <button id="t" type="button" class="btn btn-outline-secondary btn-lg" value="t">t</button>
+                <button id="y" type="button" class="btn btn-outline-secondary btn-lg" value="y">y</button>
+                <button id="u" type="button" class="btn btn-outline-secondary btn-lg" value="u">u</button>
+                <button id="i" type="button" class="btn btn-outline-secondary btn-lg" value="i">i</button>
+                <button id="o" type="button" class="btn btn-outline-secondary btn-lg" value="o">o</button>
+                <button id="p" type="button" class="btn btn-outline-secondary btn-lg" value="p">p</button>
+            </div>
+            <div class="keyboard_row">
+                <button id="a" type="button" class="btn btn-outline-secondary btn-lg" value="a">a</button>
+                <button id="s" type="button" class="btn btn-outline-secondary btn-lg" value="s">s</button>
+                <button id="d" type="button" class="btn btn-outline-secondary btn-lg" value="d">d</button>
+                <button id="f" type="button" class="btn btn-outline-secondary btn-lg" value="f">f</button>
+                <button id="g" type="button" class="btn btn-outline-secondary btn-lg" value="g">g</button>
+                <button id="h" type="button" class="btn btn-outline-secondary btn-lg" value="h">h</button>
+                <button id="j" type="button" class="btn btn-outline-secondary btn-lg" value="j">j</button>
+                <button id="k" type="button" class="btn btn-outline-secondary btn-lg" value="k">k</button>
+                <button id="l" type="button" class="btn btn-outline-secondary btn-lg" value="l">l</button>
+            </div>
+            <div class="keyboard_row">
+                <button id="enter" type="button" class="btn btn-outline-secondary btn-lg" value="Enter">ENTER</button>
+                <button id="z" type="button" class="btn btn-outline-secondary btn-lg" value="z">z</button>
+                <button id="x" type="button" class="btn btn-outline-secondary btn-lg" value="x">x</button>
+                <button id="c" type="button" class="btn btn-outline-secondary btn-lg" value="c">c</button>
+                <button id="v" type="button" class="btn btn-outline-secondary btn-lg" value="v">v</button>
+                <button id="b" type="button" class="btn btn-outline-secondary btn-lg" value="b">b</button>
+                <button id="n" type="button" class="btn btn-outline-secondary btn-lg" value="n">n</button>
+                <button id="m" type="button" class="btn btn-outline-secondary btn-lg" value="m">m</button>
+                <button id="back" type="button" class="btn btn-outline-secondary btn-lg"  value="Back">
+                    {{!-- Following Code was taken from Bootstrap --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">
+                        <path d="M5.83 5.146a.5.5 0 0 0 0 .708L7.975 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z"/>
+                        <path d="M13.683 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7.08a2 2 0 0 1-1.519-.698L.241 8.65a1 1 0 0 1 0-1.302L5.084 1.7A2 2 0 0 1 6.603 1zm-7.08 1a1 1 0 0 0-.76.35L1 8l4.844 5.65a1 1 0 0 0 .759.35h7.08a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-5" style="border: 2px solid black;">
+        <h1>Let's Play!!</h1>
+    </div>  
+    </div>
+</div>
+
+
+<script>
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    // Log the previous key to make the color change
+    let prevKey = "";
+
+    // Store the user's inputs
+    let buttonInputs = [];
+
+    // See if the user's done with current guess
+    let filled = true;
+
+    // Update the user's guess on the screen
+    function updateGuess(buttonInputs) {
+         // Your chosen JavaScript code from above would go here
+        // For example, using forEach():
+        const guessDiv = document.getElementById("guess");
+
+        let htmlContent = "<div class= 'letters'>";
+        buttonInputs.forEach(item => {
+            htmlContent += "<div class= 'character rounded'>";
+            htmlContent += `${item}`;
+            htmlContent += "</div>";
+        });
+        htmlContent += "</div>";
+        guessDiv.innerHTML = htmlContent;
+    }
+
+    // Get the key from the user and store in array
+    function buttonPressed(event) {
+        if (filled)
+        {   
+            // console.log(prevKey)
+            if (prevKey) {
+                prevKey.classList.remove('simulate-btn-hover');
+            }
+            // console.log(event)
+            const correctKey = document.querySelector(`#${event.target.id}`)
+            // console.log(correctKey)
+            prevKey = correctKey
+            correctKey.classList.add('simulate-btn-hover');
+
+            if (event.target.tagName === 'BUTTON') {
+                if(event.target.id == 'enter') {
+                //    console.log('im here')
+                    filled = false;
+                //    console.log(filled)
+                }
+                else if (event.target.id === 'back') {
+                    buttonInputs.pop();
+                    // console.log(buttonInputs);
+                } else {
+                    buttonInputs.push(event.target.value);
+                    // console.log(buttonInputs);
+                }
+            }
+        }
+        else {
+            updateGuess(buttonInputs);
+            // console.log('Guess Set')
+        }
+    };
+
+    // Call the button function every time a key is pressed (from the virtual keyboard)
+    buttonContainer.addEventListener('click', buttonPressed)
+
+    // Call the correct key when the user inputs the value from the keyboard itself
+    document.addEventListener("keydown", function(event) { 
+        if ((event.key.length === 1 && event.key.match(/[a-z]/i)) || event.key == 'Enter' || event.key == 'Backspace') {
+            event.preventDefault();
+            let keyTap;
+
+            if (event.key == 'Enter') {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
+            }
+            else if (event.key == 'Backspace') {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
+            }
+            else {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
+            }
+            // console.log(event.keyCode);
+            // console.log(keyTap);
+
+            // Record user's input
+            buttonPressed(keyTap);
+        }
+    });
+  
+
+</script>
