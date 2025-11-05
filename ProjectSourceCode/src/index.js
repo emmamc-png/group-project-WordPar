@@ -91,7 +91,6 @@ app.post('/login', async(req,res) => {
   const password=req.body.password;
 
   //Will be added once the database is available to check if username and password are correct
-  /*
   if(!username || !password) {
         const error=true;
         res.render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
@@ -144,7 +143,6 @@ app.post('/login', async(req,res) => {
   //If both are correct then set session variables:
   req.session.user = user;
   req.session.save();
-  */
 
   //TEMP FIX
   req.session.user = 'tempuser';
@@ -156,28 +154,26 @@ app.post('/login', async(req,res) => {
 app.post('/registration', async(req,res)=> {
     username=req.body.username;
     //Might need to be changed depending on name given on forms 
-    /*
     password1=req.body.password1;
     password2=req.body.password2;
-    */
     email=req.body.email;
 
-    //Add check to compare the passwords to ensure they're the same
-    /*
-    if(password1!=password2) {
+    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
+    if(!username || !password1 || !email || !password2 ) {
         const error=true;
-        res.render('pages/register', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
         return;
     }
-    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
-    if(!username || !password) {
+
+    //Add check to compare the passwords to ensure they're the same
+    if(password1!=password2) {
         const error=true;
-        res.render('pages/register', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
         return;
     }
 
     //hash the password
-    const hash=await bcrypt.hash(req.body.password,10);
+    const hash=await bcrypt.hash(req.body.password1,10);
     console.log("Hashed password: "+hash);
     const query='INSERT INTO users(username, password) VALUES($1, $2)';
     try {
@@ -188,9 +184,8 @@ app.post('/registration', async(req,res)=> {
     catch(err) {
         const error=true;
         console.log(err);
-        res.render("pages/register", { bodyClass: 'auth-page', message: "Username already exists.", error, });
+        res.render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists.", error, });
     }
-    */
 
     //Temporary response
     res.redirect('/login');
