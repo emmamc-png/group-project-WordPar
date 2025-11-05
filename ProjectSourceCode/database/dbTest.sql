@@ -30,4 +30,9 @@ CREATE TABLE userGame(
     FOREIGN KEY (user_id) REFERENCES users(userID)
 );
 
+CREATE TABLE guesses(
+    guessID SERIAL PRIMARY KEY,
+    wordID INT,
+    
+)
 
