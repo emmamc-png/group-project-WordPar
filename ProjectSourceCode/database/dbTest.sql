@@ -33,7 +33,7 @@ CREATE TABLE userGame(
 CREATE TABLE guesses(
     guessID SERIAL PRIMARY KEY,
     wordID INT,
-    FOREIGN KEY (wordID) REFERENCES words(wordID);
+    FOREIGN KEY (wordID) REFERENCES words(wordID),
     userInput VARCHAR(15)
 
 );
