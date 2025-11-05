@@ -280,11 +280,6 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   border-color: #934790; 
 }
 
-.simulate-btn-hover {
-  background-color: #01a305;
-  border-color: #934790; 
-}
-
 .keyboard_row{
   padding: 1%;
   text-align: center;
@@ -301,4 +296,36 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 #top-left-game{
   padding: 20%;
+}
+
+
+.simulate-btn-hover {
+  background-color: #01a305;
+  border-color: #934790; 
+  color: #FFFFFF;
+}
+
+.letters {
+  text-align: center;
+  margin: 0%;
+  padding: 0%;
+  /* padding: 1%; */
+}
+
+.character {
+  background-color: #01a305;
+  border-color: #000000; 
+  border-width: 5px;
+  border-style: solid;
+  color: #FFFFFF;
+  display: inline-block;
+  padding: 4%;
+  margin: 2%;
+}
+
+.character:hover {
+  background-color: #076d08;
+  border-color: #433a3d; 
+  border-width: 5px;
+  border-style: dashed;
 }
