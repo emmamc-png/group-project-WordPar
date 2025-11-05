@@ -2,15 +2,24 @@
 /////-------------- Import Dependencies --------------/////
 ///////////////////////////////////////////////////////////
 
-const express = require('express'); // To build an application server or API
+import express from 'express';
+import handlebars from 'express-handlebars';
+import Handlebars from 'handlebars';
+import path from 'path';
+import pgp from 'pg-promise';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import bcrypt from 'bcryptjs';
+import fetch from 'node-fetch'; // For AI service communication
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// ES6 module fix for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
-const handlebars = require('express-handlebars');
-const Handlebars = require('handlebars');
-const path = require('path');
-const pgp = require('pg-promise')(); // To connect to the Postgres DB from the node server
-const bodyParser = require('body-parser');
-const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
-const bcrypt = require('bcryptjs'); //  To hash passwords
+const pgpInstance = pgp();
 
 ///////////////////////////////////////////////////////////
 /////----------------- Connect to DB -----------------/////
@@ -32,7 +41,7 @@ const hbs = handlebars.create({
     password: process.env.POSTGRES_PASSWORD, // the password of the user account
   };
   
-  const db = pgp(dbConfig);
+  const db = pgpInstance(dbConfig);
   
   // test your database
   db.connect()
@@ -85,6 +94,7 @@ app.get('/login', (req, res) => {
 app.get('/registration', (req, res) => {
     res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
+
 //Handle when users attempt to login`
 app.post('/login', async(req,res) => {
   const username=req.body.username;
@@ -152,11 +162,11 @@ app.post('/login', async(req,res) => {
 });
 
 app.post('/registration', async(req,res)=> {
-    username=req.body.username;
+    const username=req.body.username;
     //Might need to be changed depending on name given on forms 
-    password1=req.body.password1;
-    password2=req.body.password2;
-    email=req.body.email;
+    const password1=req.body.password1;
+    const password2=req.body.password2;
+    const email=req.body.email;
 
     //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
     if(!username || !password1 || !email || !password2 ) {
@@ -209,12 +219,33 @@ app.get('/', (req, res) => {
     res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
-
 app.get('/game', (req, res) => {
     res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
+///////////////////////////////////////////////////////////
+/////--------------- AI Service Routes ---------------/////
+///////////////////////////////////////////////////////////
 
+// Example route to test AI communication
+app.post("/api/guess", async (req, res) => {
+  const { word } = req.body;
+
+  try {
+    // Use the Docker service name here
+    const response = await fetch("http://ai_service:5000/api/similarity", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word1: word, word2: "test" }) // Adjust as needed
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error contacting AI service:", error);
+    res.status(500).json({ error: "AI service unreachable" });
+  }
+});
 
 ///////////////////////////////////////////////////////////
 /////---------- Open Server/Listen to port ----------//////
