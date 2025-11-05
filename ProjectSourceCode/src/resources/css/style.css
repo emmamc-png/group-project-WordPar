@@ -89,7 +89,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 .custom-btn {
     background-color: #6A0066;
     width: 7%;
-    color: white;
+    color: white !important;
     border: none;
     transition: background-color 0.2s ease;
 }
