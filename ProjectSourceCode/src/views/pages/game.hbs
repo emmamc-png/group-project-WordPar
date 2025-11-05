@@ -6,8 +6,11 @@
             <br>
             <br>
             <br>
-            <h1>User's Guess should go here:</h1>
-            <h1>__  __  __  __  __</h1>
+            <div id="guess">
+
+            </div>
+            {{!-- <h1>User's Guess should go here:</h1> --}}
+            {{!-- <h1>__  __  __  __  __</h1> --}}
             <br>
             <br>
             <br>
@@ -76,6 +79,22 @@
     // See if the user's done with current guess
     let filled = true;
 
+    // Update the user's guess on the screen
+    function updateGuess(buttonInputs) {
+         // Your chosen JavaScript code from above would go here
+        // For example, using forEach():
+        const guessDiv = document.getElementById("guess");
+
+        let htmlContent = "<div class= 'letters'>";
+        buttonInputs.forEach(item => {
+            htmlContent += "<div class= 'character rounded'>";
+            htmlContent += `${item}`;
+            htmlContent += "</div>";
+        });
+        htmlContent += "</div>";
+        guessDiv.innerHTML = htmlContent;
+    }
+
     // Get the key from the user and store in array
     function buttonPressed(event) {
         if (filled)
@@ -106,6 +125,7 @@
             }
         }
         else {
+            updateGuess(buttonInputs);
             // console.log('Guess Set')
         }
     };
@@ -130,7 +150,7 @@
             }
             // console.log(event.keyCode);
             // console.log(keyTap);
-            
+
             // Record user's input
             buttonPressed(keyTap);
         }
