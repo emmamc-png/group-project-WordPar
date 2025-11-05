@@ -1,0 +1,260 @@
+///////////////////////////////////////////////////////////
+/////-------------- Import Dependencies --------------/////
+///////////////////////////////////////////////////////////
+
+import express from 'express';
+import handlebars from 'express-handlebars';
+import Handlebars from 'handlebars';
+import path from 'path';
+import pgp from 'pg-promise';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import bcrypt from 'bcryptjs';
+import fetch from 'node-fetch'; // For AI service communication
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// ES6 module fix for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const app = express();
+const pgpInstance = pgp();
+
+///////////////////////////////////////////////////////////
+/////----------------- Connect to DB -----------------/////
+///////////////////////////////////////////////////////////
+
+// create `ExpressHandlebars` instance and configure the layouts and partials dir.
+const hbs = handlebars.create({
+    extname: 'hbs',
+    layoutsDir: __dirname + '/views/layouts',
+    partialsDir: __dirname + '/views/partials',
+  });
+  
+  // database configuration
+  const dbConfig = {
+    host: 'db', // the database server
+    port: 5432, // the database port
+    database: process.env.POSTGRES_DB, // the database name
+    user: process.env.POSTGRES_USER, // the user account to connect with
+    password: process.env.POSTGRES_PASSWORD, // the password of the user account
+  };
+  
+  const db = pgpInstance(dbConfig);
+  
+  // test your database
+  db.connect()
+    .then(obj => {
+      console.log('Database connection successful'); // you can view this message in the docker compose logs
+      obj.done(); // success, release the connection;
+    })
+    .catch(error => {
+      console.log('ERROR:', error.message || error);
+    });
+
+///////////////////////////////////////////////////////////
+/////----------------- App Settings -----------------//////
+///////////////////////////////////////////////////////////
+
+// Register `hbs` as our view engine using its bound `engine()` function.
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+
+// initialize session variables
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+
+//Sets up the connection to use the style sheet
+app.use(express.static(path.join(__dirname, 'resources')));
+
+///////////////////////////////////////////////////////////
+/////------------------- API/Routes -----------------//////
+///////////////////////////////////////////////////////////
+
+//Render login page
+app.get('/login', (req, res) => {
+    res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+//Render registration page
+app.get('/registration', (req, res) => {
+    res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+//Handle when users attempt to login`
+app.post('/login', async(req,res) => {
+  const username=req.body.username;
+  const password=req.body.password;
+
+  //Will be added once the database is available to check if username and password are correct
+  /*
+  if(!username || !password) {
+        const error=true;
+        res.render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
+        return;
+  }
+  //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
+  const query='SELECT * FROM users WHERE username=$1';
+  let user;
+
+  //Check if username exists in DB:
+  //If username doesn't exist, redirect to register page with error message saying: "Username doesn't exist, please register"
+    try {
+        // check if username exists in DB
+        user=await db.one(query, [username]);
+        console.log("User exists: "+user.username);
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Username does not exist. Please register.", error});
+        return;
+    }
+    try {
+        // check if password from request matches with password in DB
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if(!match) {
+            const error=true;
+            console.log("Incorrect password: "+password);
+            res.render("pages/login", { bodyClass: 'auth-page', message: "Incorrect password. Please try again.", error});
+            return;
+        }
+        console.log(user.password + " : " + match);
+        // check if password from request matches with password in DB
+        //const user=await db.one(query, [username, hash]);
+        console.log("User logged in");
+        //save user details in session like in lab 7
+        //CHANGE USERNAME TO USER ONCE DATABASE IS DONE
+        req.session.user = username;
+        req.session.save();
+        console.log("Session user set: "+ req.session.user.username);
+        res.redirect('/');
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render("pages/login", { bodyClass: 'auth-page', message: "An error occured. Please try again.", error});
+    }
+
+  //For now, assume username and password are correct:
+  //If both are correct then set session variables:
+  req.session.user = user;
+  req.session.save();
+  */
+
+  //TEMP FIX
+  req.session.user = 'tempuser';
+  req.session.save();
+  //Redirect to home page:
+  res.redirect('/');
+});
+
+app.post('/registration', async(req,res)=> {
+    const username=req.body.username;
+    //Might need to be changed depending on name given on forms 
+    /*
+    password1=req.body.password1;
+    password2=req.body.password2;
+    */
+    const email=req.body.email;
+
+    //Add check to compare the passwords to ensure they're the same
+    /*
+    if(password1!=password2) {
+        const error=true;
+        res.render('pages/register', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
+        return;
+    }
+    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
+    if(!username || !password) {
+        const error=true;
+        res.render('pages/register', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
+        return;
+    }
+
+    //hash the password
+    const hash=await bcrypt.hash(req.body.password,10);
+    console.log("Hashed password: "+hash);
+    const query='INSERT INTO users(username, password) VALUES($1, $2)';
+    try {
+        await db.none(query, [username, hash]);
+        console.log("User registered");
+        res.redirect('/login');
+    }
+    catch(err) {
+        const error=true;
+        console.log(err);
+        res.render("pages/register", { bodyClass: 'auth-page', message: "Username already exists.", error, });
+    }
+    */
+
+    //Temporary response
+    res.redirect('/login');
+});
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  console.log("auth has been called!");
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+// Authentication Required
+app.use(auth);
+
+//Render home page
+app.get('/', (req, res) => {
+    res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+app.get('/game', (req, res) => {
+    res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+///////////////////////////////////////////////////////////
+/////--------------- AI Service Routes ---------------/////
+///////////////////////////////////////////////////////////
+
+// Example route to test AI communication
+app.post("/api/guess", async (req, res) => {
+  const { word } = req.body;
+
+  try {
+    // Use the Docker service name here
+    const response = await fetch("http://ai_service:5000/api/similarity", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word1: word, word2: "test" }) // Adjust as needed
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error contacting AI service:", error);
+    res.status(500).json({ error: "AI service unreachable" });
+  }
+});
+
+///////////////////////////////////////////////////////////
+/////---------- Open Server/Listen to port ----------//////
+///////////////////////////////////////////////////////////
+// starting the server and keeping the connection open to listen for more requests
+app.listen(3000);
+console.log('Server is listening on port 3000');

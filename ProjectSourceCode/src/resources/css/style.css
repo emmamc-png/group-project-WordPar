@@ -1,0 +1,408 @@
+body.auth-page { /*Used to rerpresent the login pages*/
+    background-color: rgba(232, 212, 183, 0.8); /*rgba represents (red, green, blue, alpha), alpha represents the opacity of the color. Does not affect child elements*/
+    overflow: hidden; /* Prevent scrolling */
+}
+
+body.home-page{
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+    background-color: rgba(232, 212, 183, 0.8);
+    font-family: sans-serif;
+}
+
+a { /*Removes the underline form all HTML links*/
+    text-decoration: none;
+}
+
+/*
+    Font used for titles: Coiny
+    Font used for text: 
+*/
+
+/*
+ * Font: Coiny
+ * Designer: Marcelo Magalhães
+ * Source: https://fonts.google.com/specimen/Coiny
+ * License: SIL Open Font License, Version 1.1 (https://openfontlicense.org)
+ *
+ * This font is licensed under the Open Font License. 
+ * You may use, modify, and redistribute it freely, 
+ * provided you do not sell the font by itself.
+*/
+
+/* Login/Registration Page CSS */
+
+.loginTitle{
+    color: #934790;
+    font-family: 'Coiny', sans-serif;
+    padding-top: 150px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.registerTitle{
+    color: #934790;
+    font-family: 'Coiny', sans-serif;
+    padding-top: 100px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.formBody{
+    text-align: center;
+}
+
+.usernameForm{
+    margin: 0px auto 10px auto; /*Note this is the order of the shorthand margin: top right bottom left*/
+    width: 14%;
+    height: 35px;
+    border-radius: 4px;
+    border: none;
+    padding-left: 5px;
+}
+
+.passwordForm{
+    margin: 0px auto 0px auto;
+    width: 14%;
+    height: 35px;
+    border-radius: 4px;
+    border: none;
+    padding-left: 5px;
+}
+
+input:focus { /*Adds the highlighted field to the text inputs on the page*/
+    border-color: #934790; /* Your custom color */
+    outline: none; /* Optional: removes default blue glow */
+    box-shadow: 0 0 0 0.2rem rgba(147, 71, 144, 0.25); /* Optional: adds subtle glow */
+}
+
+.logo{
+   width: 200px;
+   height: auto; 
+}
+
+.logoContainer{
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.custom-btn {
+    background-color: #6A0066;
+    width: 7%;
+    color: white;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.custom-btn:hover {
+    background-color: #b34dac; /* Lighter or different shade for hover */
+    color: white;
+}
+
+/* Home Page CSS information */
+
+.center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.page-box {
+    position: relative; /* Enables absolute positioning inside */
+    /* Possible nbackground color to add to the screen */
+    background-image: linear-gradient(to top, rgba(0, 202, 255, 1) 50%, rgba(0, 101, 248, 0.8), rgba(67, 0, 255,0.8));
+    background-blend-mode: screen;
+    width: 80%;
+    max-width: 600px;
+    height: 100vh; /* Full height */
+    padding: 2rem;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    text-align: center;
+    overflow: hidden; /* Prevent internal scroll */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center content inside */
+    /* Used to see the border */
+    /* background-color: rgba(255,255,255,0.1); */
+ }
+
+/* Top-left corner */
+.top-left {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+  
+  /* Top-center */
+.top-center {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #934790;
+  font-family: 'Coiny', sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  font-size: 50px;
+}
+  
+  /* Top-right corner */
+.top-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+  
+  /* Slightly above center */
+.above-center {
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+  
+  /* Slightly below center */
+.below-center {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-category{
+  background-color: #6A0066;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  width: 150px;
+  appearance: none; /* Removes default arrow styling (optional) */
+  cursor: pointer;
+}
+
+.btn-category:hover{
+  background-color: #6A0066; /* Lighter or different shade for hover */
+}
+
+.btn-user{
+  margin-top: 10px;
+  margin-right: 15px;
+  background-color: rgba(0, 101, 248, 0.0);
+  transition: background-color 0.2s ease;
+}
+  
+.btn-user:hover{
+  background-color: #0065F8;
+}
+
+.leaderboard-container {
+  width: 300px;
+  margin: 100px auto;
+  background-color: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+.leaderboard-title{
+  padding-top: 10px;
+}
+  
+.leaderboard-scroll {
+  max-height: 100px; /* Controls visible height */
+  overflow-y: auto;  /* Enables vertical scrolling */
+  margin-top: 1rem;
+  padding-top: 5px;
+}
+/* 
+  Custom sroll Bar for the leader board
+*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+  
+.entry {
+  padding: 0.5rem;
+  font-size: 15px;
+}
+
+.play-btn {
+  background-color: #6A0066;
+  width: 150px;
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.play-btn:hover{
+    background-color: #b34dac;
+}
+
+.play-text{
+    font-size: 30px;
+    margin: 0px;
+    text-align: center;
+}
+
+.logo-position{
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.how-to-play{
+  position: absolute;
+  top: 76%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.how-to-btn{
+  background-color: #b34dac;
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.how-to-btn:hover{
+  color: white !important;
+  background-color: #6A0066;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* dark backdrop */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Box */
+.modal-box {
+  position: absolute;
+  top: 30%;
+  left:10%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.9); /* white but opaque */
+  color: black;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  position: relative;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+}
+
+/* Text Area */
+.modal-body {
+  flex-grow: 1;
+  margin-top: 40px;
+  resize: none;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  color: black;
+  background: white;
+}
+/* Custom CSS to override Bootstrap's default btn-secondary hover styles */
+.btn-outline-secondary:hover {
+  background-color: #01a305;
+  border-color: #934790; 
+}
+
+.keyboard_row{
+  padding: 1%;
+  text-align: center;
+}
+
+.btn{
+  color: #2e3030;
+}
+
+.btn-outline-secondary{
+  size: 15px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#top-left-game{
+  padding: 20%;
+}
+
+
+.simulate-btn-hover {
+  background-color: #01a305;
+  border-color: #934790; 
+  color: #FFFFFF;
+}
+
+.letters {
+  text-align: center;
+  margin: 0%;
+  padding: 0%;
+  /* padding: 1%; */
+}
+
+.character {
+  background-color: #01a305;
+  border-color: #000000; 
+  border-width: 5px;
+  border-style: solid;
+  color: #FFFFFF;
+  display: inline-block;
+  padding: 4%;
+  margin: 2%;
+}
+
+.character:hover {
+  background-color: #076d08;
+  border-color: #433a3d; 
+  border-width: 5px;
+  border-style: dashed;
+}
