@@ -101,7 +101,6 @@ app.post('/login', async(req,res) => {
   const password=req.body.password;
 
   //Will be added once the database is available to check if username and password are correct
-  /*
   if(!username || !password) {
         const error=true;
         res.render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
@@ -126,20 +125,19 @@ app.post('/login', async(req,res) => {
     }
     try {
         // check if password from request matches with password in DB
+        const test=bcrypt.hash(user.password,10);
+        console.log("Testing password hash: "+ test);
         const match = await bcrypt.compare(req.body.password, user.password);
         if(!match) {
             const error=true;
-            console.log("Incorrect password: "+password);
+            console.log("Incorrect password: "+ password);
             res.render("pages/login", { bodyClass: 'auth-page', message: "Incorrect password. Please try again.", error});
             return;
         }
         console.log(user.password + " : " + match);
-        // check if password from request matches with password in DB
-        //const user=await db.one(query, [username, hash]);
         console.log("User logged in");
-        //save user details in session like in lab 7
-        //CHANGE USERNAME TO USER ONCE DATABASE IS DONE
-        req.session.user = username;
+        //set session user
+        req.session.user = user;
         req.session.save();
         console.log("Session user set: "+ req.session.user.username);
         res.redirect('/');
@@ -148,46 +146,33 @@ app.post('/login', async(req,res) => {
         const error=true;
         console.log(err);
         res.render("pages/login", { bodyClass: 'auth-page', message: "An error occured. Please try again.", error});
+        return;
     }
-
-  //For now, assume username and password are correct:
-  //If both are correct then set session variables:
-  req.session.user = user;
-  req.session.save();
-  */
-
-  //TEMP FIX
-  req.session.user = 'tempuser';
-  req.session.save();
-  //Redirect to home page:
-  res.redirect('/');
 });
 
 app.post('/registration', async(req,res)=> {
     const username=req.body.username;
     //Might need to be changed depending on name given on forms 
-    /*
-    password1=req.body.password1;
-    password2=req.body.password2;
-    */
+    const password1=req.body.password1;
+    const password2=req.body.password2;
     const email=req.body.email;
 
-    //Add check to compare the passwords to ensure they're the same
-    /*
-    if(password1!=password2) {
+    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
+    if(!username || !password1 || !email || !password2 ) {
         const error=true;
-        res.render('pages/register', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
         return;
     }
-    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
-    if(!username || !password) {
+
+    //Add check to compare the passwords to ensure they're the same
+    if(password1!=password2) {
         const error=true;
-        res.render('pages/register', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
+        res.render('pages/registration', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
         return;
     }
 
     //hash the password
-    const hash=await bcrypt.hash(req.body.password,10);
+    const hash=await bcrypt.hash(req.body.password1,10);
     console.log("Hashed password: "+hash);
     const query='INSERT INTO users(username, password) VALUES($1, $2)';
     try {
@@ -198,12 +183,8 @@ app.post('/registration', async(req,res)=> {
     catch(err) {
         const error=true;
         console.log(err);
-        res.render("pages/register", { bodyClass: 'auth-page', message: "Username already exists.", error, });
+        res.render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists.", error, });
     }
-    */
-
-    //Temporary response
-    res.redirect('/login');
 });
 
 // Authentication Middleware.
