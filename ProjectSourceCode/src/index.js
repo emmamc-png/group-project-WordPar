@@ -85,6 +85,11 @@ app.use(express.static(path.join(__dirname, 'resources')));
 /////------------------- API/Routes -----------------//////
 ///////////////////////////////////////////////////////////
 
+//dummy test case
+app.get('/welcome', (req, res) => {
+  res.json({status: 'success', message: 'Welcome!'});
+});
+
 //Render login page
 app.get('/login', (req, res) => {
     res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
@@ -103,7 +108,7 @@ app.post('/login', async(req,res) => {
   //Will be added once the database is available to check if username and password are correct
   if(!username || !password) {
         const error=true;
-        res.render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
+        res.status(400).render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
         return;
   }
   //INSERT QUERY HERE TO GET USER DATA FROM DATABASE
@@ -120,7 +125,7 @@ app.post('/login', async(req,res) => {
     catch(err) {
         const error=true;
         console.log(err);
-        res.render('pages/registration', { bodyClass: 'auth-page', message: "Username does not exist. Please register.", error});
+        res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Username does not exist. Please register.", error});
         return;
     }
     try {
@@ -131,7 +136,7 @@ app.post('/login', async(req,res) => {
         if(!match) {
             const error=true;
             console.log("Incorrect password: "+ password);
-            res.render("pages/login", { bodyClass: 'auth-page', message: "Incorrect password. Please try again.", error});
+            res.status(400).render("pages/login", { bodyClass: 'auth-page', message: "Incorrect password. Please try again.", error});
             return;
         }
         console.log(user.password + " : " + match);
@@ -140,34 +145,32 @@ app.post('/login', async(req,res) => {
         req.session.user = user;
         req.session.save();
         console.log("Session user set: "+ req.session.user.username);
-        res.redirect('/');
+        res.status(200).redirect('/');
     }
     catch(err) {
         const error=true;
         console.log(err);
-        res.render("pages/login", { bodyClass: 'auth-page', message: "An error occured. Please try again.", error});
+        res.status(500).render("pages/login", { bodyClass: 'auth-page', message: "An error occured. Please try again.", error});
         return;
     }
 });
 
 app.post('/registration', async(req,res)=> {
     const username=req.body.username;
-    //Might need to be changed depending on name given on forms 
     const password1=req.body.password1;
     const password2=req.body.password2;
     const email=req.body.email;
 
-    //ADD VALIDATION FOR USERNAME AND PASSWORD BASED ON INPUTTED VALUES
     if(!username || !password1 || !email || !password2 ) {
         const error=true;
-        res.render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
+        res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
         return;
     }
 
     //Add check to compare the passwords to ensure they're the same
     if(password1!=password2) {
         const error=true;
-        res.render('pages/registration', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
+        res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
         return;
     }
 
@@ -175,15 +178,16 @@ app.post('/registration', async(req,res)=> {
     const hash=await bcrypt.hash(req.body.password1,10);
     console.log("Hashed password: "+hash);
     const query='INSERT INTO users(username, password) VALUES($1, $2)';
+    const query2='SELECT * FROM users WHERE username=$1';
     try {
         await db.none(query, [username, hash]);
         console.log("User registered");
-        res.redirect('/login');
+        res.status(200).redirect('/login');
     }
     catch(err) {
         const error=true;
-        console.log(err);
-        res.render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists.", error, });
+        //res.status(400).json({ error: 'Username already exists.' });
+        res.status(400).render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists.", error});
     }
 });
 
@@ -237,5 +241,6 @@ app.post("/api/guess", async (req, res) => {
 /////---------- Open Server/Listen to port ----------//////
 ///////////////////////////////////////////////////////////
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+const server = app.listen(3000);
+export default server;
 console.log('Server is listening on port 3000');
