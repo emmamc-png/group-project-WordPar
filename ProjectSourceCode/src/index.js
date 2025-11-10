@@ -232,6 +232,18 @@ app.post("/api/guess", async (req, res) => {
   }
 });
 
+//Route for logging out user and removing session token
+app.post("/logout", (req,res) => {
+  try {
+    req.session.destroy();
+    res.status(200).redirect('/login');
+  }
+  catch(err) {
+    console.log(err);
+    res.status(500).redirect('/settings', {message: "An error occurred while logging out. Please try again."});
+  };
+});
+
 ///////////////////////////////////////////////////////////
 /////---------- Open Server/Listen to port ----------//////
 ///////////////////////////////////////////////////////////
