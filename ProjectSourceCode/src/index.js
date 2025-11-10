@@ -85,11 +85,6 @@ app.use(express.static(path.join(__dirname, 'resources')));
 /////------------------- API/Routes -----------------//////
 ///////////////////////////////////////////////////////////
 
-//dummy test case
-app.get('/welcome', (req, res) => {
-  res.json({status: 'success', message: 'Welcome!'});
-});
-
 //Render login page
 app.get('/login', (req, res) => {
     res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page

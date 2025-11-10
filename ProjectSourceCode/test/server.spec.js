@@ -17,6 +17,8 @@ const {assert, expect} = chai;
 
 // ********************** DEFAULT WELCOME TESTCASE ****************************
 
+//Default test case removed to prevent any user confusion
+/*
 describe('Server!', () => {
   // Sample test case given to test / endpoint.
   it('Returns the default welcome message', done => {
@@ -31,6 +33,7 @@ describe('Server!', () => {
       });
   });
 });
+*/
 
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
 //We are checking POST /registration API by passing the user info. 
