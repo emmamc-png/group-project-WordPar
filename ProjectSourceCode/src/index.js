@@ -200,12 +200,47 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 //Render home page
-app.get('/', (req, res) => {
-    res.render('pages/home', { bodyClass: 'home-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+app.get('/', async(req, res) => {
+    const query=`SELECT users.username, SUM(game.score) AS Score 
+                FROM userGame 
+                JOIN users ON userGame.user_id=users.userID 
+                JOIN game ON userGame.game_id=game.gameID 
+                GROUP BY username 
+                ORDER BY SUM(score) DESC 
+                LIMIT 10`;
+    const currentUser=req.session.user.username;
+    const userQuery=`SELECT username, SUM(game.score) AS Score 
+                    FROM userGame 
+                    JOIN users ON userGame.user_id=users.userID 
+                    JOIN game ON userGame.game_id=game.gameID 
+                    WHERE username=$1 
+                    GROUP BY username`;
+    //generate arrays to store user and leaderboard data
+    let users=[];
+    let currentUserData=[];
+    try {
+      //Attempt to get user information
+      currentUserData=await db.one(userQuery, [currentUser]);
+    }
+    catch(err) {
+      //If no scores exist, set user score to 0
+      users=[currentUser, 0];
+      console.log('user has no scores yet');
+    }
+    try {
+      users=await db.any(query);
+      console.log("Leaderboard data retrieved");
+      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+    }
+    catch(err) {
+      console.log(err);
+      //If error occurs, render page with empty leaderboard
+      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: []}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+    }
 });
 
-app.get('/game', (req, res) => {
-    res.render('pages/game', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+app.get('/game', async(req, res) => {         
+  res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
 ///////////////////////////////////////////////////////////
