@@ -351,58 +351,184 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   color: black;
   background: white;
 }
+
 /* Custom CSS to override Bootstrap's default btn-secondary hover styles */
 .btn-outline-secondary:hover {
   background-color: #01a305;
   border-color: #934790; 
 }
 
-.keyboard_row{
+.keyboard_row {
   padding: 1%;
   text-align: center;
 }
 
-.btn{
+.btn {
   color: #2e3030;
 }
 
-.btn-outline-secondary{
+.btn-outline-secondary {
   size: 15px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-#top-left-game{
+#top-left-game {
   padding: 20%;
 }
 
-
 .simulate-btn-hover {
-  background-color: #01a305;
-  border-color: #934790; 
-  color: #FFFFFF;
+  background-color: #01a305 !important;
+  border-color: #934790 !important;
+  color: #FFFFFF !important;
 }
 
 .letters {
   text-align: center;
   margin: 0%;
   padding: 0%;
-  /* padding: 1%; */
 }
 
 .character {
-  background-color: #01a305;
-  border-color: #000000; 
-  border-width: 5px;
-  border-style: solid;
-  color: #FFFFFF;
-  display: inline-block;
-  padding: 4%;
-  margin: 2%;
+  background-color: #01a305 !important;
+  border-color: #000000 !important; 
+  border-width: 5px !important;
+  border-bottom-style: solid !important;
+  color: #FFFFFF !important;
+  display: inline-block !important;
+  padding: 4% !important;
+  margin: 2% !important;
 }
 
 .character:hover {
-  background-color: #076d08;
-  border-color: #433a3d; 
-  border-width: 5px;
-  border-style: dashed;
+  background-color: #15b117 !important;
+  border-color: #a03357 !important;
+  border-width: 5px !important;
+  border-bottom-style: dashed !important;
+  color: #FFFFFF !important;
 }
+
+.game {
+  border-color: #944765 !important;
+}
+
+.game:hover {
+  border-color: #944765 !important;
+  color: #FFFFFF !important;
+}
+
+/* From w3schools */
+.circle {
+  position: absolute; 
+  height: 5%;
+  width: 2.75%;
+  top: 12%;
+  right: 18.75%;
+  background-color: #fffefe;
+  border-radius: 50%;
+}
+
+/* From GeeksForGeeks */
+.semicircle {
+  position: relative; 
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100%;
+  width: 50%;
+  border-radius: 150px 150px 0 0;
+  background-color: green;
+}
+
+/* From w3schools */
+.rectangle {
+  position: absolute;
+  left: 76.5%;
+  height: 50px;
+  width: 100px;
+  background-color: #555;
+}
+
+/* From w3schools */
+.triangle-right {
+  position: absolute;
+  top: 5%;
+  left: 80%;
+	width: 0;
+	height: 0;
+	border-top: 25px solid transparent;
+	border-left: 50px solid #ec0d0d;
+}
+
+/* From w3schools */
+.vl {
+  position: absolute;
+  top: 5%;
+  left: 79.8%;
+  height: 80px;
+  border-left: 3px solid rgb(0, 0, 0);
+}
+
+#golf-logo {
+  position: absolute;
+  top: 60%;
+  left: 79.8%;
+}
+
+#myCanvas {
+  position: absolute;
+  top: 26%;
+  left: 80%;
+}
+
+/* Note: From codepen.io -- Majority of CSS for golfball & tee */
+.wrapper {
+  position: absolute;
+  top: 22%;
+  left: 80%;
+}
+.ball {
+  width:50px;
+  height:50px;
+  position:absolute;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow: -5px -5x 5px red;
+  left:25%;
+  top:25%;
+  box-shadow: -3px 3px 15px rgba(0,0,0,0.35), 0px 0px 100px rgba(0,0,0,0.25), 0px 0px 5px rgba(255,255,255,0.5);
+  z-index: 1;
+}
+
+.ball:before {
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(transparent 0%, rgba(0,0,0,0.2) 50%);
+  transform: rotate(-125deg);
+}
+
+.texture{
+  position: relative;
+  animation: translateBackground 40s infinite linear;  
+  background:url('../img/golfball.jpg') 0% 0 repeat-x;
+  background-size: cover; 
+  width:50px;
+  height:50px;
+  position:absolute;
+  border-radius:50%;
+}
+
+@keyframes translateBackground{
+  0%{
+    background-position-x:0;
+  }
+  100%{
+    background-position-x:-600px;
+  }
+}
+
+/* #guess {
+  position: absolute;
+  top: 50%;
+} */
