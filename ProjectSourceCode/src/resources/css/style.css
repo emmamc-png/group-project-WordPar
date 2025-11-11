@@ -10,6 +10,10 @@ body.home-page{
     font-family: sans-serif;
 }
 
+.center-text {
+  text-align: center;
+}
+
 a { /*Removes the underline form all HTML links*/
     text-decoration: none;
 }
@@ -126,7 +130,34 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     justify-content: center; /* Vertically center content inside */
     /* Used to see the border */
     /* background-color: rgba(255,255,255,0.1); */
- }
+}
+
+.userinfo-box{
+  position: absolute;
+  z-index: 1;
+  width: 400px;
+  height: 400px;
+  background-blend-mode: screen;
+  border-radius: 5px;
+  background-color: rgba(232, 212, 183, .98);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.userinfo-title{
+  font-family: 'Coiny', sans-serif;
+  color: #934790;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 3px black;
+}
+
+.settingsImage{
+  position: absolute;
+  margin-top: 10.5%;
+  margin-left: 0.75%;
+  z-index: -1;
+  transform: rotate(90deg);
+  width: 575px;
+}
 
 /* Top-left corner */
 .top-left {
@@ -196,6 +227,29 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   
 .btn-user:hover{
   background-color: #0065F8;
+}
+
+.back-to-home-btn{
+  position: relative;
+  background-color: #b34dac;
+  color: white !important;
+  border-radius: 4px;
+  border: none;
+  width: 200px;
+  height: 40px;
+  top: 30%;
+  left: 25%;
+  transition: 0.2s ease;
+}
+
+.back-to-home-btn:hover{
+  transform: scale(1.05);
+}
+
+.back-to-home-btn-text{
+  font-size: 20px;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .leaderboard-container {
