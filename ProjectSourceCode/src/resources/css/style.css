@@ -6,7 +6,7 @@ body.auth-page { /*Used to rerpresent the login pages*/
 body.home-page{
     height: 100%;
     overflow: hidden; /* Prevent scrolling */
-    background-color: rgba(232, 212, 183, 0.8);
+    background-color: #0000ff;
     font-family: sans-serif;
 }
 
