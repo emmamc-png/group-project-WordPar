@@ -237,7 +237,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   border: none;
   width: 200px;
   height: 40px;
-  top: 30%;
+  top: 20%;
   left: 25%;
   transition: 0.2s ease;
 }
@@ -250,6 +250,15 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   font-size: 20px;
   text-align: center;
   margin-top: 5px;
+}
+
+.userinfo-text-box{
+  margin-top: 15%;
+  margin-left: 5%;
+}
+.seperate-text{
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .leaderboard-container {
