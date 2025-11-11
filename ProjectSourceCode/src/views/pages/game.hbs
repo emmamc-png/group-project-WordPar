@@ -1,21 +1,17 @@
 {{!-- <script src="../../script.js"></script> --}}
 
 <div class="row">
-    <div class="col-7" style="border: 2px solid black;">
-        <div id="top-left-game" class="row" style="border: 2px solid black;">
+    <div class="col-7" style="border: 2px none black;">
+        <div id="top-left-game" class="row">
             <br>
             <br>
             <br>
-            <div id="guess">
-
-            </div>
-            {{!-- <h1>User's Guess should go here:</h1> --}}
-            {{!-- <h1>__  __  __  __  __</h1> --}}
+            <div id="guess"></div>
             <br>
             <br>
             <br>
         </div>
-        <div id="buttonContainer" class="row" style="border: 2px solid black;">
+        <div id="buttonContainer" class="row" style="border-style: dashed dashed dashed none; border-width: 2px">
             <div class="keyboard_row">
                 <button id="q" type="button" class="game btn btn-outline-secondary btn-lg" value="q">q</button>
                 <button id="w" type="button" class="game btn btn-outline-secondary btn-lg" value="w">w</button>
@@ -60,10 +56,32 @@
 
 
     </div>
-    <div class="col-5" style="border: 2px solid black;">
-        <h1>Let's Play!!</h1>
+    <div class="col-5" style="border: 2px none black;">
+        <div class="semicircle"></div>
+        <div class="circle"></div>
+        <div class="rectangle"></div>
+        <div class="triangle-right"></div>
+        <div class="vl"></div>
+        <div class="wrapper">
+            <div class="ball"> 
+                <div class="texture"></div>  
+            </div>
+        </div>
+        {{!-- From w3schools --}}
+        <canvas id="myCanvas" width="300" height="750">
+            Sorry, your browser does not support canvas.
+        </canvas>
+        <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.moveTo(0, 425);
+        ctx.quadraticCurveTo(190, 15, 30, 0);
+        ctx.stroke();
+        </script>
+
+        <h1 id="golf-logo" class="top-center">WORD PAR</h1>
     </div>  
-    </div>
 </div>
 
 
