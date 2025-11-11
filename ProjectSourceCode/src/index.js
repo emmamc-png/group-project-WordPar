@@ -201,16 +201,18 @@ app.use(auth);
 
 //Render home page
 app.get('/', async(req, res) => {
-  //Need to add a lot more stuff in here
-    const query=`SELECT users.username, SUM(game.score) AS score 
+    //Query to get leaderboard data
+    const query=`SELECT users.username, SUM(game.score) AS Score 
                 FROM userGame 
                 JOIN users ON userGame.user_id=users.userID 
                 JOIN game ON userGame.game_id=game.gameID 
                 GROUP BY username 
-                ORDER BY SUM(score) DESC 
+                ORDER BY SUM(score) DESC
                 LIMIT 10`;
+    //Get current logged in user
     const currentUser=req.session.user.username;
-    const userQuery=`SELECT username, SUM(game.score) AS score 
+    //Query to get current user data (pts and username)
+    const userQuery=`SELECT username, SUM(game.score) AS Score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
                     FROM userGame 
                     JOIN users ON userGame.user_id=users.userID 
                     JOIN game ON userGame.game_id=game.gameID 
@@ -225,7 +227,7 @@ app.get('/', async(req, res) => {
     }
     catch(err) {
       //If no scores exist, set user score to 0
-      currentUserData=[currentUser, 0];
+      users=[currentUser, 0, null];
       console.log('user has no scores yet');
     }
     try {
