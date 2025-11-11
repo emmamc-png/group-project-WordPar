@@ -201,30 +201,39 @@ app.use(auth);
 
 //Render home page
 app.get('/', async(req, res) => {
-    const query=`SELECT users.username, SUM(game.score) AS Score 
+    //Query to get leaderboard data
+    const query=`SELECT users.username, SUM(game.score) AS score 
                 FROM userGame 
                 JOIN users ON userGame.user_id=users.userID 
                 JOIN game ON userGame.game_id=game.gameID 
                 GROUP BY username 
-                ORDER BY SUM(score) DESC 
+                ORDER BY SUM(score) DESC
                 LIMIT 10`;
+    //Get current logged in user
     const currentUser=req.session.user.username;
-    const userQuery=`SELECT username, SUM(game.score) AS Score 
-                    FROM userGame 
-                    JOIN users ON userGame.user_id=users.userID 
-                    JOIN game ON userGame.game_id=game.gameID 
-                    WHERE username=$1 
-                    GROUP BY username`;
+    //Query to get current user data (pts, rank, and username)
+    const userQuery=`WITH ranked AS (
+                      SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
+                      FROM userGame 
+                      JOIN users ON userGame.user_id=users.userID 
+                      JOIN game ON userGame.game_id=game.gameID  
+                      GROUP BY users.username
+                      )
+                    SELECT username, score, position
+                    FROM ranked
+                    WHERE username=$1`;
     //generate arrays to store user and leaderboard data
     let users=[];
     let currentUserData=[];
+    //
     try {
       //Attempt to get user information
       currentUserData=await db.one(userQuery, [currentUser]);
     }
+    
     catch(err) {
       //If no scores exist, set user score to 0
-      users=[currentUser, 0];
+      currentUserData={username: currentUser, score: 0, position: null};
       console.log('user has no scores yet');
     }
     try {
@@ -235,13 +244,24 @@ app.get('/', async(req, res) => {
     catch(err) {
       console.log(err);
       //If error occurs, render page with empty leaderboard
-      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: []}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
 });
 
 app.get('/game', async(req, res) => {         
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
+
+///////////////////////////////////////////////////////////
+/////---------- Handlebars Helper Functions ----------/////
+///////////////////////////////////////////////////////////
+
+
+Handlebars.registerHelper('indexPlusOne', function(index) {
+  return index+1;
+});
+
+
 
 ///////////////////////////////////////////////////////////
 /////--------------- AI Service Routes ---------------/////
@@ -265,6 +285,18 @@ app.post("/api/guess", async (req, res) => {
     console.error("Error contacting AI service:", error);
     res.status(500).json({ error: "AI service unreachable" });
   }
+});
+
+//Route for logging out user and removing session token
+app.post("/logout", (req,res) => {
+  try {
+    req.session.destroy();
+    res.status(200).redirect('/login');
+  }
+  catch(err) {
+    console.log(err);
+    res.status(500).redirect('/settings', {message: "An error occurred while logging out. Please try again."});
+  };
 });
 
 ///////////////////////////////////////////////////////////
