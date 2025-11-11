@@ -314,7 +314,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 .modal-box {
   position: absolute;
   top: 30%;
-  left:10%;
+  left:8.5%;
   transform: translate(-50%, -50%);
   width: 300px;
   height: 500px;
