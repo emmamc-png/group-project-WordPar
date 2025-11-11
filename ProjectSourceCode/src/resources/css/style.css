@@ -376,13 +376,41 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   padding: 20%;
 }
 
+#guess {
+  width: 45%;
+  position: absolute;
+  top: 15%;
+}
+
+#buttonContainer {
+  width: 100%;
+  padding-left: 20%;
+  padding-top: 5%;
+} 
+
+ #clear {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  background-color: #944765 !important;
+  color: #d4d9d4;
+  border-color: #72186f !important;
+} 
+
+#clear:hover {
+  background-color: #95073d !important;
+  color: #ffffff;
+  border-color: #090208 !important;
+  border-style: dashed;
+} 
+
 .simulate-btn-hover {
   background-color: #01a305 !important;
   border-color: #934790 !important;
   color: #FFFFFF !important;
 }
 
-.letters {
+#letters {
   text-align: center;
   margin: 0%;
   padding: 0%;
@@ -527,8 +555,3 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     background-position-x:-600px;
   }
 }
-
-/* #guess {
-  position: absolute;
-  top: 50%;
-} */
