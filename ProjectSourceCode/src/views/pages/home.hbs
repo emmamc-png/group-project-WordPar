@@ -14,15 +14,11 @@
             <div class="leaderboard-container">
                 <h2 class="leaderboard-title">Leaderboard</h2>
                 <div class="leaderboard-scroll"> <!-- To implement user data for the leader board -->
-                    <div class="entry">1. Alice - 1200 pts</div>
-                    <div class="entry">2. Bob - 1150 pts</div>
-                    <div class="entry">3. Charlie - 1100 pts</div>
-                    <div class="entry">3. Charlie - 1100 pts</div>
-                    <div class="entry">3. Charlie - 1100 pts</div>
-                    <div class="entry">3. Charlie - 1100 pts</div>
-                    <div class="entry">3. Charlie - 1100 pts</div>
+                    {{#each leaderboard}}
+                        <div class="entry"> {{indexPlusOne @index}}. {{this.username}} - {{this.score}} pts</div>
+                    {{/each}}
                 </div>
-                <p3>Current Position: #. Username Points</p3> <!-- To implement user information and there current position -->
+                <p3>Current Position: #. {{currentUser.username}} - {{currentUser.score}} pts</p3> <!-- To implement user information and there current position -->
             </div>
         </div>
         <div class="logoContainer logo-position">
