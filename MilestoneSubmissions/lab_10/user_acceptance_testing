@@ -1,0 +1,34 @@
+1.
+User should be able to enter a guess with the keyboard
+To test this, we will simulate a user entering the word “ADIEU”
+We will enter the game page, via the localhost environment, and type this word using the keyboard only
+Upon typing this word, we will hit the “Enter” key
+We will then examine the word that appears on the screen
+If the word that appears is “ADIEU”, then our test case was successful
+
+2.
+User should be able to log into their account via their username and password
+To test this, we will use the localhost environment, and simulate a user logging
+We will first navigate to the website, where we should be prompted by a login page
+Since we are creating a new account, we will then navigate to the registration page by clicking on “Register” 
+Here, we will make a new user with the following data:
+Username: Austin
+Email: 123austin@aol.com
+Password: password:)
+Retype Password: password:)
+We will then press the “Register” button, and the site should redirect us to the login page
+From here, we will input out newly created user credentials into the page:
+Username: Austin
+Password: password:)
+Upon hitting the “Login” button, we will see what the page does
+If we are redirected into the main home page of Word Par, our test case was successful
+
+3.
+User should be able to view the top three scores on the leaderboard
+To test this, we will use the localhost environment, and simulate a user viewing the leaderboard
+We will use the account created in the last user test
+First: We will navigate to the login in page, and input the following information:
+Username: Austin
+Password: password:)
+Upon doing this, we should be navigated to the main page, and we will view the results
+If the leaderboard is displayed on the page, our test case was successful
