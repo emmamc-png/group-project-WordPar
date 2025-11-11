@@ -18,7 +18,11 @@
                         <div class="entry"> {{indexPlusOne @index}}. {{this.username}} - {{this.score}} pts</div>
                     {{/each}}
                 </div>
-                <p3>Current Position: #. {{currentUser.username}} - {{currentUser.score}} pts</p3> <!-- To implement user information and there current position -->
+                {{#if currentUser.position}} 
+                    <p3>Current Position: {{currentUser.position}}. {{currentUser.username}} - {{currentUser.score}} pts</p3> <!-- To implement user information and there current position -->
+                {{else}}
+                    <p3>Current Position: Unranked. {{currentUser.username}} - {{currentUser.score}} pts</p3>
+                {{/if}}
             </div>
         </div>
         <div class="logoContainer logo-position">

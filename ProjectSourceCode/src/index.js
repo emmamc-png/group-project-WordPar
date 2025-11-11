@@ -202,7 +202,7 @@ app.use(auth);
 //Render home page
 app.get('/', async(req, res) => {
     //Query to get leaderboard data
-    const query=`SELECT users.username, SUM(game.score) AS Score 
+    const query=`SELECT users.username, SUM(game.score) AS score 
                 FROM userGame 
                 JOIN users ON userGame.user_id=users.userID 
                 JOIN game ON userGame.game_id=game.gameID 
@@ -211,23 +211,29 @@ app.get('/', async(req, res) => {
                 LIMIT 10`;
     //Get current logged in user
     const currentUser=req.session.user.username;
-    //Query to get current user data (pts and username)
-    const userQuery=`SELECT username, SUM(game.score) AS Score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
-                    FROM userGame 
-                    JOIN users ON userGame.user_id=users.userID 
-                    JOIN game ON userGame.game_id=game.gameID 
-                    WHERE username=$1 
-                    GROUP BY username`;
+    //Query to get current user data (pts, rank, and username)
+    const userQuery=`WITH ranked AS (
+                      SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
+                      FROM userGame 
+                      JOIN users ON userGame.user_id=users.userID 
+                      JOIN game ON userGame.game_id=game.gameID  
+                      GROUP BY users.username
+                      )
+                    SELECT username, score, position
+                    FROM ranked
+                    WHERE username=$1`;
     //generate arrays to store user and leaderboard data
     let users=[];
     let currentUserData=[];
+    //
     try {
       //Attempt to get user information
       currentUserData=await db.one(userQuery, [currentUser]);
     }
+    
     catch(err) {
       //If no scores exist, set user score to 0
-      users=[currentUser, 0, null];
+      currentUserData={username: currentUser, score: 0, position: null};
       console.log('user has no scores yet');
     }
     try {
