@@ -111,7 +111,8 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 .page-box {
     position: relative; /* Enables absolute positioning inside */
     /* Possible nbackground color to add to the screen */
-    background-image: linear-gradient(to top, rgba(0, 202, 255, 1) 50%, rgba(0, 101, 248, 0.8), rgba(67, 0, 255,0.8));
+    background-image: linear-gradient(to top, rgba(0, 202, 255, 1) 50%, rgba(0, 101, 248, 1), rgba(67, 0, 255,1));
+    left: -20%;
     background-blend-mode: screen;
     width: 80%;
     max-width: 600px;
@@ -246,11 +247,11 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .play-btn {
-  background-color: #6A0066;
+  background-color: #b34dac;
   width: 150px;
   color: white;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -260,6 +261,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 .play-btn:hover{
     background-color: #b34dac;
+    transform: scale(1.1);
 }
 
 .play-text{
@@ -277,21 +279,21 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 .how-to-play{
   position: absolute;
-  top: 76%;
+  top: 77%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .how-to-btn{
   background-color: #b34dac;
-  color: white;
+  color: white !important;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .how-to-btn:hover{
-  color: white !important;
-  background-color: #6A0066;
+  background-color: #b34dac;
+  transform: scale(1.05);
 }
 
 /* Modal Overlay */
@@ -405,4 +407,13 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   border-color: #433a3d; 
   border-width: 5px;
   border-style: dashed;
+}
+
+.backgroundimage{
+  position: relative;
+  top: 11%;
+  left: 20%;
+  width: 575px;
+  z-index: -2;
+  transform: rotate(90deg);
 }
