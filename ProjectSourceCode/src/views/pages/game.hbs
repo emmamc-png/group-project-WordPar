@@ -147,6 +147,7 @@
                 updateGuess(buttonInputs);
                     room = false;
                 //    console.log(room)
+                submitGuess();
                 }
                 else if (event.target.id === 'back') {
                     buttonInputs.pop();
@@ -193,6 +194,7 @@
             if (room) {
                 if (event.key == 'Enter') {
                     keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
+                    submitGuess();
                 }
                 else if (event.key == 'Backspace') {
                     keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
@@ -214,6 +216,37 @@
             buttonPressed(keyTap);
         }
     });
+
+    async function submitGuess() {
+    const guess = buttonInputs.join("");
+
+    try {
+        const response = await fetch("/api/submitGuess", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                userInput: guess,
+                gameID: window.currentGameID || null
+            })
+        });
+
+        const data = await response.json();
+
+        console.log("Server response:", data);
+
+        if (data.success) {
+            window.currentGameID = data.gameID; 
+            console.log("Guess saved, new gameID:", window.currentGameID);
+        } else {
+            console.error("Backend error:", data.error);
+        }
+    } catch (err) {
+        console.error("Failed to send guess:", err);
+    }
+}
+
   
 
 </script>

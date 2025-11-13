@@ -306,3 +306,48 @@ app.post("/logout", (req,res) => {
 const server = app.listen(3000);
 export default server;
 console.log('Server is listening on port 3000');
+
+
+///////////////////////////////////////////////////////////
+/////---------- Guesses routes ----------//////
+///////////////////////////////////////////////////////////
+
+app.post("/api/submitGuess", async (req, res) => {
+  let { userInput, gameID } = req.body;
+  const user = req.session.user;
+
+  if (!user) return res.status(401).json({ error: "Not logged in" });
+  if (!userInput) return res.status(400).json({ error: "No guess" });
+
+  try {
+    if (!gameID) {
+      const game = await db.one(
+        "INSERT INTO game (score, wordid) VALUES (0, NULL) RETURNING gameid"
+      );
+      gameID = game.gameid;
+    }
+
+    let word = await db.oneOrNone(
+      "SELECT wordid FROM words WHERE word = $1",
+      [userInput.toLowerCase()]
+    );
+
+    if (!word) {
+      word = await db.one(
+        "INSERT INTO words (word, length) VALUES ($1, $2) RETURNING wordid",
+        [userInput.toLowerCase(), userInput.length]
+      );
+    }
+
+    await db.none(
+      `INSERT INTO guesses (gameid, userid, wordid, userinput)
+       VALUES ($1, $2, $3, $4)`,
+      [gameID, user.userid, word.wordid, userInput]
+    );
+
+    res.json({ success: true, gameID });
+  } catch (err) {
+    console.error("Error saving guess:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});

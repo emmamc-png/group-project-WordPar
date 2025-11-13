@@ -30,11 +30,11 @@ CREATE TABLE userGame(
     FOREIGN KEY (user_id) REFERENCES users(userID)
 );
 
-CREATE TABLE guesses(
+CREATE TABLE guesses (
     guessID SERIAL PRIMARY KEY,
-    wordID INT,
-    FOREIGN KEY (wordID) REFERENCES words(wordID),
-    userInput VARCHAR(15)
-
+    gameID INT REFERENCES game(gameID),
+    userID INT REFERENCES users(userID),
+    wordID INT REFERENCES words(wordID),
+    userInput VARCHAR(15) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
 );
-
