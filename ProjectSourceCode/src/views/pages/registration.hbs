@@ -4,16 +4,16 @@
 </div>
 <form class = "formBody" method = "POST" action="/registration"> 
     <div>
-        <input name="username" class="usernameForm" type = "text" id = "username" placeholder="Username"/>
+        <input name="username" class="usernameForm" type = "text" id = "username" placeholder="Username" required/>
     </div>
     <div>
-        <input name="email" class="usernameForm" type = "text" id = "email" placeholder="Email"/>
+        <input name="email" class="usernameForm" type = "email" id = "email" placeholder="Email" required/>
     </div>
     <div>
-        <input name="password1"class="usernameForm" type = "password" id ="password" placeholder="Password"/>
+        <input name="password"class="usernameForm" type = "password" id ="password" placeholder="Password" required/>
     </div>
     <div>
-        <input name="password2" class="passwordForm" type = "password" id ="password" placeholder="Retype Password"/>
+        <input name="password_retype" class="passwordForm" type = "password" id ="password_retype" placeholder="Retype Password" oninput="checkPasswords()"/>
     </div>
     <br>
     <div>

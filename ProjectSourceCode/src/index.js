@@ -152,25 +152,25 @@ app.post('/login', async(req,res) => {
 
 app.post('/registration', async(req,res)=> {
     const username=req.body.username;
-    const password1=req.body.password1;
-    const password2=req.body.password2;
+    const password=req.body.password;
+    const password_retype=req.body.password_retype;
     const email=req.body.email;
 
-    if(!username || !password1 || !email || !password2 ) {
+    if(!username || !password || !email || !password_retype ) {
         const error=true;
         res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
         return;
     }
 
     //Add check to compare the passwords to ensure they're the same
-    if(password1!=password2) {
+    if(password!=password_retype) {
         const error=true;
         res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Passwords do not match.", error});
         return;
     }
 
     //hash the password
-    const hash=await bcrypt.hash(req.body.password1,10);
+    const hash=await bcrypt.hash(req.body.password,10);
     console.log("Hashed password: "+hash);
     const query='INSERT INTO users(username, password) VALUES($1, $2)';
     const query2='SELECT * FROM users WHERE username=$1';
