@@ -30,7 +30,9 @@ a { /*Removes the underline form all HTML links*/
  * provided you do not sell the font by itself.
 */
 
-/* Login/Registration Page CSS */
+/*/////////////////////////////////*/
+/*// Login/Registration Page CSS //*/
+/*/////////////////////////////////*/
 
 .loginTitle{
     color: #934790;
@@ -99,7 +101,9 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     color: white;
 }
 
-/* Home Page CSS information */
+/*/////////////////////////////////*/
+/*///////// Home Page CSS /////////*/
+/*/////////////////////////////////*/
 
 .center-wrapper {
     display: flex;
@@ -172,7 +176,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .btn-category{
-  background-color: #6A0066;
+  background-color: #934790;
   color: white;
   border: none;
   padding: 0.5rem;
@@ -183,7 +187,8 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .btn-category:hover{
-  background-color: #6A0066; /* Lighter or different shade for hover */
+  transform: scale(1.05);
+  background-color: #934790; /* Lighter or different shade for hover */
 }
 
 .btn-user{
@@ -246,20 +251,22 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .play-btn {
-  background-color: #6A0066;
+  background-color: #b34dac;
   width: 150px;
   color: white;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .play-btn:hover{
-    background-color: #b34dac;
+  transform: scale(1.05);
+  background-color: #6A0066;
 }
 
 .play-text{
@@ -284,13 +291,14 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 .how-to-btn{
   background-color: #b34dac;
-  color: white;
+  color: white !important;
   border: none;
-  transition: background-color 0.2s ease;
+  transition:0.2s ease;
 }
 
 .how-to-btn:hover{
   color: white !important;
+  transform: scale(1.1);
   background-color: #6A0066;
 }
 
@@ -357,6 +365,10 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   background-color: #01a305;
   border-color: #934790; 
 }
+
+/*/////////////////////////////////*/
+/*///////// Game Page CSS /////////*/
+/*/////////////////////////////////*/
 
 .keyboard_row {
   padding: 1%;
