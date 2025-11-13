@@ -422,6 +422,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   border-width: 5px !important;
   border-bottom-style: solid !important;
   color: #FFFFFF !important;
+  font-size: 25px;
   display: inline-block !important;
   padding: 4% !important;
   margin: 2% !important;
