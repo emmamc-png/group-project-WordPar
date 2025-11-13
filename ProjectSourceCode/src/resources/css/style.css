@@ -376,6 +376,12 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   padding: 20%;
 }
 
+#top-right-game {
+  position:absolute;
+  top: 2%;
+  left: 93%;
+}
+
 #guess {
   width: 45%;
   position: absolute;
