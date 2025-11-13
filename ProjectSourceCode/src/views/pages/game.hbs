@@ -1,14 +1,23 @@
 <div class="row">
-    <div class="col-7" style="border: 2px none black;">
-        <div id="clearbtn"></div>
-        <div id="top-left-game" class="row">
-            <br>
-            <br>
-            <br>
-            <div id="guess"></div>
-            <br>
-            <br>
-            <br>
+    <div class="col-7">
+        <div class="row game-info">
+            <div id="points" class="col-1">Points</div>
+            <div id="category" class="col-5">Category</div>
+            <div id="user-score" class="col-2">Score
+                <div id="strokes">Strokes</div>
+            </div>
+        </div>
+        <div id="actual-game" class="row">
+            <div class="row">
+                <div id="clearbtn"></div>
+                <br>
+                <br>
+                <br>
+                <div id="guess"></div>
+                <br>
+                <br>
+                <br>
+            </div>
         </div>
         <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%"></div>
         <div id="buttonContainer" class="row">
@@ -53,8 +62,6 @@
                 </button>
             </div>
         </div>
-
-
     </div>
     <div class="col-5" style="border: 2px none black;">
         <div class="semicircle"></div>
@@ -84,7 +91,6 @@
     </div>  
 </div>
 
-
 <script>
     const buttonContainer = document.getElementById('buttonContainer');
 
@@ -96,6 +102,9 @@
 
     // See if the user's done with current guess
     let room = true;
+
+    // See if the clear button is active
+    let clear = false;
 
     // Update the user's guess on the screen
     function updateGuess(buttonInputs) {
@@ -112,12 +121,14 @@
         htmlContent += "</div>";
         guessDiv.innerHTML = htmlContent;
 
-        const clearbtnDiv = document.getElementById("clearbtn");
-        let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
-        clearbtnDiv.innerHTML = htmlContent2;
+        if (clear) {
+            const clearbtnDiv = document.getElementById("clearbtn");
+            let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
+            clearbtnDiv.innerHTML = htmlContent2;
 
         // Call the button function every time the clear is pressed (from the virtual keyboard)
         clearbtnDiv.addEventListener('click', buttonPressed);
+        }
     }
 
     // Get the key from the user and store in array
@@ -135,10 +146,15 @@
             prevKey = correctKey
             correctKey.classList.add('simulate-btn-hover');
 
+            if (event.target.id === 'clear') {
+                clear = true;
+            }
+
             // console.log(event.target)
             if (event.target.tagName === 'BUTTON') {
                 if(event.target.id == 'enter') {
                 //    console.log('im here')
+                clear = true;
                 updateGuess(buttonInputs);
                     room = false;
                 //    console.log(room)
@@ -146,10 +162,13 @@
                 else if (event.target.id === 'back') {
                     buttonInputs.pop();
                     updateGuess(buttonInputs);
-                    // console.log(buttonInputs);
                 }
                 else {
-                    buttonInputs.push(event.target.value);
+                    // Don't append the clear button
+                    if (event.target.id != 'clear') {
+                        buttonInputs.push(event.target.value);
+                    }
+                    // console.log(event.target.id)
                     updateGuess(buttonInputs);
                     // console.log(buttonInputs);
                 }
@@ -170,6 +189,7 @@
                         clearbtn.remove();
                     }
                     room = true;
+                    clear = false;
                 }
             }
             // console.log('Guess Set')
