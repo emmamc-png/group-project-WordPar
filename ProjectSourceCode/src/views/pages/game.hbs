@@ -92,13 +92,137 @@
     </div>
 
     <div id="top-right-game" class="col-12">
-        <form method="POST" action="/logout">
+        <form method="POST" action="/exitGame">
             <button id="exit-button" type="submit" class="btn btn-danger" style="background-color: green; color:white">Exit Game</button>
         </form>
     </div>
 </div>
 
 <script>
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    // Log the previous key to make the color change
+    let prevKey = "";
+
+    // Store the user's inputs
+    let buttonInputs = [];
+
+    // See if the user's done with current guess
+    let room = true;
+
+    // Update the user's guess on the screen
+    function updateGuess(buttonInputs) {
+        // Your chosen JavaScript code from above would go here
+        // For example, using forEach():
+        const guessDiv = document.getElementById("guess");
+
+        let htmlContent = "<div id= 'letters'>";
+        buttonInputs.forEach(item => {
+            htmlContent += "<div class= 'character rounded'>";
+            htmlContent += `${item}`;
+            htmlContent += "</div>";
+        });
+        htmlContent += "</div>";
+        guessDiv.innerHTML = htmlContent;
+
+        const clearbtnDiv = document.getElementById("clearbtn");
+        let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
+        clearbtnDiv.innerHTML = htmlContent2;
+
+        // Call the button function every time the clear is pressed (from the virtual keyboard)
+        clearbtnDiv.addEventListener('click', buttonPressed);
+    }
+
+    // Get the key from the user and store in array
+    function buttonPressed(event) {
+        // console.log(room)
+        if (room)
+        {   
+            // console.log(prevKey)
+            if (prevKey) {
+                prevKey.classList.remove('simulate-btn-hover');
+            }
+            // console.log(event)
+            const correctKey = document.querySelector(`#${event.target.id}`)
+            // console.log(correctKey)
+            prevKey = correctKey
+            correctKey.classList.add('simulate-btn-hover');
+
+            // console.log(event.target)
+            if (event.target.tagName === 'BUTTON') {
+                if(event.target.id == 'enter') {
+                //    console.log('im here')
+                updateGuess(buttonInputs);
+                    room = false;
+                //    console.log(room)
+                }
+                else if (event.target.id === 'back') {
+                    buttonInputs.pop();
+                    updateGuess(buttonInputs);
+                    // console.log(buttonInputs);
+                }
+                else {
+                    buttonInputs.push(event.target.value);
+                    updateGuess(buttonInputs);
+                    // console.log(buttonInputs);
+                }
+            }
+        }
+        else {
+            if (event.target.tagName === 'BUTTON') {
+                 if (event.target.id === 'clear') {
+                    // console.log(buttonInputs);
+                    buttonInputs.length = 0;
+                    // console.log(buttonInputs);
+                    const guessDiv = document.getElementById("letters");
+                    const clearbtn = document.getElementById("clear");
+                    if (guessDiv) {
+                        guessDiv.remove();
+                    }
+                    if (clearbtn) {
+                        clearbtn.remove();
+                    }
+                    room = true;
+                }
+            }
+            // console.log('Guess Set')
+        }
+    };
+
+    // Call the button function every time a key is pressed (from the virtual keyboard)
+    buttonContainer.addEventListener('click', buttonPressed)
+
+    // Call the correct key when the user inputs the value from the keyboard itself
+    document.addEventListener("keydown", function(event) { 
+        if ((event.key.length === 1 && event.key.match(/[a-z]/i)) || event.key == 'Enter' || event.key == 'Backspace') {
+            event.preventDefault();
+            let keyTap;
+
+            if (room) {
+                if (event.key == 'Enter') {
+                    keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
+                }
+                else if (event.key == 'Backspace') {
+                    keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
+                }
+                else {
+                    keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
+                }
+            }
+            else {
+                // console.log("here")
+                if (event.key === 'Backspace') {
+                    keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'clear'} }
+                }
+            }
+            // console.log(event.keyCode);
+            // console.log(keyTap);
+
+            // Record user's input
+            buttonPressed(keyTap);
+        }
+    });
+
 // ========================================
 // AI Integration Variables
 // ========================================
@@ -146,129 +270,6 @@ window.addEventListener('DOMContentLoaded', () => {
     startNewGame('music'); // Start with music category
 });
 
-// ========================================
-// Keyboard Input Handling
-// ========================================
-const buttonContainer = document.getElementById('buttonContainer');
-let prevKey = "";
-let buttonInputs = [];
-let room = true;
-    // See if the clear button is active
-    let clear = false;
-
-    // Update the user's guess on the screen
-    function updateGuess(buttonInputs) {
-        // Your chosen JavaScript code from above would go here
-        // For example, using forEach():
-        const guessDiv = document.getElementById("guess");
-
-function updateGuess(buttonInputs) {
-    const guessDiv = document.getElementById("guess");
-    let htmlContent = "<div id='letters'>";
-    buttonInputs.forEach(item => {
-        htmlContent += "<div class='character rounded'>";
-        htmlContent += `${item}`;
-        htmlContent += "</div>";
-    });
-    htmlContent += "</div>";
-    guessDiv.innerHTML = htmlContent;
-
-    const clearbtnDiv = document.getElementById("clearbtn");
-    let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
-    clearbtnDiv.innerHTML = htmlContent2;
-    clearbtnDiv.addEventListener('click', buttonPressed);
-}
-        guessDiv.innerHTML = htmlContent;
-
-        if (clear) {
-            const clearbtnDiv = document.getElementById("clearbtn");
-            let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
-            clearbtnDiv.innerHTML = htmlContent2;
-
-        // Call the button function every time the clear is pressed (from the virtual keyboard)
-        clearbtnDiv.addEventListener('click', buttonPressed);
-        }
-    }
-
-async function buttonPressed(event) {
-    if (room) {
-        if (prevKey) {
-            prevKey.classList.remove('simulate-btn-hover');
-        }
-        
-        const correctKey = document.querySelector(`#${event.target.id}`)
-        prevKey = correctKey
-        if (correctKey) {
-            correctKey.classList.add('simulate-btn-hover');
-        }
-
-        if (event.target.tagName === 'BUTTON') {
-            if(event.target.id == 'enter') {
-                if (buttonInputs.length === 0) {
-                    alert('Please enter a word first!');
-                    return;
-            if (event.target.id === 'clear') {
-                clear = true;
-            }
-
-            // console.log(event.target)
-            if (event.target.tagName === 'BUTTON') {
-                if(event.target.id == 'enter') {
-                //    console.log('im here')
-                clear = true;
-                updateGuess(buttonInputs);
-                    room = false;
-                //    console.log(room)
-                }
-                else if (event.target.id === 'back') {
-                    buttonInputs.pop();
-                    updateGuess(buttonInputs);
-                }
-                else {
-                    // Don't append the clear button
-                    if (event.target.id != 'clear') {
-                        buttonInputs.push(event.target.value);
-                    }
-                    // console.log(event.target.id)
-                    updateGuess(buttonInputs);
-                    // console.log(buttonInputs);
-                }
-                
-                // Submit guess - this handles both AI check AND database save
-                await submitGuess(buttonInputs.join(''));
-                updateGuess(buttonInputs);
-                room = false;
-            }
-            else if (event.target.id === 'back') {
-                buttonInputs.pop();
-                updateGuess(buttonInputs);
-            }
-            else if (event.target.id !== 'clear') {
-                buttonInputs.push(event.target.value);
-                updateGuess(buttonInputs);
-            }
-        }
-        else {
-            if (event.target.tagName === 'BUTTON') {
-                 if (event.target.id === 'clear') {
-                    // console.log(buttonInputs);
-                    buttonInputs.length = 0;
-                    // console.log(buttonInputs);
-                    const guessDiv = document.getElementById("letters");
-                    const clearbtn = document.getElementById("clear");
-                    if (guessDiv) {
-                        guessDiv.remove();
-                    }
-                    if (clearbtn) {
-                        clearbtn.remove();
-                    }
-                    room = true;
-                    clear = false;
-                }
-            }
-        }
-    }
-}
 
 // ========================================
 // Submit Guess - AI Similarity + Database Save
@@ -405,34 +406,4 @@ function displayFeedback(guess, similarity, percentage) {
     // Add to top of history
     feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
 }
-
-// ========================================
-// Event Listeners
-// ========================================
-buttonContainer.addEventListener('click', buttonPressed);
-
-document.addEventListener("keydown", function(event) { 
-    if ((event.key.length === 1 && event.key.match(/[a-z]/i)) || event.key == 'Enter' || event.key == 'Backspace') {
-        event.preventDefault();
-        let keyTap;
-
-        if (room) {
-            if (event.key == 'Enter') {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
-            }
-            else if (event.key == 'Backspace') {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
-            }
-            else {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
-            }
-        }
-        else {
-            if (event.key === 'Backspace') {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'clear'} }
-            }
-        }
-        buttonPressed(keyTap);
-    }
-});
 </script>

@@ -35,16 +35,9 @@ CREATE TABLE userGame(
 
 CREATE TABLE guesses (
     guessID SERIAL PRIMARY KEY,
-<<<<<<< HEAD
     gameID INT REFERENCES game(gameID),
     userID INT REFERENCES users(userID),
     wordID INT REFERENCES words(wordID),
     userInput VARCHAR(15) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
-=======
-    wordID INT,
-    FOREIGN KEY (wordID) REFERENCES words(wordID),
-    userInput VARCHAR(15)
-);
->>>>>>> ai_serv2
