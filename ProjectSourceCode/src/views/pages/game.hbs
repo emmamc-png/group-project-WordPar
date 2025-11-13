@@ -162,6 +162,7 @@
                 else if (event.target.id === 'back') {
                     buttonInputs.pop();
                     updateGuess(buttonInputs);
+                    // console.log(buttonInputs);
                 }
                 else {
                     // Don't append the clear button
@@ -169,6 +170,8 @@
                         buttonInputs.push(event.target.value);
                     }
                     // console.log(event.target.id)
+                    updateGuess(buttonInputs);
+                    buttonInputs.push(event.target.value);
                     updateGuess(buttonInputs);
                     // console.log(buttonInputs);
                 }
