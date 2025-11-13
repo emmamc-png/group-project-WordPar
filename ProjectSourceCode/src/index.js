@@ -156,9 +156,9 @@ app.post('/registration', async(req,res)=> {
     const password_retype=req.body.password_retype;
     const email=req.body.email;
 
-    if(!username || !password || !email || !password_retype ) {
+    if(!username || !password || !email || !password_retype || username.length>50 || email.length>100) {
         const error=true;
-        res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username and password.", error});
+        res.status(400).render('pages/registration', { bodyClass: 'auth-page', message: "Please enter a valid username, password, and email.", error});
         return;
     }
 
