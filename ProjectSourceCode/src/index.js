@@ -252,6 +252,17 @@ app.get('/game', async(req, res) => {
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
+//Initialize new game
+app.post('/game', async(req,res) => {
+  let category=req.body.category;
+  let initial_score=100;
+  console.log('Category selected: '+category);
+  //Make call to API service to get words based on category
+  //INSERT FETCH CALL TO API SERVICE HERE TO GET WORD
+  let word="test"; //Temporary placeholder until API service works
+  res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+})
+
 ///////////////////////////////////////////////////////////
 /////---------- Handlebars Helper Functions ----------/////
 ///////////////////////////////////////////////////////////
