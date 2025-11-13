@@ -42,7 +42,7 @@ describe('Server!', () => {
 
 describe('Testing Registration API', () => {
     // API: /registration
-    // Input: { username: randomly generated alphanumeric string, email: 't@gmail.com', password1:'pass', password2:'pass'}
+    // Input: { username: randomly generated alphanumeric string, email: 't@gmail.com', password:'pass', password_retype:'pass'}
     // Expect: res.status == 200
     // Result: This test case should pass and return a status 200.
     // Explanation: The testcase will call the /registration API with the following valid inputs
@@ -52,7 +52,7 @@ describe('Testing Registration API', () => {
         chai
             .request(server)
             .post('/registration')
-            .send({username: name, email: 't@gmail.com', password1: 'pass', password2: 'pass'}) //password is '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'
+            .send({username: name, email: 't@gmail.com', password: 'pass', password_retype: 'pass'}) //password is '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'
             .end((err, res) => {
                 console.log('testing positive');
                 expect(res).to.have.status(200);
@@ -60,7 +60,7 @@ describe('Testing Registration API', () => {
             });
     });
   // API: /registration
-  // Input: { username: 'bob', email: 'bob@gmail.com', password1:'pass', password2:'pass'}
+  // Input: { username: 'bob', email: 'bob@gmail.com', password:'pass', password_retype:'pass'}
   // Expect: res.status == 400
   // Result: This test case should pass and return a status 400.
   // Explanation: The testcase will call the /registration API with the following invalid inputs
@@ -69,7 +69,7 @@ describe('Testing Registration API', () => {
     chai
       .request(server)
       .post('/registration')
-      .send({ username: 'bob', email: 'bob@gmail.com', password1:'pass', password2:'pass'}) //Will fail because bob already exists
+      .send({ username: 'bob', email: 'bob@gmail.com', password:'pass', password_retype:'pass'}) //Will fail because bob already exists
       .end((err, res) => {
         console.log('testing negative');
         console.log('Status: ', res.status);
