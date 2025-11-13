@@ -145,10 +145,12 @@
                 }
                 else if (event.target.id === 'back') {
                     buttonInputs.pop();
+                    updateGuess(buttonInputs);
                     // console.log(buttonInputs);
                 }
                 else {
                     buttonInputs.push(event.target.value);
+                    updateGuess(buttonInputs);
                     // console.log(buttonInputs);
                 }
             }
