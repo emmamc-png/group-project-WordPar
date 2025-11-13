@@ -309,8 +309,12 @@ console.log('Server is listening on port 3000');
 
 
 ///////////////////////////////////////////////////////////
-/////---------- Guesses routes ----------//////
+/////---------------- Guesses routes ----------------//////
 ///////////////////////////////////////////////////////////
+
+function calculateScore(userInput) {
+  return userInput.length;
+}
 
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
@@ -345,7 +349,14 @@ app.post("/api/submitGuess", async (req, res) => {
       [gameID, user.userid, word.wordid, userInput]
     );
 
-    res.json({ success: true, gameID });
+    const scoreToAdd = calculateScore(userInput);
+
+    await db.none(
+      `UPDATE game SET score = score + $1 WHERE gameid = $2`,
+      [scoreToAdd, gameID]
+    );
+
+    res.json({ success: true, gameID, scoreAdded: scoreToAdd });
   } catch (err) {
     console.error("Error saving guess:", err);
     res.status(500).json({ error: "Database error" });
