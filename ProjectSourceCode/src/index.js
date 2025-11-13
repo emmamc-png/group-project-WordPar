@@ -281,7 +281,11 @@ app.get('/game', async(req, res) => {
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
-app.get
+app.post('/exitGame', async(req, res) => {
+  //Need to implement a way to delete from DB and end game session
+  //temporary placeholder for exit game functionality
+  res.status(200).redirect('/');
+});
 
 ///////////////////////////////////////////////////////////
 /////---------- Guesses Routes (from merge) ----------/////
