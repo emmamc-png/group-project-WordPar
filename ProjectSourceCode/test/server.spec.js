@@ -49,10 +49,11 @@ describe('Testing Registration API', () => {
     // and expects the API to return a status of 200.
     it('positive : /registration', done => {
         var name=Math.random().toString(36).substring(7);
+        var email=name+'@gmail.com';
         chai
             .request(server)
             .post('/registration')
-            .send({username: name, email: 't@gmail.com', password: 'pass', password_retype: 'pass'}) //password is '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'
+            .send({username: name, email: email, password: 'pass', password_retype: 'pass'}) //password is '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'
             .end((err, res) => {
                 console.log('testing positive');
                 expect(res).to.have.status(200);

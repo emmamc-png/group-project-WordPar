@@ -172,17 +172,17 @@ app.post('/registration', async(req,res)=> {
     //hash the password
     const hash=await bcrypt.hash(req.body.password,10);
     console.log("Hashed password: "+hash);
-    const query='INSERT INTO users(username, password) VALUES($1, $2)';
+    const query='INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
     const query2='SELECT * FROM users WHERE username=$1';
     try {
-        await db.none(query, [username, hash]);
+      await db.none(query, [username, email, hash]);
         console.log("User registered");
         res.status(200).redirect('/login');
     }
     catch(err) {
         const error=true;
         //res.status(400).json({ error: 'Username already exists.' });
-        res.status(400).render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists.", error});
+        res.status(400).render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists or email already in use.", error});
     }
 });
 
@@ -211,6 +211,16 @@ app.get('/', async(req, res) => {
                 LIMIT 10`;
     //Get current logged in user
     const currentUser=req.session.user.username;
+    const getUserEmail=`SELECT email FROM users WHERE username=$1`;
+    let userEmail;
+    try {
+      userEmail=await db.one(getUserEmail, [currentUser]);
+      console.log("User email retrieved: " + userEmail.email);
+    }
+    catch (err) {
+      console.log("Error retrieving user email: " + err);
+      userEmail={email: ''};
+    }
     //Query to get current user data (pts, rank, and username)
     const userQuery=`WITH ranked AS (
                       SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
@@ -225,7 +235,6 @@ app.get('/', async(req, res) => {
     //generate arrays to store user and leaderboard data
     let users=[];
     let currentUserData=[];
-    //
     try {
       //Attempt to get user information
       currentUserData=await db.one(userQuery, [currentUser]);
@@ -233,35 +242,24 @@ app.get('/', async(req, res) => {
     
     catch(err) {
       //If no scores exist, set user score to 0
-      currentUserData={username: currentUser, score: 0, position: null};
+      currentUserData={username: currentUser, score: 0, position: null, email: userEmail.email};
       console.log('user has no scores yet');
     }
     try {
       users=await db.any(query);
       console.log("Leaderboard data retrieved");
-      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData, email: userEmail.email}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
     catch(err) {
       console.log(err);
       //If error occurs, render page with empty leaderboard
-      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData, email: userEmail.email}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
 });
 
 app.get('/game', async(req, res) => {         
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
-
-//Initialize new game
-app.post('/game', async(req,res) => {
-  let category=req.body.category;
-  let initial_score=100;
-  console.log('Category selected: '+category);
-  //Make call to API service to get words based on category
-  //INSERT FETCH CALL TO API SERVICE HERE TO GET WORD
-  let word="test"; //Temporary placeholder until API service works
-  res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-})
 
 ///////////////////////////////////////////////////////////
 /////---------- Handlebars Helper Functions ----------/////
@@ -317,3 +315,48 @@ app.post("/logout", (req,res) => {
 const server = app.listen(3000);
 export default server;
 console.log('Server is listening on port 3000');
+
+
+///////////////////////////////////////////////////////////
+/////---------- Guesses routes ----------//////
+///////////////////////////////////////////////////////////
+
+app.post("/api/submitGuess", async (req, res) => {
+  let { userInput, gameID } = req.body;
+  const user = req.session.user;
+
+  if (!user) return res.status(401).json({ error: "Not logged in" });
+  if (!userInput) return res.status(400).json({ error: "No guess" });
+
+  try {
+    if (!gameID) {
+      const game = await db.one(
+        "INSERT INTO game (score, wordid) VALUES (0, NULL) RETURNING gameid"
+      );
+      gameID = game.gameid;
+    }
+
+    let word = await db.oneOrNone(
+      "SELECT wordid FROM words WHERE word = $1",
+      [userInput.toLowerCase()]
+    );
+
+    if (!word) {
+      word = await db.one(
+        "INSERT INTO words (word, length) VALUES ($1, $2) RETURNING wordid",
+        [userInput.toLowerCase(), userInput.length]
+      );
+    }
+
+    await db.none(
+      `INSERT INTO guesses (gameid, userid, wordid, userinput)
+       VALUES ($1, $2, $3, $4)`,
+      [gameID, user.userid, word.wordid, userInput]
+    );
+
+    res.json({ success: true, gameID });
+  } catch (err) {
+    console.error("Error saving guess:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});

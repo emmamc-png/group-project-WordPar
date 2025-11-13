@@ -2,13 +2,52 @@
     <div class="page-box">
         <h1 class="top-center">WORD PAR</h1>
         <div class="top-right">
-            <button class="btn btn-user">
+            <button class="btn btn-user" id="myBtn">
                 <a> <!-- To implment route to page game page -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" class="bi bi-person-fill" viewBox="0 0 16 16">
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                     </svg>
                 </a>
             </button>
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Account Information</h2>
+                    <p class="useninfo-text">Username: {{currentUser.username}}</p>
+                    <p class="useninfo-text">Email: {{email}} </p>
+                    <form method = "POST" action="/logout">
+                        <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
+                    </form>
+                </div>
+            </div>
+            <script>
+                // Get the modal
+                var modal = document.getElementById("myModal");
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("myBtn");
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks the button, open the modal 
+                btn.onclick = function() {
+                    modal.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function() {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                    modal.style.display = "none";
+                    }
+                }
+            </script>
         </div>
         <div class="above-center">
             <div class="leaderboard-container">
