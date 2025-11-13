@@ -101,7 +101,7 @@ app.post('/login', async(req,res) => {
   const password=req.body.password;
 
   //Will be added once the database is available to check if username and password are correct
-  if(!username || !password) {
+  if(!username || !password || username.length>50) {
         const error=true;
         res.status(400).render('pages/login', { bodyClass: 'auth-page', message: "Please enter your username and password.", error});
         return;
