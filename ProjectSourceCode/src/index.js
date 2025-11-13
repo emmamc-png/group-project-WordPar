@@ -248,8 +248,31 @@ app.get('/', async(req, res) => {
     }
 });
 
-app.get('/game', async(req, res) => {         
+//Render game page
+app.get('/game', async(req, res) => { 
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+//Route to handle exiting the game and redirecting to home page
+//Once the game data has been implemented, we can add code here to delete the current game session from the database
+app.post('/exit-game', async(req, res) => {
+  /*
+    currentGameId=req.session.currentGameID;
+    currentUserID=req.session.user.userID;
+    let gameDelete='DELETE FROM game WHERE gameID=$1';
+    let userGameDelete='DELETE from userGame where game_id=$1 AND user_id=$2';
+    try {
+      await db.none(userGameDelete, [currentGameID, currentUserID]);
+      await db.none(gameDelete, [currentGameID]);
+      console.log("Succesfully deleted current game");
+      }
+    catch(err) {
+      console.log("Issue deleting current game: "+err);
+      res.status(500).redirect('/game', {message: "An error occurred while exiting the game. Please try again."});
+      return;
+    }
+  */
+  res.status(200).redirect('/');
 });
 
 ///////////////////////////////////////////////////////////
