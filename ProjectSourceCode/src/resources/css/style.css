@@ -447,7 +447,50 @@ body {font-family: Arial, Helvetica, sans-serif;}
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-#top-left-game {
+.game-info {
+  position: absolute;
+  top: 0%;
+  left: 1%;
+  width: 100%;
+}
+
+#points {
+  align-content: center;
+  background-color: #95073d !important;
+  color: #ffffff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 2px !important;
+  padding: 1%;
+  text-align: center;
+}
+
+#category {
+  align-content: center;
+  background-color :#079528 !important;
+  color: #ffffff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 2px !important;
+  padding: 1%;
+  text-align: center;
+}
+
+#user-score {
+  align-content: center;
+  background-color: #95078e !important;
+  color: #ffffff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 2px !important;
+  padding: 1%;
+  text-align: center;
+}
+
+#actual-game {
   padding: 20%;
 }
 
@@ -460,7 +503,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 #guess {
   width: 45%;
   position: absolute;
-  top: 15%;
+  top: 25%;
 }
 
 #buttonContainer {
@@ -470,7 +513,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 } 
 
  #clear {
-  position: absolute;
+  position: relative;
   top: 2%;
   left: 2%;
   background-color: #944765 !important;
