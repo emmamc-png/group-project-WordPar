@@ -14,8 +14,8 @@
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h2>Account Information</h2>
-                    <p class="useninfo-text">Username: </p>
-                    <p class="useninfo-text">Email: </p>
+                    <p class="useninfo-text">Username: {{currentUser.username}} </p>
+                    <p class="useninfo-text">Email: {{email}} </p>
                     <form method = "POST" action="/logout">
                         <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
                     </form>
