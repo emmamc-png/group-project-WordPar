@@ -125,6 +125,7 @@
         htmlContent += "</div>";
         guessDiv.innerHTML = htmlContent;
 
+        // Create the clear button once the user has entered their guess
         const clearbtnDiv = document.getElementById("clearbtn");
         let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
         clearbtnDiv.innerHTML = htmlContent2;
@@ -161,6 +162,16 @@
                     updateGuess(buttonInputs);
                     // console.log(buttonInputs);
                 }
+                else if (buttonInputs.length >= 15) {
+                    // Do nothing if the input is already 15 characters
+                    console.log("Maximum input length reached.");
+                }
+                else if(event.target.id === 'clear') {
+                    // Clear entire input
+                    console.log("user entered: " +buttonInputs);
+                    buttonInputs.length = 0;
+                    updateGuess(buttonInputs);
+                }
                 else {
                     buttonInputs.push(event.target.value);
                     updateGuess(buttonInputs);
@@ -171,9 +182,9 @@
         else {
             if (event.target.tagName === 'BUTTON') {
                  if (event.target.id === 'clear') {
-                    // console.log(buttonInputs);
+                    console.log("Before clearing: "+buttonInputs);
                     buttonInputs.length = 0;
-                    // console.log(buttonInputs);
+                    console.log("After clearing: "+buttonInputs);
                     const guessDiv = document.getElementById("letters");
                     const clearbtn = document.getElementById("clear");
                     if (guessDiv) {
