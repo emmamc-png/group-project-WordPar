@@ -164,14 +164,7 @@ app.post("/registration", async (req, res) => {
   const password_retype = req.body.password_retype;
   const email = req.body.email;
 
-  if (
-    !username ||
-    !password ||
-    !email ||
-    !password_retype ||
-    username.length > 50 ||
-    email.length > 100
-  ) {
+  if (!username || !password || !email || !password_retype || username.length > 50 || email.length > 100) {
     const error = true;
     res.status(400).render("pages/registration", {
       bodyClass: "auth-page",
@@ -339,6 +332,40 @@ app.get("/game", async (req, res) => {
   res.status(200).render("pages/game", { bodyClass: "auth-page" });
 });
 
+app.post("/exitGame", async(req,res)=>{
+  /* Will be added in future iterations
+      const gameID = req.body.gameID;
+      const userID = req.session.user.userid;
+
+      // Logic to delete the game session connection to the user
+      // Prevents the user from cheating by always exiting the game with the highest score
+      const deleteQuery=`DELETE FROM userGame WHERE user_id=$1 AND game_id=$2`;
+      try {
+        await db.none(deleteQuery, [userID, gameID]);
+        console.log("Game session deleted for user:", userID);
+      }
+      catch (err) {
+        console.log("Error occured exiting: ", err);
+        //Can we make this redirect somewhere better?
+        res.status(500).redirect('/', message: "An error occured while exiting the game.");
+      }
+  */
+ res.status(200).redirect('/');
+});
+
+// Logout
+app.post("/logout", (req, res) => {
+  try {
+    req.session.destroy();
+    res.status(200).redirect("/login");
+  } catch (err) {
+    console.log(err);
+    res.status(500).redirect("/settings", {
+      message: "An error occurred while logging out. Please try again.",
+    });
+  }
+});
+
 ///////////////////////////////////////////////////////////
 /////---------- Guesses Routes (from merge) ----------/////
 ///////////////////////////////////////////////////////////
@@ -384,19 +411,6 @@ app.post("/api/submitGuess", async (req, res) => {
   } catch (err) {
     console.error("Error saving guess:", err);
     res.status(500).json({ error: "Database error" });
-  }
-});
-
-// Logout
-app.post("/logout", (req, res) => {
-  try {
-    req.session.destroy();
-    res.status(200).redirect("/login");
-  } catch (err) {
-    console.log(err);
-    res.status(500).redirect("/settings", {
-      message: "An error occurred while logging out. Please try again.",
-    });
   }
 });
 
