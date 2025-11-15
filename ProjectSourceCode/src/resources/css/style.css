@@ -30,7 +30,9 @@ a { /*Removes the underline form all HTML links*/
  * provided you do not sell the font by itself.
 */
 
-/* Login/Registration Page CSS */
+/*/////////////////////////////////*/
+/*// Login/Registration Page CSS //*/
+/*/////////////////////////////////*/
 
 .loginTitle{
     color: #934790;
@@ -99,7 +101,9 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     color: white;
 }
 
-/* Home Page CSS information */
+/*/////////////////////////////////*/
+/*///////// Home Page CSS /////////*/
+/*/////////////////////////////////*/
 
 .center-wrapper {
     display: flex;
@@ -172,7 +176,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .btn-category{
-  background-color: #6A0066;
+  background-color: #934790;
   color: white;
   border: none;
   padding: 0.5rem;
@@ -183,7 +187,8 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .btn-category:hover{
-  background-color: #6A0066; /* Lighter or different shade for hover */
+  transform: scale(1.05);
+  background-color: #934790; /* Lighter or different shade for hover */
 }
 
 .btn-user{
@@ -246,20 +251,22 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .play-btn {
-  background-color: #6A0066;
+  background-color: #b34dac;
   width: 150px;
   color: white;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .play-btn:hover{
-    background-color: #b34dac;
+  transform: scale(1.05);
+  background-color: #6A0066;
 }
 
 .play-text{
@@ -284,13 +291,14 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 .how-to-btn{
   background-color: #b34dac;
-  color: white;
+  color: white !important;
   border: none;
-  transition: background-color 0.2s ease;
+  transition:0.2s ease;
 }
 
 .how-to-btn:hover{
   color: white !important;
+  transform: scale(1.1);
   background-color: #6A0066;
 }
 
@@ -308,15 +316,78 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   z-index: 1000;
 }
 
+/* HOME PAGE USER MODAL */
+
+.useninfo-text{
+  font-size: 20px;
+}
+
+.btn-logout{
+  background-color: red;
+  color: #000;
+  border-radius: 4px;
+  width: 15%;
+  height: 10%;
+  border: none;
+  transition: ease 0.2s;
+}
+
+.btn-logout:hover{
+  transform: scale(1.05);
+}
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  color: #555353;
+  left: 3%;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 /* Modal Box */
 .modal-box {
   position: absolute;
+  z-index: 2;
   top: 30%;
   left:10%;
   transform: translate(-50%, -50%);
   width: 300px;
   height: 500px;
-  background: rgba(255, 255, 255, 0.9); /* white but opaque */
+  background: rgba(255, 255, 255, .95); /* white but opaque */
   color: black;
   border-radius: 8px;
   padding: 20px;
@@ -358,6 +429,10 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   border-color: #934790; 
 }
 
+/*/////////////////////////////////*/
+/*///////// Game Page CSS /////////*/
+/*/////////////////////////////////*/
+
 .keyboard_row {
   padding: 1%;
   text-align: center;
@@ -372,14 +447,63 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-#top-left-game {
+.game-info {
+  position: absolute;
+  top: 0%;
+  left: 1%;
+  width: 100%;
+}
+
+#points {
+  align-content: center;
+  background-color: #95073d !important;
+  color: #ffffff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 2px !important;
+  padding: 1%;
+  text-align: center;
+}
+
+#category {
+  align-content: center;
+  background-color :#079528 !important;
+  color: #ffffff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 2px !important;
+  padding: 1%;
+  text-align: center;
+}
+
+#user-score {
+  align-content: center;
+  background-color: #95078e !important;
+  color: #ffffff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 2px !important;
+  padding: 1%;
+  text-align: center;
+}
+
+#actual-game {
   padding: 20%;
+}
+
+#top-right-game {
+  position:absolute;
+  top: 2%;
+  left: 93%;
 }
 
 #guess {
   width: 45%;
   position: absolute;
-  top: 15%;
+  top: 25%;
 }
 
 #buttonContainer {
@@ -389,7 +513,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 } 
 
  #clear {
-  position: absolute;
+  position: relative;
   top: 2%;
   left: 2%;
   background-color: #944765 !important;

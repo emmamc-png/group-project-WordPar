@@ -1,14 +1,23 @@
 <div class="row">
-    <div class="col-7" style="border: 2px none black;">
-        <div id="clearbtn"></div>
-        <div id="top-left-game" class="row">
-            <br>
-            <br>
-            <br>
-            <div id="guess"></div>
-            <br>
-            <br>
-            <br>
+    <div class="col-7">
+        <div class="row game-info">
+            <div id="points" class="col-1">Points</div>
+            <div id="category" class="col-5">Category</div>
+            <div id="user-score" class="col-2">Score
+                <div id="strokes">Strokes</div>
+            </div>
+        </div>
+        <div id="actual-game" class="row">
+            <div class="row">
+                <div id="clearbtn"></div>
+                <br>
+                <br>
+                <br>
+                <div id="guess"></div>
+                <br>
+                <br>
+                <br>
+            </div>
         </div>
         <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%"></div>
         <div id="buttonContainer" class="row">
@@ -53,9 +62,8 @@
                 </button>
             </div>
         </div>
-
-
     </div>
+
     <div class="col-5" style="border: 2px none black;">
         <div class="semicircle"></div>
         <div class="circle"></div>
@@ -81,9 +89,14 @@
         </script>
 
         <h1 id="golf-logo" class="top-center">WORD PAR</h1>
-    </div>  
-</div>
+    </div>
 
+    <div id="top-right-game" class="col-12">
+        <form method="POST" action="/exitGame">
+            <button id="exit-button" type="submit" class="btn btn-danger" style="background-color: green; color:white">Exit Game</button>
+        </form>
+    </div>
+</div>
 
 <script>
     const buttonContainer = document.getElementById('buttonContainer');
@@ -209,6 +222,188 @@
             buttonPressed(keyTap);
         }
     });
-  
 
+// ========================================
+// AI Integration Variables
+// ========================================
+let secretWord = '';
+let category = 'music'; // Default category
+let guessHistory = [];
+let attempts = 0;
+const MAX_ATTEMPTS = 10;
+let currentGameID = null;
+
+// ========================================
+// Initialize Game - Generate Secret Word
+// ========================================
+async function startNewGame(selectedCategory) {
+    category = selectedCategory || 'music';
+    attempts = 0;
+    guessHistory = [];
+    currentGameID = null;
+    
+    try {
+        // Call AI to generate secret word
+        const response = await fetch(`/api/generate_word?category=${category}`);
+        const data = await response.json();
+        
+        secretWord = data.word;
+        console.log('🎯 Secret word generated:', secretWord); // TODO: Remove in production!
+        
+        // Show feedback
+        alert(`New game started! Category: ${category.toUpperCase()}`);
+        
+        // Clear previous guesses
+        const existingHistory = document.getElementById('guess-history');
+        if (existingHistory) {
+            existingHistory.remove();
+        }
+        
+    } catch (error) {
+        console.error('Error generating word:', error);
+        alert('Failed to start game. Please try again.');
+    }
+}
+
+// Call this when page loads
+window.addEventListener('DOMContentLoaded', () => {
+    startNewGame('music'); // Start with music category
+});
+
+
+// ========================================
+// Submit Guess - AI Similarity + Database Save
+// ========================================
+async function submitGuess(userGuess) {
+    attempts++;
+    
+    try {
+        // 1. Save guess to database first
+        const dbResponse = await fetch("/api/submitGuess", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userInput: userGuess,
+                gameID: currentGameID || null
+            })
+        });
+
+        const dbData = await dbResponse.json();
+        
+        if (dbData.success) {
+            currentGameID = dbData.gameID;
+            console.log("Guess saved to database, gameID:", currentGameID);
+        }
+
+        // 2. Calculate similarity with AI
+        const aiResponse = await fetch('/api/similarity', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                word1: userGuess.toLowerCase(),
+                word2: secretWord.toLowerCase()
+            })
+        });
+        
+        const aiData = await aiResponse.json();
+        const similarity = aiData.similarity;
+        const percentage = Math.round(similarity * 100);
+        
+        // Store guess in history
+        guessHistory.push({
+            word: userGuess,
+            similarity: similarity,
+            percentage: percentage,
+            attempt: attempts
+        });
+        
+        // Display feedback
+        displayFeedback(userGuess, similarity, percentage);
+        
+        // Check if won
+        if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()) {
+            setTimeout(() => {
+                alert(`🎉 YOU WON! The word was "${secretWord}"!\nAttempts: ${attempts}`);
+                if (confirm('Play again?')) {
+                    location.reload();
+                }
+            }, 500);
+        }
+        else if (attempts >= MAX_ATTEMPTS) {
+            setTimeout(() => {
+                alert(`😢 Game Over! The word was "${secretWord}".\nBetter luck next time!`);
+                if (confirm('Try again?')) {
+                    location.reload();
+                }
+            }, 500);
+        }
+        
+    } catch (error) {
+        console.error('Error processing guess:', error);
+        alert('Error checking your guess. Please try again.');
+    }
+}
+
+// ========================================
+// Display Feedback with Visual Indicators
+// ========================================
+function displayFeedback(guess, similarity, percentage) {
+    // Get or create feedback container
+    let feedbackContainer = document.getElementById('guess-history');
+    if (!feedbackContainer) {
+        feedbackContainer = document.createElement('div');
+        feedbackContainer.id = 'guess-history';
+        feedbackContainer.style.cssText = `
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        `;
+        document.getElementById('top-left-game').appendChild(feedbackContainer);
+    }
+    
+    // Determine feedback message and color
+    let message = '';
+    let color = '';
+    
+    if (similarity > 0.9) {
+        message = '🔥 ALMOST THERE!';
+        color = '#ff4444';
+    } else if (similarity > 0.7) {
+        message = '🌟 VERY CLOSE!';
+        color = '#ff8844';
+    } else if (similarity > 0.5) {
+        message = '😊 GETTING WARMER!';
+        color = '#ffaa44';
+    } else if (similarity > 0.3) {
+        message = '🤔 ON THE RIGHT TRACK...';
+        color = '#88aaff';
+    } else {
+        message = '❄️ COLD!';
+        color = '#4488ff';
+    }
+    
+    // Create feedback element
+    const feedbackItem = document.createElement('div');
+    feedbackItem.style.cssText = `
+        margin-bottom: 10px;
+        padding: 10px;
+        background: ${color};
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+    `;
+    feedbackItem.innerHTML = `
+        <div style="display: flex; justify-content: space-between;">
+            <span>${attempts}. ${guess.toUpperCase()}</span>
+            <span>${percentage}%</span>
+        </div>
+        <div style="font-size: 0.9em; margin-top: 5px;">${message}</div>
+    `;
+    
+    // Add to top of history
+    feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
+}
 </script>
