@@ -284,13 +284,43 @@ app.get('/game', async(req, res) => {
 //Initialize new game
 app.post('/game', async(req,res) => {
   let category=req.body.category;
+  if(!category) {
+    category='music';
+  }
   let initial_score=100;
   console.log('Category selected: '+category);
+  let word=null;
   //Make call to API service to get words based on category
-  //INSERT FETCH CALL TO API SERVICE HERE TO GET WORD
-  let word="test"; //Temporary placeholder until API service works
-  res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-})
+  generateWord(category).then (async (result) => {
+    let word=result.word;
+    console.log('Word generated from AI service: '+word);
+    //Insert word into DB if it does not already exist
+    let wordID;
+    initial_score=word.length*20; //Set initial score based on word length
+    let getWordQuery=`SELECT wordID from words WHERE word=$1`;
+    let insertWordQuery=`INSERT INTO words(word, length) VALUES ($1, $2) RETURNING wordID`;
+    try {
+      let wordRecord=await db.oneOrNone(getWordQuery, [word]);
+      if(wordRecord) {
+        wordID=wordRecord.wordid;
+        console.log('Word already exists in DB with ID: '+wordID);
+      }
+      else {
+        let insertResult=await db.one(insertWordQuery, [word, word.length]);
+        wordID=insertResult.wordid;
+        console.log('New word inserted into DB with ID: '+wordID);
+      }
+      res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      return;
+    }
+    catch(err) {
+      console.log('Error inserting/retrieving word from DB: '+err);
+      //If error occurs, return back to home page
+      res.status(500).redirect('/');
+      return;
+    }
+  });
+});
 
 app.post('/exitGame', async(req, res) => {
   //Need to implement a way to delete from DB and end game session

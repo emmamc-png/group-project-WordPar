@@ -92,11 +92,10 @@
             <img src="/img/logoImage.png" class="logo"/>
         </div>
         <div class="below-center">
-            <button class="play-btn" onclick="window.location.href='/game'">
-                <a> <!-- To implment route to page settings page -->
-                    <p class="play-text">PLAY</p>
-                </a>
-            </button>
+            <form method="POST" action="/game">
+                <!--Insert here category button-->
+                <button type="submit" class="play-btn"><p class="play-text">PLAY</p></button>
+            </form>
         </div>
         <div>
             <!-- Button to display modal -->
