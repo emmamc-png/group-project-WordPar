@@ -220,7 +220,7 @@ app.post("/registration", async (req, res) => {
 
     //Create new user
     try {
-      await db.none(query, [username, email, hash]);
+      await db.none(createUser, [username, email, hash]);
         console.log("User registered");
         res.status(200).redirect('/login');
     }
