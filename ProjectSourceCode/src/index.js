@@ -187,8 +187,38 @@ app.post("/registration", async (req, res) => {
     //hash the password
     const hash=await bcrypt.hash(req.body.password,10);
     console.log("Hashed password: "+hash);
-    const query='INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
-    const query2='SELECT * FROM users WHERE username=$1';
+    const createUser='INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
+    const checkUsername='SELECT * FROM users WHERE username=$1';
+    const checkEmail=`SELECT * FROM users WHERE email=$1`;
+
+    let existingUser;
+    let existingEmail;
+
+    //Check if username already exists
+    try {
+      existingUser=await db.none(checkUsername, [username]);
+      console.log("Username is available: " +username);
+    }
+    catch(err) {
+      const error=true;
+      console.log("Username already exists: " + err);
+      res.status(400).render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists", error});
+      return;
+    }
+
+    //Check if email is already in use
+    try {
+      existingEmail=await db.none(checkEmail, [email]);
+      console.log("Email is available: " +email);
+    }
+    catch(err) {
+      const error=true;
+      console.log("Email already in use: " + err);
+      res.status(400).render("pages/registration", { bodyClass: 'auth-page', message: "Email already in use", error});
+      return;
+    }
+
+    //Create new user
     try {
       await db.none(query, [username, email, hash]);
         console.log("User registered");
@@ -196,7 +226,6 @@ app.post("/registration", async (req, res) => {
     }
     catch(err) {
         const error=true;
-        //res.status(400).json({ error: 'Username already exists.' });
         res.status(400).render("pages/registration", { bodyClass: 'auth-page', message: "Username already exists or email already in use.", error});
     }
 });
