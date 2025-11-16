@@ -81,6 +81,7 @@ describe('Testing Registration API', () => {
   });
 });
 
+
 //EC Testing
 //We are testing the login session by attempting to login using a test user through doing POST /login.
 //Positive case: We are passing valid credentials for an existing user and expect to get a status 200 response and a session to be created.
@@ -109,7 +110,7 @@ describe('Testing Login API', () => {
   // Result: This test case should pass and return a status 400.
   // Explanation: The testcase will call the /login API with the following invalid inputs
   // and expects the API to return a status of 400.
-  it('Negative : /registration, attempts to login to a user with an invalid password', done => {
+  it('Negative : /login, attempts to login to a user with an invalid password', done => {
     chai
       .request(server)
       .post('/login')
