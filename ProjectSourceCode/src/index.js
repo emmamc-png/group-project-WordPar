@@ -312,6 +312,7 @@ app.get('/game', async(req, res) => {
 
 //Initialize new game
 app.post('/game', async(req,res) => {
+  let userID=req.session.user.userid;
   let category=req.body.category;
   if(!category) {
     category='music';
@@ -328,6 +329,8 @@ app.post('/game', async(req,res) => {
     initial_score=word.length*20; //Set initial score based on word length
     let getWordQuery=`SELECT wordID from words WHERE word=$1`;
     let insertWordQuery=`INSERT INTO words(word, length) VALUES ($1, $2) RETURNING wordID`;
+    let startGameQuery=`INSERT INTO game(score,wordID) VALUES ($1, $2) RETURNING gameID`;
+    let connectUserToGameQuery=`INSERT INTO userGame(game_id,user_id) VALUES ($1, $2)`;
     try {
       let wordRecord=await db.oneOrNone(getWordQuery, [word]);
       if(wordRecord) {
@@ -339,14 +342,17 @@ app.post('/game', async(req,res) => {
         wordID=insertResult.wordid;
         console.log('New word inserted into DB with ID: '+wordID);
       }
+      let gameID=await db.one(startGameQuery, [initial_score, wordID]);
+      //Provies {"gameid": (number)}
+      req.session.gameSession=gameID;
+      console.log("GameID is: "+gameID.gameid);
+      await db.none(connectUserToGameQuery, [gameID.gameid, userID])
       res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-      return;
     }
     catch(err) {
       console.log('Error inserting/retrieving word from DB: '+err);
       //If error occurs, return back to home page
       res.status(500).redirect('/');
-      return;
     }
   });
 });
