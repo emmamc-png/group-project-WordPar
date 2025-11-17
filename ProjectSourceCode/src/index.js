@@ -317,7 +317,7 @@ app.post('/game', async(req,res) => {
   if(!category) {
     category='music';
   }
-  let initial_score=100;
+  let initialScore=100;
   console.log('Category selected: '+category);
   let word=null;
   //Make call to API service to get words based on category
@@ -326,7 +326,7 @@ app.post('/game', async(req,res) => {
     console.log('Word generated from AI service: '+word);
     //Insert word into DB if it does not already exist
     let wordID;
-    initial_score=word.length*20; //Set initial score based on word length
+    initialScore=word.length*20; //Set initial score based on word length
     let getWordQuery=`SELECT wordID from words WHERE word=$1`;
     let insertWordQuery=`INSERT INTO words(word, length) VALUES ($1, $2) RETURNING wordID`;
     let startGameQuery=`INSERT INTO game(score,wordID) VALUES ($1, $2) RETURNING gameID`;
@@ -342,12 +342,15 @@ app.post('/game', async(req,res) => {
         wordID=insertResult.wordid;
         console.log('New word inserted into DB with ID: '+wordID);
       }
-      let gameID=await db.one(startGameQuery, [initial_score, wordID]);
+      let gameID=await db.one(startGameQuery, [initialScore, wordID]);
+      gameID=gameID.gameid;
       //Provies {"gameid": (number)}
-      req.session.gameSession=gameID;
-      console.log("GameID is: "+gameID.gameid);
-      await db.none(connectUserToGameQuery, [gameID.gameid, userID])
-      res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      req.session.gameSession={gameID, wordID, initialScore, category};
+      console.log("Category is: "+ req.session.gameSession.category);
+      console.log("Current score is: "+req.session.gameSession.initialScore);
+      console.log("GameID is: "+req.session.gameSession.gameID);
+      await db.none(connectUserToGameQuery, [gameID, userID])
+      res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
     catch(err) {
       console.log('Error inserting/retrieving word from DB: '+err);
