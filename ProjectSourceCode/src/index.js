@@ -26,14 +26,12 @@ const pgpInstance = pgp();
 /////----------------- Connect to DB -----------------/////
 ///////////////////////////////////////////////////////////
 
-// create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
   extname: "hbs",
   layoutsDir: __dirname + "/views/layouts",
   partialsDir: __dirname + "/views/partials",
 });
 
-// database configuration
 const dbConfig = {
   host: "db",
   port: 5432,
@@ -44,7 +42,6 @@ const dbConfig = {
 
 const db = pgpInstance(dbConfig);
 
-// test your database
 db.connect()
   .then((obj) => {
     console.log("Database connection successful");
@@ -58,13 +55,11 @@ db.connect()
 /////----------------- App Settings -----------------//////
 ///////////////////////////////////////////////////////////
 
-// Register `hbs` as our view engine
 app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.json());
 
-// initialize session variables
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -79,24 +74,20 @@ app.use(
   })
 );
 
-// Sets up the connection to use the style sheet
 app.use(express.static(path.join(__dirname, "resources")));
 
 ///////////////////////////////////////////////////////////
 /////------------------- PUBLIC ROUTES ---------------/////
 ///////////////////////////////////////////////////////////
 
-// Render login page
 app.get("/login", (req, res) => {
   res.render("pages/login", { bodyClass: "auth-page" });
 });
 
-// Render registration page
 app.get("/registration", (req, res) => {
   res.render("pages/registration", { bodyClass: "auth-page" });
 });
 
-// Handle login
 app.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -157,7 +148,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Handle registration
 app.post("/registration", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -193,27 +183,67 @@ app.post("/registration", async (req, res) => {
 
   const hash = await bcrypt.hash(req.body.password, 10);
   console.log("Hashed password: " + hash);
-  const query = "INSERT INTO users(username, password) VALUES($1, $2)";
+  const createUser =
+    "INSERT INTO users(username, email, password) VALUES($1, $2, $3)";
+  const checkUsername = "SELECT * FROM users WHERE username=$1";
+  const checkEmail = `SELECT * FROM users WHERE email=$1`;
+
+  let existingUser;
+  let existingEmail;
 
   try {
-    await db.none(query, [username, hash]);
+    existingUser = await db.none(checkUsername, [username]);
+    console.log("Username is available: " + username);
+  } catch (err) {
+    const error = true;
+    console.log("Username already exists: " + err);
+    res
+      .status(400)
+      .render("pages/registration", {
+        bodyClass: "auth-page",
+        message: "Username already exists",
+        error,
+      });
+    return;
+  }
+
+  try {
+    existingEmail = await db.none(checkEmail, [email]);
+    console.log("Email is available: " + email);
+  } catch (err) {
+    const error = true;
+    console.log("Email already in use: " + err);
+    res
+      .status(400)
+      .render("pages/registration", {
+        bodyClass: "auth-page",
+        message: "Email already in use",
+        error,
+      });
+    return;
+  }
+
+  try {
+    await db.none(createUser, [username, email, hash]);
     console.log("User registered");
     res.status(200).redirect("/login");
   } catch (err) {
     const error = true;
-    res.status(400).render("pages/registration", {
-      bodyClass: "auth-page",
-      message: "Username already exists.",
-      error,
-    });
+    res
+      .status(400)
+      .render("pages/registration", {
+        bodyClass: "auth-page",
+        message: "Username already exists or email already in use.",
+        error,
+      });
   }
 });
 
 ///////////////////////////////////////////////////////////
 /////--------------- AI SERVICE ROUTES ---------------/////
 ///////////////////////////////////////////////////////////
+// CRITICAL: These MUST be BEFORE auth middleware!
 
-// Health check
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     status: "ok",
@@ -222,8 +252,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Generate word
 app.get("/api/generate_word", async (req, res) => {
+  console.log(
+    "🎯 Generate word endpoint called! Category:",
+    req.query.category
+  );
   const category = req.query.category;
 
   if (!category) {
@@ -232,9 +265,10 @@ app.get("/api/generate_word", async (req, res) => {
 
   try {
     const result = await generateWord(category);
+    console.log("✅ Word generated successfully:", result);
     res.status(200).json(result);
   } catch (error) {
-    console.error("Generate word error:", error);
+    console.error("❌ Generate word error:", error);
     res.status(500).json({
       error: "Failed to generate word",
       details: error.message,
@@ -242,7 +276,6 @@ app.get("/api/generate_word", async (req, res) => {
   }
 });
 
-// Calculate similarity
 app.post("/api/similarity", async (req, res) => {
   const { word1, word2 } = req.body;
 
@@ -269,21 +302,20 @@ app.post("/api/similarity", async (req, res) => {
 ///////////////////////////////////////////////////////////
 
 const auth = (req, res, next) => {
-  console.log("auth has been called!");
+  console.log("auth has been called for:", req.path);
   if (!req.session.user) {
     return res.redirect("/login");
   }
   next();
 };
 
-// Apply authentication to all routes below
+// Apply authentication to all routes below this line
 app.use(auth);
 
 ///////////////////////////////////////////////////////////
 /////------------- PROTECTED ROUTES ---------------------//
 ///////////////////////////////////////////////////////////
 
-// Render home page
 app.get("/", async (req, res) => {
   const query = `SELECT users.username, SUM(game.score) AS score 
                 FROM userGame 
@@ -294,6 +326,16 @@ app.get("/", async (req, res) => {
                 LIMIT 10`;
 
   const currentUser = req.session.user.username;
+  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  let userEmail;
+
+  try {
+    userEmail = await db.one(getUserEmail, [currentUser]);
+    console.log("User email retrieved: " + userEmail.email);
+  } catch (err) {
+    console.log("Error retrieving user email: " + err);
+    userEmail = { email: "" };
+  }
 
   const userQuery = `WITH ranked AS (
                       SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
@@ -312,38 +354,47 @@ app.get("/", async (req, res) => {
   try {
     currentUserData = await db.one(userQuery, [currentUser]);
   } catch (err) {
-    currentUserData = { username: currentUser, score: 0, position: null };
+    currentUserData = {
+      username: currentUser,
+      score: 0,
+      position: null,
+      email: userEmail.email,
+    };
     console.log("user has no scores yet");
   }
 
   try {
     users = await db.any(query);
     console.log("Leaderboard data retrieved");
-    res.status(200).render("pages/home", {
-      bodyClass: "home-page",
-      leaderboard: users,
-      currentUser: currentUserData,
-    });
+    res
+      .status(200)
+      .render("pages/home", {
+        bodyClass: "home-page",
+        leaderboard: users,
+        currentUser: currentUserData,
+        email: userEmail.email,
+      });
   } catch (err) {
     console.log(err);
-    res.status(500).render("pages/home", {
-      bodyClass: "home-page",
-      leaderboard: [],
-      currentUser: currentUserData,
-    });
+    res
+      .status(500)
+      .render("pages/home", {
+        bodyClass: "home-page",
+        leaderboard: [],
+        currentUser: currentUserData,
+        email: userEmail.email,
+      });
   }
 });
 
-// Render game page
 app.get("/game", async (req, res) => {
   res.status(200).render("pages/game", { bodyClass: "auth-page" });
 });
 
-///////////////////////////////////////////////////////////
-/////---------- Guesses Routes (from merge) ----------/////
-///////////////////////////////////////////////////////////
+app.post("/exitGame", async (req, res) => {
+  res.status(200).redirect("/");
+});
 
-// Submit guess to database
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
   const user = req.session.user;
@@ -352,7 +403,6 @@ app.post("/api/submitGuess", async (req, res) => {
   if (!userInput) return res.status(400).json({ error: "No guess" });
 
   try {
-    // Create new game if no gameID provided
     if (!gameID) {
       const game = await db.one(
         "INSERT INTO game (score, wordid) VALUES (0, NULL) RETURNING gameid"
@@ -360,12 +410,10 @@ app.post("/api/submitGuess", async (req, res) => {
       gameID = game.gameid;
     }
 
-    // Check if word exists in words table
     let word = await db.oneOrNone("SELECT wordid FROM words WHERE word = $1", [
       userInput.toLowerCase(),
     ]);
 
-    // Insert word if it doesn't exist
     if (!word) {
       word = await db.one(
         "INSERT INTO words (word, length) VALUES ($1, $2) RETURNING wordid",
@@ -373,7 +421,6 @@ app.post("/api/submitGuess", async (req, res) => {
       );
     }
 
-    // Insert guess into guesses table
     await db.none(
       `INSERT INTO guesses (gameid, userid, wordid, userinput)
        VALUES ($1, $2, $3, $4)`,
@@ -387,7 +434,6 @@ app.post("/api/submitGuess", async (req, res) => {
   }
 });
 
-// Logout
 app.post("/logout", (req, res) => {
   try {
     req.session.destroy();

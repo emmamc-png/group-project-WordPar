@@ -14,6 +14,7 @@
                     <span class="close">&times;</span>
                     <h2>Account Information</h2>
                     <p class="useninfo-text">Username: {{currentUser.username}}</p>
+                    <p class="useninfo-text">Email: {{email}}</p>
                     <form method="POST" action="/logout">
                         <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
                     </form>
@@ -143,26 +144,7 @@
 </style>
 
 <script>
-// Account modal
-var modal = document.getElementById("myModal");
-var btn = document.getElementById("myBtn");
-var span = document.getElementsByClassName("close")[0];
-
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-// How to Play modal
+// Script for how to play modal
 const howToPlayModal = document.getElementById('customModal');
 const openHowToPlay = document.getElementById('openModal');
 const closeHowToPlay = document.getElementById('closeModal');
@@ -181,7 +163,26 @@ howToPlayModal.addEventListener('click', (e) => {
     }
 });
 
-// Category Selection Modal
+// Script for user profile modal
+const modal2 = document.getElementById("myModal");
+const btn = document.getElementById("myBtn");
+const span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+    modal2.style.display = "block";
+}
+
+span.onclick = function() {
+    modal2.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal2) {
+        modal2.style.display = "none";
+    }
+}
+
+// Category Selection Modal (YOUR NEW FEATURE)
 const playButton = document.getElementById('playButton');
 const categoryModal = document.getElementById('categoryModal');
 const closeCategoryModal = document.getElementById('closeCategoryModal');
@@ -201,11 +202,10 @@ categoryModal.addEventListener('click', (e) => {
     }
 });
 
-// Handle category selection
+// Handle category selection - redirects to game with category
 categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
         const category = button.getAttribute('data-category');
-        // Redirect to game page with category parameter
         window.location.href = `/game?category=${category}`;
     });
 });

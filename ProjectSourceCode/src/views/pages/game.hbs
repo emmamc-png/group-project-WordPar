@@ -87,7 +87,7 @@
     </div>
 
     <div id="top-right-game" class="col-12">
-        <form method="POST" action="/logout">
+        <form method="POST" action="/exitGame">
             <button id="exit-button" type="submit" class="btn btn-danger" style="background-color: green; color:white">Exit Game</button>
         </form>
     </div>
@@ -95,7 +95,7 @@
 
 <script>
 // ========================================
-// Get Category from URL
+// Get Category from URL API Parameter
 // ========================================
 const urlParams = new URLSearchParams(window.location.search);
 let category = urlParams.get('category') || 'music';
@@ -111,7 +111,7 @@ const MAX_ATTEMPTS = 10;
 let currentGameID = null;
 
 // ========================================
-// Initialize Game - Generate Secret Word
+// Initialize Game - Generate Secret Word (YOUR FEATURE)
 // ========================================
 async function startNewGame() {
     attempts = 0;
@@ -123,7 +123,7 @@ async function startNewGame() {
         const data = await response.json();
         
         secretWord = data.word;
-        console.log('🎯 Secret word:', secretWord); // TODO: Remove in production
+        console.log('🎯 Secret word:', secretWord); // DEBUG - Remove in production
         
         alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
         
@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ========================================
-// Keyboard Input Handling
+// Keyboard Input Handling 
 // ========================================
 const buttonContainer = document.getElementById('buttonContainer');
 let prevKey = "";
@@ -182,6 +182,7 @@ async function buttonPressed(event) {
                     return;
                 }
                 
+                // Submit guess with AI integration (YOUR FEATURE)
                 await submitGuess(buttonInputs.join(''));
                 updateGuess(buttonInputs);
                 room = false;
@@ -210,8 +211,37 @@ async function buttonPressed(event) {
     }
 }
 
+// Call the button function every time a key is pressed
+buttonContainer.addEventListener('click', buttonPressed);
+
+// Keyboard support
+document.addEventListener("keydown", function(event) { 
+    if ((event.key.length === 1 && event.key.match(/[a-z]/i)) || event.key == 'Enter' || event.key == 'Backspace') {
+        event.preventDefault();
+        let keyTap;
+
+        if (room) {
+            if (event.key == 'Enter') {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
+            }
+            else if (event.key == 'Backspace') {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
+            }
+            else {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
+            }
+        }
+        else {
+            if (event.key === 'Backspace') {
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'clear'} }
+            }
+        }
+        buttonPressed(keyTap);
+    }
+});
+
 // ========================================
-// Submit Guess
+// Submit Guess with AI 
 // ========================================
 async function submitGuess(userGuess) {
     attempts++;
@@ -233,7 +263,7 @@ async function submitGuess(userGuess) {
             currentGameID = dbData.gameID;
         }
 
-        // Calculate similarity
+        // Calculate similarity with AI
         const aiResponse = await fetch('/api/similarity', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -281,7 +311,7 @@ async function submitGuess(userGuess) {
 }
 
 // ========================================
-// Display Feedback
+// Display Feedback (YOUR FEATURE)
 // ========================================
 function displayFeedback(guess, similarity, percentage) {
     let feedbackContainer = document.getElementById('guess-history');
@@ -338,34 +368,4 @@ function displayFeedback(guess, similarity, percentage) {
     
     feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
 }
-
-// ========================================
-// Event Listeners
-// ========================================
-buttonContainer.addEventListener('click', buttonPressed);
-
-document.addEventListener("keydown", function(event) { 
-    if ((event.key.length === 1 && event.key.match(/[a-z]/i)) || event.key == 'Enter' || event.key == 'Backspace') {
-        event.preventDefault();
-        let keyTap;
-
-        if (room) {
-            if (event.key == 'Enter') {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
-            }
-            else if (event.key == 'Backspace') {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
-            }
-            else {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
-            }
-        }
-        else {
-            if (event.key === 'Backspace') {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'clear'} }
-            }
-        }
-        buttonPressed(keyTap);
-    }
-});
 </script>
