@@ -381,6 +381,7 @@ app.post('/game', async(req,res) => {
   let userID=req.session.user.userid;
   let category=req.body.category;
   if(!category) {
+    console.log("I can't find the category :(");
     category='music';
   }
   let initialScore=100;
@@ -416,7 +417,7 @@ app.post('/game', async(req,res) => {
       console.log("Current score is: "+req.session.gameSession.initialScore);
       console.log("GameID is: "+req.session.gameSession.gameID);
       await db.none(connectUserToGameQuery, [gameID, userID])
-      res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      res.status(200).render('pages/game', { bodyClass: 'auth-page', chosenCategory: category, gameID: gameID, wordID: wordID, score:initialScore }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
     catch(err) {
       console.log('Error inserting/retrieving word from DB: '+err);
@@ -431,8 +432,9 @@ app.post("/exitGame", async (req, res) => {
 });
 
 app.post("/api/submitGuess", async (req, res) => {
-  let { userInput, gameID } = req.body;
+  let userInput = req.body;
   const user = req.session.user;
+  const gameID=req.session.gameSession.gameID;
 
   if (!user) return res.status(401).json({ error: "Not logged in" });
   if (!userInput) return res.status(400).json({ error: "No guess" });

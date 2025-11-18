@@ -53,32 +53,34 @@
             <div class="modal-box" style="max-width: 600px;">
                 <button class="close-btn" id="closeCategoryModal">&times;</button>
                 <h2 style="text-align: center; margin-bottom: 30px;">Choose a Category</h2>
+                <form method="POST" action="/game">
                 <div class="category-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px;">
-                    <button class="category-btn" data-category="music">
+                    <button type="submit" value="Music" class="category-btn" data-category="music">
                         <span style="font-size: 2em;">🎵</span>
                         <span>Music</span>
                     </button>
-                    <button class="category-btn" data-category="sports">
+                    <button  type="submit" name="category" value="Sports" class="category-btn" data-category="sports">
                         <span style="font-size: 2em;">⚽</span>
                         <span>Sports</span>
                     </button>
-                    <button class="category-btn" data-category="food">
+                    <button type="submit" name="category" value="Food" class="category-btn" data-category="food">
                         <span style="font-size: 2em;">🍕</span>
                         <span>Food</span>
                     </button>
-                    <button class="category-btn" data-category="animals">
+                    <button type="submit"  name="category" value="Animals" class="category-btn" data-category="animals">
                         <span style="font-size: 2em;">🐾</span>
                         <span>Animals</span>
                     </button>
-                    <button class="category-btn" data-category="nature">
+                    <button type="submit"  name="category" value="Nature" class="category-btn" data-category="nature">
                         <span style="font-size: 2em;">🌲</span>
                         <span>Nature</span>
                     </button>
-                    <button class="category-btn" data-category="technology">
+                    <button type="submit" name="category" value="Technology" class="category-btn" data-category="technology">
                         <span style="font-size: 2em;">💻</span>
                         <span>Technology</span>
                     </button>
                 </div>
+                </form>
             </div>
         </div>
 

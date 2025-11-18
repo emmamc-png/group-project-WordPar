@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-7">
         <div class="row game-info">
-            <div id="points" class="col-1">Points: <span id="points-value">0</span></div>
-            <div id="category" class="col-5">Category: <span id="category-value">...</span></div>
+            <div id="points" class="col-1">Points: <span id="points-value">{{score}}</span></div>
+            <div id="category" class="col-5">Category: <span id="category-value">{{chosenCategory}}</span></div>
             <div id="user-score" class="col-2">
                 Strokes: <span id="strokes-value">0</span>
             </div>
@@ -98,17 +98,20 @@
 // Get Category from URL API Parameter
 // ========================================
 const urlParams = new URLSearchParams(window.location.search);
-let category = urlParams.get('category') || 'music';
-document.getElementById('category-value').textContent = category.toUpperCase();
+let window.category="<%= chosenCategory %>";
+let category = chosenCategory || 'music';
+//document.getElementById('category-value').textContent = category.toUpperCase();
 
 // ========================================
 // Game Variables
 // ========================================
-let secretWord = '';
+let window.word = "<%= word %>";
+let secretWord = window.word;
 let guessHistory = [];
 let attempts = 0;
 const MAX_ATTEMPTS = 10;
-let currentGameID = null;
+let window.gameID = "<%= gameID %>";
+let currentGameID = window.gameID;
 
 // ========================================
 // Initialize Game - Generate Secret Word (YOUR FEATURE)
@@ -116,13 +119,15 @@ let currentGameID = null;
 async function startNewGame() {
     attempts = 0;
     guessHistory = [];
-    currentGameID = null;
+    //currentGameID = null;
     
     try {
+        /*
         const response = await fetch(`/api/generate_word?category=${category}`);
         const data = await response.json();
         
         secretWord = data.word;
+        */
         console.log('🎯 Secret word:', secretWord); // DEBUG - Remove in production
         
         alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
@@ -276,7 +281,7 @@ async function submitGuess(userGuess) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 userInput: userGuess,
-                gameID: currentGameID || null
+                //gameID: currentGameID || null
             })
         });
 
