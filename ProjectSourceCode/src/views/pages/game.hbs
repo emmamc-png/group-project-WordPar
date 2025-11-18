@@ -1,10 +1,20 @@
 <div class="row">
     <div class="col-7">
         <div class="row game-info">
-            <div id="points" class="col-1">Points: <span id="points-value">0</span></div>
-            <div id="category" class="col-5">Category: <span id="category-value">...</span></div>
-            <div id="user-score" class="col-2">
-                Strokes: <span id="strokes-value">0</span>
+            <div id="points" class="col-1">
+                <div id="point">
+                    Points: 
+                </div>
+                 <span id="points-value">100</span>
+            </div>
+            <div id="category" class="col-6"> 
+                <span id="category-value">...</span>
+            </div>
+            <div id="user-score" class="col-1">
+                <div id="strokes">
+                    Strokes: 
+                </div>
+                <span id="strokes-value">0</span>
             </div>
         </div>
         <div id="actual-game" class="row">
@@ -17,7 +27,7 @@
                 <br>
             </div>
         </div>
-        <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%"></div>
+        {{!-- <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%;"></div> --}}
         <div id="buttonContainer" class="row">
             <div class="keyboard_row">
                 <button id="q" type="button" class="game btn btn-outline-secondary btn-lg" value="q">q</button>
@@ -79,7 +89,7 @@
         const canvas = document.getElementById("myCanvas");
         const ctx = canvas.getContext("2d");
         ctx.beginPath();
-        ctx.moveTo(0, 425);
+        ctx.moveTo(0, 475);
         ctx.quadraticCurveTo(190, 15, 30, 0);
         ctx.stroke();
         </script>
@@ -199,7 +209,7 @@ async function buttonPressed(event) {
             
                 // Submit guess with AI integration (YOUR FEATURE)
                 await submitGuess(buttonInputs.join(''));
-                
+
                 // Display the clear button
                 clear = true;
                 updateGuess(buttonInputs);
