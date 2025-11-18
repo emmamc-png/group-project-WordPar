@@ -110,15 +110,15 @@ let attempts = 0;
 const MAX_ATTEMPTS = 10;
 let currentGameID = null;
 
-/*
+
 // ========================================
 // Initialize Game - Generate Secret Word (YOUR FEATURE)
 // ========================================
+/*
 async function startNewGame() {
     attempts = 0;
     guessHistory = [];
     currentGameID = null;
-    
     try {
         const response = await fetch(`/api/generate_word?category=${category}`);
         const data = await response.json();
@@ -134,6 +134,7 @@ async function startNewGame() {
     }
 }
 */
+
 // Start game when page loads
 window.addEventListener('DOMContentLoaded', () => {
     startNewGame();

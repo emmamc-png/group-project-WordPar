@@ -422,6 +422,8 @@ app.post("/exitGame", async (req, res) => {
 
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
+  console.log("User input was: "+userInput);
+  console.log("Game session is: "+gameID);
   const user = req.session.user;
 
   if (!user) return res.status(401).json({ error: "Not logged in" });
