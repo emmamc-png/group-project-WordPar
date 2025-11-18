@@ -388,7 +388,54 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/game", async (req, res) => {
-  res.status(200).render("pages/game", { bodyClass: "auth-page" });
+  // implementation of leader board for results pop up
+  const query = `SELECT users.username, SUM(game.score) AS score 
+                FROM userGame 
+                JOIN users ON userGame.user_id=users.userID 
+                JOIN game ON userGame.game_id=game.gameID 
+                GROUP BY username 
+                ORDER BY SUM(score) DESC
+                LIMIT 10`;
+
+  const currentUser = req.session.user.username;
+  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  let userEmail;
+
+  try {
+    userEmail = await db.one(getUserEmail, [currentUser]);
+    console.log("User email retrieved: " + userEmail.email);
+  } catch (err) {
+    console.log("Error retrieving user email: " + err);
+    userEmail = { email: "" };
+  }
+
+  const userQuery = `WITH ranked AS (
+                      SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
+                      FROM userGame 
+                      JOIN users ON userGame.user_id=users.userID 
+                      JOIN game ON userGame.game_id=game.gameID  
+                      GROUP BY users.username
+                      )
+                    SELECT username, score, position
+                    FROM ranked
+                    WHERE username=$1`;
+
+  let users = [];
+  let currentUserData = [];
+
+  try {
+    currentUserData = await db.one(userQuery, [currentUser]);
+  } catch (err) {
+    currentUserData = {
+      username: currentUser,
+      score: 0,
+      position: null,
+      email: userEmail.email,
+    };
+    console.log("user has no scores yet");
+  }
+  users = await db.any(query);
+  res.status(200).render("pages/game", { bodyClass: "auth-page", leaderboard: users, currentUser: currentUserData, email: userEmail.email,});
 });
 
 app.post("/exitGame", async (req, res) => {
