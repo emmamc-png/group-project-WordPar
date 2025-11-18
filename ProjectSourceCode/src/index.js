@@ -90,10 +90,6 @@ app.get('/login', (req, res) => {
     res.render('pages/login', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
-app.get('/test', (req, res) => {
-  res.render('pages/test', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-});
-
 //Render registration page
 app.get('/registration', (req, res) => {
     res.render('pages/registration', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
@@ -144,7 +140,7 @@ app.post('/login', async(req,res) => {
         req.session.user = user;
         req.session.save();
         console.log("Session user set: "+ req.session.user.username);
-        res.status(200).redirect('/');
+        res.status(200).redirect('/home');
     }
     catch(err) {
         const error=true;
@@ -204,7 +200,7 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 //Render home page
-app.get('/', async(req, res) => {
+app.get('/home', async(req, res) => {
     //Query to get leaderboard data
     const query=`SELECT users.username, SUM(game.score) AS score 
                 FROM userGame 
@@ -254,6 +250,47 @@ app.get('/', async(req, res) => {
 
 app.get('/game', async(req, res) => {         
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+});
+
+app.get('/test', async (req, res) => {
+  const query=`SELECT users.username, SUM(game.score) AS score 
+              FROM userGame 
+              JOIN users ON userGame.user_id=users.userID 
+              JOIN game ON userGame.game_id=game.gameID 
+              GROUP BY username 
+              ORDER BY SUM(score) DESC
+              LIMIT 10`;
+  //Get current logged in user
+  const currentUser = req.session.user.username;
+  //Query to get current user data (pts, rank, and username)
+  const userQuery=`WITH ranked AS (
+                    SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
+                    FROM userGame 
+                    JOIN users ON userGame.user_id=users.userID 
+                    JOIN game ON userGame.game_id=game.gameID  
+                    GROUP BY users.username
+                    )
+                  SELECT username, score, position
+                  FROM ranked
+                  WHERE username=$1`;
+  //generate arrays to store user and leaderboard data
+  let users=[];
+  let currentUserData=[];
+  //
+  try {
+    //Attempt to get user information
+    currentUserData= await db.one(userQuery, [currentUser]);
+  }
+  
+  catch(err) {
+    //If no scores exist, set user score to 0
+    currentUserData={username: currentUser, score: 0, position: null};
+    console.log('user has no scores yet');
+  }
+
+users=await db.any(query);
+//res.render('pages/test', { bodyClass: 'auth-page' }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+res.status(200).render('pages/test', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData});
 });
 
 ///////////////////////////////////////////////////////////
