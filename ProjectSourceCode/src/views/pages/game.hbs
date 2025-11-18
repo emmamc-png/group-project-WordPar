@@ -99,9 +99,7 @@
     </div>
 
     <div id="top-right-game" class="col-12">
-        <form method="POST" action="/exitGame">
-            <button id="exit-button" type="submit" class="btn btn-danger">EXIT</button>
-        </form>
+        <button id="exit-button" class="btn btn-danger" onclick="exitGame()">Exit</button>
     </div>
 </div>
 
@@ -219,7 +217,6 @@ async function buttonPressed(event) {
                     alert('Please enter a word first!');
                     return;
                 }
-            
                 // Submit guess with AI integration (YOUR FEATURE)
                 await submitGuess(buttonInputs.join(''));
 
@@ -238,6 +235,10 @@ async function buttonPressed(event) {
             }
             else if (event.target.id !== 'clear') {
                 buttonInputs.push(event.target.value);
+                updateGuess(buttonInputs);
+            }
+            else {
+                buttonInputs=[];
                 updateGuess(buttonInputs);
             }
         }
@@ -289,6 +290,36 @@ document.addEventListener("keydown", function(event) {
         buttonPressed(keyTap);
     }
 });
+
+
+// ========================================
+// Exit Game
+// ========================================
+async function exitGame() {
+    try {
+        const exitGameResponse = await fetch("/exitGame", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                gameID: currentGameID || null
+            })
+        })
+
+        const exit=await exitGameResponse.json();
+        if (exit.success) {
+            //Redirect back to home if a success
+            window.location.href='/';
+            return;
+        }
+        else {
+            console.log("Error exiting");
+        }
+    }
+    catch(err) {
+        console.log("Error exiting: "+err);
+    }
+};
+
 
 // ========================================
 // Submit Guess with AI 
