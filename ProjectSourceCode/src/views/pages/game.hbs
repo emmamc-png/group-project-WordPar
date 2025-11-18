@@ -21,9 +21,10 @@
             <div id="top-left-game" class="row">
                 <br>
                 <div id="clearbtn"></div>
+                <div id="max-length"></div>
                 <br>
                 <div id="guess"></div>
-                <div id="result"></div>
+                <div id="guessContainer"></div>
                 <br>
                 <br>
             </div>
@@ -31,37 +32,37 @@
         {{!-- <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%;"></div> --}}
         <div id="buttonContainer" class="row">
             <div class="keyboard_row">
-                <button id="q" type="button" class="game btn btn-outline-secondary btn-lg" value="q">q</button>
-                <button id="w" type="button" class="game btn btn-outline-secondary btn-lg" value="w">w</button>
-                <button id="e" type="button" class="game btn btn-outline-secondary btn-lg" value="e">e</button>
-                <button id="r" type="button" class="game btn btn-outline-secondary btn-lg" value="r">r</button>
-                <button id="t" type="button" class="game btn btn-outline-secondary btn-lg" value="t">t</button>
-                <button id="y" type="button" class="game btn btn-outline-secondary btn-lg" value="y">y</button>
-                <button id="u" type="button" class="game btn btn-outline-secondary btn-lg" value="u">u</button>
-                <button id="i" type="button" class="game btn btn-outline-secondary btn-lg" value="i">i</button>
-                <button id="o" type="button" class="game btn btn-outline-secondary btn-lg" value="o">o</button>
-                <button id="p" type="button" class="game btn btn-outline-secondary btn-lg" value="p">p</button>
+                <button id="q" type="button" class="game btn btn-outline-secondary btn-lg" value="q">Q</button>
+                <button id="w" type="button" class="game btn btn-outline-secondary btn-lg" value="w">W</button>
+                <button id="e" type="button" class="game btn btn-outline-secondary btn-lg" value="e">E</button>
+                <button id="r" type="button" class="game btn btn-outline-secondary btn-lg" value="r">R</button>
+                <button id="t" type="button" class="game btn btn-outline-secondary btn-lg" value="t">T</button>
+                <button id="y" type="button" class="game btn btn-outline-secondary btn-lg" value="y">Y</button>
+                <button id="u" type="button" class="game btn btn-outline-secondary btn-lg" value="u">U</button>
+                <button id="i" type="button" class="game btn btn-outline-secondary btn-lg" value="i">I</button>
+                <button id="o" type="button" class="game btn btn-outline-secondary btn-lg" value="o">O</button>
+                <button id="p" type="button" class="game btn btn-outline-secondary btn-lg" value="p">P</button>
             </div>
             <div class="keyboard_row">
-                <button id="a" type="button" class="game btn btn-outline-secondary btn-lg" value="a">a</button>
-                <button id="s" type="button" class="game btn btn-outline-secondary btn-lg" value="s">s</button>
-                <button id="d" type="button" class="game btn btn-outline-secondary btn-lg" value="d">d</button>
-                <button id="f" type="button" class="game btn btn-outline-secondary btn-lg" value="f">f</button>
-                <button id="g" type="button" class="game btn btn-outline-secondary btn-lg" value="g">g</button>
-                <button id="h" type="button" class="game btn btn-outline-secondary btn-lg" value="h">h</button>
-                <button id="j" type="button" class="game btn btn-outline-secondary btn-lg" value="j">j</button>
-                <button id="k" type="button" class="game btn btn-outline-secondary btn-lg" value="k">k</button>
-                <button id="l" type="button" class="game btn btn-outline-secondary btn-lg" value="l">l</button>
+                <button id="a" type="button" class="game btn btn-outline-secondary btn-lg" value="a">A</button>
+                <button id="s" type="button" class="game btn btn-outline-secondary btn-lg" value="s">S</button>
+                <button id="d" type="button" class="game btn btn-outline-secondary btn-lg" value="d">D</button>
+                <button id="f" type="button" class="game btn btn-outline-secondary btn-lg" value="f">F</button>
+                <button id="g" type="button" class="game btn btn-outline-secondary btn-lg" value="g">G</button>
+                <button id="h" type="button" class="game btn btn-outline-secondary btn-lg" value="h">H</button>
+                <button id="j" type="button" class="game btn btn-outline-secondary btn-lg" value="j">J</button>
+                <button id="k" type="button" class="game btn btn-outline-secondary btn-lg" value="k">K</button>
+                <button id="l" type="button" class="game btn btn-outline-secondary btn-lg" value="l">L</button>
             </div>
             <div class="keyboard_row">
                 <button id="enter" type="button" class="game btn btn-outline-secondary btn-lg" value="Enter">ENTER</button>
-                <button id="z" type="button" class="game btn btn-outline-secondary btn-lg" value="z">z</button>
-                <button id="x" type="button" class="game btn btn-outline-secondary btn-lg" value="x">x</button>
-                <button id="c" type="button" class="game btn btn-outline-secondary btn-lg" value="c">c</button>
-                <button id="v" type="button" class="game btn btn-outline-secondary btn-lg" value="v">v</button>
-                <button id="b" type="button" class="game btn btn-outline-secondary btn-lg" value="b">b</button>
-                <button id="n" type="button" class="game btn btn-outline-secondary btn-lg" value="n">n</button>
-                <button id="m" type="button" class="game btn btn-outline-secondary btn-lg" value="m">m</button>
+                <button id="z" type="button" class="game btn btn-outline-secondary btn-lg" value="z">Z</button>
+                <button id="x" type="button" class="game btn btn-outline-secondary btn-lg" value="x">X</button>
+                <button id="c" type="button" class="game btn btn-outline-secondary btn-lg" value="c">C</button>
+                <button id="v" type="button" class="game btn btn-outline-secondary btn-lg" value="v">V</button>
+                <button id="b" type="button" class="game btn btn-outline-secondary btn-lg" value="b">B</button>
+                <button id="n" type="button" class="game btn btn-outline-secondary btn-lg" value="n">N</button>
+                <button id="m" type="button" class="game btn btn-outline-secondary btn-lg" value="m">M</button>
                 <button id="back" type="button" class="game btn btn-outline-secondary btn-lg" value="Back">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">
                         <path d="M5.83 5.146a.5.5 0 0 0 0 .708L7.975 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z"/>
@@ -180,10 +181,21 @@ function updateGuess(buttonInputs) {
    //console.log(buttonInputs)
     if (clear) {
         const clearbtnDiv = document.getElementById("clearbtn");
-        let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
+        let htmlContent2 = "<button id='clear' type='button' class=' btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
         clearbtnDiv.innerHTML = htmlContent2;
         clearbtnDiv.addEventListener('click', buttonPressed);
     }
+
+    const maxLengthDiv = document.getElementById("max-length");
+    let htmlContent3 = "<div id='true-length'>";
+        htmlContent3 += "Maximum: ";
+        htmlContent3 += "<div id='actual-length'>";
+        htmlContent3 += "<div id='maximum'>";
+        htmlContent3 += `${secretWord.length}`;
+        htmlContent3 += "</div>";
+        htmlContent3 += "</div>";
+        htmlContent3 += "</div>";
+    maxLengthDiv.innerHTML = htmlContent3;
 }
 
 async function buttonPressed(event) {
@@ -365,13 +377,17 @@ function displayFeedback(guess, similarity, percentage) {
             overflow-y: auto;
         `;
         */
-        document.getElementById('result').appendChild(feedbackContainer);
+        document.getElementById('guessContainer').appendChild(feedbackContainer);
     }
     
     let message = '';
     let color = '';
     
-    if (similarity > 0.9) {
+    if (similarity == 1) {
+        message = '🔥 YOU GOT IT!! NICE JOB!';
+        color = '#ff4444';
+    }
+    else if (similarity > 0.9) {
         message = '🔥 ALMOST THERE!';
         color = '#ff4444';
     } else if (similarity > 0.7) {

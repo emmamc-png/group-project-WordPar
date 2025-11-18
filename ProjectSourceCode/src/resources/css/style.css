@@ -542,13 +542,21 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 #guess {
-  width: 45%;
   position: absolute;
   top: 25%;
+  left: 11%;
+  width: 45%;
+}
+
+#guessContainer {
+  position: absolute;
+  left: 14%;
+  top: 40%;
+  width: 40%;
 }
 
 #guess-history {
-  position: absolute;
+  position: relative;
   margin-top: 20px;
   padding: 15px;
   background: rgba(255,255,255,0.1);
@@ -558,9 +566,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .result {
-  /* position: absolute; */
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 5%;
   color: white;
   border-radius: 5px;
   font-weight: bold;
@@ -574,18 +581,50 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
  #clear {
   position: absolute;
-  top: 20%;
-  left: 5%;
+  top: 21%;
+  left: 0%;
   background-color:#95073d !important;
+  border-color: white;
+  border-style: solid;
+  border-radius: 0% !important; 
+  border-width: 2px !important;
   color: #ffffff;
-  border-color: #090208 !important;
+  font-family: 'Coiny', sans-serif;
+  font-size: 25px;
+  padding: 1%;
+  text-transform: uppercase;
+  text-shadow: 2px 1px 5px black;
+  height: 10%;
+  width: 8.5%;
 } 
 
 #clear:hover {
   background-color:#d20d58 !important;
   color: #ffffff;
-  border-color: #090208 !important;
 } 
+
+ #true-length {
+  position: absolute;
+  left: 58%;
+  top: 21%;
+  align-content: center;
+  background-color: #95073d !important;
+  border-style: solid;
+  border-width: 2px !important;
+  color: #ffffff;
+  font-family: 'Coiny', sans-serif;
+  font-size: 15px;
+  padding: 1%;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  height: 10%;
+  width: 9%;
+} 
+
+#maximum {
+  font-size: 25px;
+}
 
 .simulate-btn-hover {
   background-color: #d20d58 !important;
@@ -604,8 +643,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .character {
-  background-color: #01a305 !important;
-  border-color: #000000 !important; 
+  background-color: #0dbf10 !important;
+  border-color: white !important; 
   border-width: 5px !important;
   border-bottom-style: solid !important;
   color: #FFFFFF !important;
@@ -613,6 +652,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
   display: inline-block !important;
   padding: 4% !important;
   margin: 2% !important;
+  font-size: xx-large;
+  text-transform: uppercase;
 }
 
 .character:hover {
