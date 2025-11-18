@@ -343,7 +343,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 50px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -383,9 +383,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
   position: absolute;
   z-index: 2;
   top: 30%;
-  left:10%;
+  left:11%;
   transform: translate(-50%, -50%);
-  width: 300px;
+  width: 350px;
   height: 500px;
   background: rgba(255, 255, 255, .95); /* white but opaque */
   color: black;
@@ -420,6 +420,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   padding: 10px;
   font-size: 16px;
   color: black;
+  overflow: scroll;
   background: white;
 }
 
