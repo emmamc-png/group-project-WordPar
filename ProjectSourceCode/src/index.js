@@ -347,54 +347,40 @@ app.get("/", async (req, res) => {
                     SELECT username, score, position
                     FROM ranked
                     WHERE username=$1`;
-
-  let users = [];
-  let currentUserData = [];
-
-  try {
-    currentUserData = await db.one(userQuery, [currentUser]);
-  } catch (err) {
-    currentUserData = {
-      username: currentUser,
-      score: 0,
-      position: null,
-      email: userEmail.email,
-    };
-    console.log("user has no scores yet");
-  }
-
-  try {
-    users = await db.any(query);
-    console.log("Leaderboard data retrieved");
-    res
-      .status(200)
-      .render("pages/home", {
-        bodyClass: "home-page",
-        leaderboard: users,
-        currentUser: currentUserData,
-        email: userEmail.email,
-      });
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .render("pages/home", {
-        bodyClass: "home-page",
-        leaderboard: [],
-        currentUser: currentUserData,
-        email: userEmail.email,
-      });
-  }
+    //generate arrays to store user and leaderboard data
+    let users=[];
+    let currentUserData=[];
+    try {
+      //Attempt to get user information
+      currentUserData=await db.one(userQuery, [currentUser]);
+    }
+    
+    catch(err) {
+      //If no scores exist, set user score to 0
+      currentUserData={username: currentUser, score: 0, position: null, email: userEmail.email};
+      console.log('user has no scores yet');
+    }
+    try {
+      users=await db.any(query);
+      console.log("Leaderboard data retrieved");
+      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData, email: userEmail.email}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+    }
+    catch(err) {
+      console.log(err);
+      //If error occurs, render page with empty leaderboard
+      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData, email: userEmail.email}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+    }
 });
 
-app.get("/game", async (req, res) => {
-  res.status(200).render("pages/game", { bodyClass: "auth-page" });
+app.get('/game', async(req, res) => {         
+  res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
 //Initialize new game
 app.post('/game', async(req,res) => {
   let category=req.body.category;
   if(!category) {
+    console.log("Error getting the category. Set to default");
     category='music';
   }
   let initial_score=100;
@@ -421,13 +407,11 @@ app.post('/game', async(req,res) => {
         console.log('New word inserted into DB with ID: '+wordID);
       }
       res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-      return;
     }
     catch(err) {
       console.log('Error inserting/retrieving word from DB: '+err);
       //If error occurs, return back to home page
       res.status(500).redirect('/');
-      return;
     }
   });
 });

@@ -110,6 +110,7 @@ let attempts = 0;
 const MAX_ATTEMPTS = 10;
 let currentGameID = null;
 
+/*
 // ========================================
 // Initialize Game - Generate Secret Word (YOUR FEATURE)
 // ========================================
@@ -132,7 +133,7 @@ async function startNewGame() {
         alert('Failed to start game. Please try again.');
     }
 }
-
+*/
 // Start game when page loads
 window.addEventListener('DOMContentLoaded', () => {
     startNewGame();
@@ -190,45 +191,44 @@ async function buttonPressed(event) {
                 updateGuess(buttonInputs);
                     room = false;
                 //    console.log(room)
-                }
-                else if (event.target.id === 'back') {
-                    buttonInputs.pop();
-                    updateGuess(buttonInputs);
-                    // console.log(buttonInputs);
-                }
-                else if (buttonInputs.length >= 15) {
-                    // Do nothing if the input is already 15 characters
-                    console.log("Maximum input length reached.");
-                }
-                else if(event.target.id === 'clear') {
-                    // Clear entire input
-                    console.log("user entered: " +buttonInputs);
-                    buttonInputs.length = 0;
-                    updateGuess(buttonInputs);
-                }
-                else {
-                    buttonInputs.push(event.target.value);
-                    updateGuess(buttonInputs);
-                    // console.log(buttonInputs);
-                }
+            }
+            else if (event.target.id === 'back') {
+                buttonInputs.pop();
+                updateGuess(buttonInputs);
+                console.log(buttonInputs);
+            }
+            else if (buttonInputs.length >= 15) {
+                // Do nothing if the input is already 15 characters
+                console.log("Maximum input length reached.");
+            }
+            else if(event.target.id === 'clear') {
+                // Clear entire input
+                console.log("user entered: " +buttonInputs);
+                buttonInputs.length = 0;
+                updateGuess(buttonInputs);
+            }
+            else {
+                buttonInputs.push(event.target.value);
+                updateGuess(buttonInputs);
+                console.log(buttonInputs);
             }
         }
-        else {
-            if (event.target.tagName === 'BUTTON') {
-                 if (event.target.id === 'clear') {
-                    console.log("Before clearing: "+buttonInputs);
-                    buttonInputs.length = 0;
-                    console.log("After clearing: "+buttonInputs);
-                    const guessDiv = document.getElementById("letters");
-                    const clearbtn = document.getElementById("clear");
-                    if (guessDiv) {
-                        guessDiv.remove();
-                    }
-                    if (clearbtn) {
-                        clearbtn.remove();
-                    }
-                    room = true;
+    }
+    else {
+        if (event.target.tagName === 'BUTTON') {
+            if (event.target.id === 'clear') {
+                console.log("Before clearing: "+buttonInputs);
+                buttonInputs.length = 0;
+                console.log("After clearing: "+buttonInputs);
+                const guessDiv = document.getElementById("letters");
+                const clearbtn = document.getElementById("clear");
+                if (guessDiv) {
+                    guessDiv.remove();
                 }
+                if (clearbtn) {
+                    clearbtn.remove();
+                }
+                room = true;
             }
         }
     }
@@ -269,7 +269,7 @@ document.addEventListener("keydown", function(event) {
 async function submitGuess(userGuess) {
     attempts++;
     document.getElementById('strokes-value').textContent = attempts;
-    
+    console.log("Your guess was: "+userGuess);
     try {
         // Save to database
         const dbResponse = await fetch("/api/submitGuess", {

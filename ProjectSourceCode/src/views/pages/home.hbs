@@ -49,39 +49,40 @@
         </div>
 
         <!-- Category Selection Modal -->
+        <form method="POST" action="/game">
         <div id="categoryModal" class="modal-overlay" style="display: none;">
             <div class="modal-box" style="max-width: 600px;">
                 <button class="close-btn" id="closeCategoryModal">&times;</button>
                 <h2 style="text-align: center; margin-bottom: 30px;">Choose a Category</h2>
                 <div class="category-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px;">
-                    <button class="category-btn" data-category="music">
+                    <button type="submit" name="category" value="music" class="category-btn" data-category="music">
                         <span style="font-size: 2em;">🎵</span>
                         <span>Music</span>
                     </button>
-                    <button class="category-btn" data-category="sports">
+                    <button type="submit" name="category" value="sports" class="category-btn" data-category="sports">
                         <span style="font-size: 2em;">⚽</span>
                         <span>Sports</span>
                     </button>
-                    <button class="category-btn" data-category="food">
+                    <button type="submit" name="category" value="food" class="category-btn" data-category="food">
                         <span style="font-size: 2em;">🍕</span>
                         <span>Food</span>
                     </button>
-                    <button class="category-btn" data-category="animals">
+                    <button type="submit" name="category" value="animals" class="category-btn" data-category="animals">
                         <span style="font-size: 2em;">🐾</span>
                         <span>Animals</span>
                     </button>
-                    <button class="category-btn" data-category="nature">
+                    <button type="submit" name="category" value="nature" class="category-btn" data-category="nature">
                         <span style="font-size: 2em;">🌲</span>
                         <span>Nature</span>
                     </button>
-                    <button class="category-btn" data-category="technology">
+                    <button type="submit" name="category" value="technology" class="category-btn" data-category="technology">
                         <span style="font-size: 2em;">💻</span>
                         <span>Technology</span>
                     </button>
                 </div>
             </div>
         </div>
-
+        </form>
         <!-- How to Play Modal -->
         <div class="how-to-play">
             <button class='btn how-to-btn' id="openModal">How to Play</button>
@@ -203,10 +204,12 @@ categoryModal.addEventListener('click', (e) => {
 });
 
 // Handle category selection - redirects to game with category
+/*
 categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
         const category = button.getAttribute('data-category');
         window.location.href = `/game?category=${category}`;
     });
 });
+*/
 </script>
