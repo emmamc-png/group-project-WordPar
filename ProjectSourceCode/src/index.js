@@ -376,88 +376,32 @@ app.get('/game', async(req, res) => {
   res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
-//Initialize new game
-app.post('/game', async(req,res) => {
-  let userID=req.session.user.userid;
-  let category=req.body.category;
-  if(!category) {
-    category='music';
-  }
-  let initial_score=100;
-  console.log('Category selected: '+category);
-  let word=null;
-  //Make call to API service to get words based on category
-  generateWord(category).then (async (result) => {
-    let word=result.word;
-    console.log('Word generated from AI service: '+word);
-    //Insert word into DB if it does not already exist
-    let wordID;
-    initial_score=word.length*20; //Set initial score based on word length
-    let getWordQuery=`SELECT wordID from words WHERE word=$1`;
-    let insertWordQuery=`INSERT INTO words(word, length) VALUES ($1, $2) RETURNING wordID`;
-    let startGameQuery=`INSERT INTO game(score,wordID) VALUES ($1, $2) RETURNING gameID`;
-    let connectUserToGameQuery=`INSERT INTO userGame(game_id,user_id) VALUES ($1, $2)`;
-    try {
-      let wordRecord=await db.oneOrNone(getWordQuery, [word]);
-      if(wordRecord) {
-        wordID=wordRecord.wordid;
-        console.log('Word already exists in DB with ID: '+wordID);
-      }
-      else {
-        let insertResult=await db.one(insertWordQuery, [word, word.length]);
-        wordID=insertResult.wordid;
-        console.log('New word inserted into DB with ID: '+wordID);
-      }
-      let gameID=await db.one(startGameQuery, [initial_score, wordID]);
-      //Provies {"gameid": (number)}
-      req.session.gameSession=gameID;
-      console.log("GameID is: "+gameID.gameid);
-      await db.none(connectUserToGameQuery, [gameID.gameid, userID])
-      res.status(200).render('pages/game', { bodyClass: 'auth-page', category: category, initial_score: initial_score, word: word}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-    }
-    catch(err) {
-      console.log('Error inserting/retrieving word from DB: '+err);
-      //If error occurs, return back to home page
-      res.status(500).redirect('/');
-    }
-  });
-});
-
 app.post('/exitGame', async(req, res) => {
   //Delete the connection to the user in userGame to prevent the user from getting points from a game they didn't finish
-  /*
-  let gameID=req.session.gameSession.gameID;
-  const user=req.session.user;
-
-  let deleteGameFromUserQuery=`DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
-  let checkGameExistsQuery=`SELECT FROM userGame WHERE game_id=$1`;
-
-  //First check if gameID has been entered into the DB
+  let gameID=req.body.gameID;
+  let userID=req.session.user.userid;
+  //If no userID, they aren't logged in which should not be possible
+  if (!userID) {
+    res.status(400).json({success:false});
+  }
+  //If no gameID, no need to delete from database
+  if (!gameID) {
+    console.log("No game session started");
+    res.status(200).json({ success: true });
+    return;
+  }
+  const deleteUserGame=`DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
   try {
-    await db.one(checkGameExistsQuery, [gameID]);
-    console.log("Game exists!");
+    await db.none(deleteUserGame, [gameID, userID]);
+    console.log("Successfully deleted");
+    res.status(200).json({ success: true });
   }
   catch(err) {
-    console.log("No game session exists. Now exiting.");
-    res.status(500).redirect('/');
+    console.log("Error exiting game. Attempt again");
+    res.status(500).json({ success: false });
   }
-
-  //If so, attempt to delete it
-  try {
-    await db.none(deleteGameFromUserQuery, [gameID, user.userid]);
-    delete req.session.gameSession;
-    console.log("User has succesfully exited game");
-    res.status(200).redirect('/');
-  }
-  //Catch will be altered to send user back to game
-  catch(err) {
-    const error=true;
-    res.status(500).redirect('/');
-  }
-    */
-  //Temporary redirecting back home
-  res.status(200).redirect('/');
 });
+
 
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
@@ -471,7 +415,6 @@ app.post("/api/submitGuess", async (req, res) => {
       const game = await db.one(
         "INSERT INTO game (score, wordid) VALUES (0, NULL) RETURNING gameid"
       );
-      req.session.gameSession.gameID=game.gameid;
       gameID = game.gameid;
     }
 
