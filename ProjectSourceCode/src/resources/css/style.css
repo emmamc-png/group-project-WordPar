@@ -435,6 +435,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 /*/////////////////////////////////*/
 
 .keyboard_row {
+  /* position: ; */
   padding: 1%;
   text-align: center;
 }
@@ -455,12 +456,20 @@ body {font-family: Arial, Helvetica, sans-serif;}
   width: 100%;
 }
 
+#point {
+  font-size: 15px !important;
+}
+
 #points {
   align-content: center;
   background-color: #95073d !important;
   color: #ffffff;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  border-color: #090208 !important;
+  /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+  font-family: 'Coiny', sans-serif;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  font-size: 50px;
+  /* border-color: #090208 !important; */
   border-style: solid;
   border-width: 2px !important;
   padding: 1%;
@@ -471,24 +480,56 @@ body {font-family: Arial, Helvetica, sans-serif;}
   align-content: center;
   background-color :#079528 !important;
   color: #ffffff;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  border-color: #090208 !important;
+  /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+  font-family: 'Monaco', sans-serif;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  font-size: 75px;
+  letter-spacing: 3px;
+  /* border-color: #090208 !important; */
   border-style: solid;
   border-width: 2px !important;
   padding: 1%;
   text-align: center;
 }
 
+#strokes {
+  font-size: 15px !important;
+}
+
 #user-score {
   align-content: center;
-  background-color: #95078e !important;
+  background-color:#95073d !important;
   color: #ffffff;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  border-color: #090208 !important;
+  /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+  font-family: 'Coiny', sans-serif;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  font-size: 50px;
+  /* border-color: #090208 !important; */
   border-style: solid;
   border-width: 2px !important;
   padding: 1%;
   text-align: center;
+}
+
+#exit-button {
+  background-color:#95073d !important;
+  color:white;
+  font-family: 'Monaco', sans-serif;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 1px black;
+  font-size: 50px;
+  letter-spacing: 1px;
+  border-color: #090208 !important;
+  border-style: solid;
+  border-width: 1px !important;
+  text-align: center;
+}
+
+#exit-button:hover {
+  background-color:#d20d58 !important;
+  text-shadow: 0px 0px 0px #ffffff;
 }
 
 #actual-game {
@@ -497,42 +538,103 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 #top-right-game {
   position:absolute;
-  top: 2%;
-  left: 93%;
+  top: 1%;
+  left: 89%;
 }
 
 #guess {
-  width: 45%;
   position: absolute;
   top: 25%;
+  left: 11%;
+  width: 45%;
+}
+
+#guessContainer {
+  position: absolute;
+  left: 14%;
+  top: 40%;
+  width: 40%;
+}
+
+#guess-history {
+  position: relative;
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.result {
+  margin-bottom: 10px;
+  padding: 5%;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
 #buttonContainer {
   width: 100%;
   padding-left: 20%;
-  padding-top: 5%;
+  padding-top: 15%;
 } 
 
  #clear {
-  position: relative;
-  top: 2%;
-  left: 2%;
-  background-color: #944765 !important;
-  color: #d4d9d4;
-  border-color: #72186f !important;
+  position: absolute;
+  top: 21%;
+  left: 0%;
+  background-color:#95073d !important;
+  border-color: white;
+  border-style: solid;
+  border-radius: 0% !important; 
+  border-width: 2px !important;
+  color: #ffffff;
+  font-family: 'Coiny', sans-serif;
+  font-size: 25px;
+  padding: 1%;
+  text-transform: uppercase;
+  text-shadow: 2px 1px 5px black;
+  height: 10%;
+  width: 8.5%;
 } 
 
 #clear:hover {
-  background-color: #95073d !important;
+  background-color:#d20d58 !important;
   color: #ffffff;
-  border-color: #090208 !important;
-  border-style: dashed;
 } 
 
+ #true-length {
+  position: absolute;
+  left: 58%;
+  top: 21%;
+  align-content: center;
+  background-color: #95073d !important;
+  border-style: solid;
+  border-width: 2px !important;
+  color: #ffffff;
+  font-family: 'Coiny', sans-serif;
+  font-size: 15px;
+  padding: 1%;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px black;
+  height: 10%;
+  width: 9%;
+} 
+
+#maximum {
+  font-size: 25px;
+}
+
 .simulate-btn-hover {
-  background-color: #01a305 !important;
+  background-color: #d20d58 !important;
   border-color: #934790 !important;
   color: #FFFFFF !important;
+}
+
+.simulate-btn-hover:hover {
+  background-color: #01a305 !important;
 }
 
 #letters {
@@ -542,8 +644,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .character {
-  background-color: #01a305 !important;
-  border-color: #000000 !important; 
+  background-color: #0dbf10 !important;
+  border-color: white !important; 
   border-width: 5px !important;
   border-bottom-style: solid !important;
   color: #FFFFFF !important;
@@ -551,13 +653,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
   display: inline-block !important;
   padding: 4% !important;
   margin: 2% !important;
+  font-size: xx-large;
+  text-transform: uppercase;
 }
 
 .character:hover {
-  background-color: #15b117 !important;
-  border-color: #a03357 !important;
+  background-color:#d20d58 !important;
   border-width: 5px !important;
-  border-bottom-style: dashed !important;
   color: #FFFFFF !important;
 }
 
@@ -583,12 +685,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 /* From GeeksForGeeks */
 .semicircle {
-  position: relative; 
-  top: 60%;
-  left: 50%;
+  position: absolute; 
+  top: 48%;
+  left: 80%;
   transform: translate(-50%, -50%);
-  height: 100%;
-  width: 50%;
+  height: 80%;
+  width: 22%;
   border-radius: 150px 150px 0 0;
   background-color: green;
 }
@@ -596,9 +698,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 /* From w3schools */
 .rectangle {
   position: absolute;
-  left: 76.5%;
-  height: 50px;
-  width: 100px;
+  top: 75%;
+  left: 75%;
+  height: 10%;
+  width: 10%;
   background-color: #555;
 }
 
