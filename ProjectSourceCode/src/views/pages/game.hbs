@@ -111,11 +111,9 @@
 // ======================================== 
 --}}
 <div id="resultModal" class="modal">
-  <div class="modal-content1 w3-modal-content w3-animate-zoom">
+  <div class="modal-content1 w3-animate-zoom">
     <h2 class="result-title" id="resultTitle"></h2>
-    <p id="resultMessage"></p>
     <div class="modal-textbox">
-        <h4>Correct Word</h4>
         <div class="results-leaderboard-container">
             <h2 class="results-leaderboard-title">Leaderboard</h2>
             <div class="results-leaderboard-scroll"> <!-- To implement user data for the leader board -->
@@ -124,8 +122,11 @@
                 {{/each}}
             </div>
         </div>
+        <p class="text-center resultmessage-font-size" id="resultMessage"></p>
     </div>
-    <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+    <div>
+        <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+    </div>
     <button class="return-home-btn" onclick="window.location.href='/'">Return Home</button>
   </div>
 </div>
@@ -390,7 +391,7 @@ async function submitGuess(userGuess) {
         if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()){
             await new Promise(resolve => setTimeout(resolve, 500));
             document.getElementById("resultTitle").innerText = "🎉 YOU WON!";
-            document.getElementById("resultMessage").innerText = `The word was "${secretWord}"\nAttempts: ${attempts}`
+            document.getElementById("resultMessage").innerText = `Attempts: ${attempts}`
             resultModal.style.display = "flex"; // show modal
         } else if (attempts >= MAX_ATTEMPTS) {
             await new Promise(resolve => setTimeout(resolve, 500));
