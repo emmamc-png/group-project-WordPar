@@ -402,7 +402,6 @@ app.post('/exitGame', async(req, res) => {
   }
 });
 
-
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
   const user = req.session.user;
