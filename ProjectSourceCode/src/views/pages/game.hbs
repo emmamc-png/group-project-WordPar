@@ -125,7 +125,7 @@ async function startNewGame() {
         secretWord = data.word;
         console.log('🎯 Secret word:', secretWord); // DEBUG - Remove in production
         
-        alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
+        // alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
         
     } catch (error) {
         console.error('Error generating word:', error);
@@ -142,11 +142,20 @@ window.addEventListener('DOMContentLoaded', () => {
 // Keyboard Input Handling 
 // ========================================
 const buttonContainer = document.getElementById('buttonContainer');
+//let wordLength = secretWord.length;
 let prevKey = "";
 let buttonInputs = [];
 let room = true;
+let clear = false;
 
 function updateGuess(buttonInputs) {
+    // Truncate the size of the input guess into the correct size
+    /*console.log('here')
+    console.log(buttonInputs.length)
+    console.log("word "+ secretWord.length)
+    buttonInputs.length = secretWord.length;
+    console.log("dude" + buttonInputs.length)
+*/
     const guessDiv = document.getElementById("guess");
     let htmlContent = "<div id='letters'>";
     buttonInputs.forEach(item => {
@@ -157,10 +166,13 @@ function updateGuess(buttonInputs) {
     htmlContent += "</div>";
     guessDiv.innerHTML = htmlContent;
 
-    const clearbtnDiv = document.getElementById("clearbtn");
-    let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
-    clearbtnDiv.innerHTML = htmlContent2;
-    clearbtnDiv.addEventListener('click', buttonPressed);
+   //console.log(buttonInputs)
+    if (clear) {
+        const clearbtnDiv = document.getElementById("clearbtn");
+        let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
+        clearbtnDiv.innerHTML = htmlContent2;
+        clearbtnDiv.addEventListener('click', buttonPressed);
+    }
 }
 
 async function buttonPressed(event) {
@@ -171,9 +183,12 @@ async function buttonPressed(event) {
         
         const correctKey = document.querySelector(`#${event.target.id}`)
         prevKey = correctKey;
-        if (correctKey) {
-            correctKey.classList.add('simulate-btn-hover');
+        //if (correctKey) {
+        correctKey.classList.add('simulate-btn-hover');
+        if (event.target.id === 'clear') {
+            clear = true;
         }
+        //}
 
         if (event.target.tagName === 'BUTTON') {
             if(event.target.id == 'enter') {
@@ -181,9 +196,12 @@ async function buttonPressed(event) {
                     alert('Please enter a word first!');
                     return;
                 }
-                
+            
                 // Submit guess with AI integration (YOUR FEATURE)
                 await submitGuess(buttonInputs.join(''));
+                
+                // Display the clear button
+                clear = true;
                 updateGuess(buttonInputs);
                 room = false;
             }
@@ -206,6 +224,7 @@ async function buttonPressed(event) {
                 if (guessDiv) guessDiv.remove();
                 if (clearbtn) clearbtn.remove();
                 room = true;
+                clear = false;
             }
         }
     }
