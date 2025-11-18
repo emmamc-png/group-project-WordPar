@@ -23,6 +23,7 @@
                 <div id="clearbtn"></div>
                 <br>
                 <div id="guess"></div>
+                <div id="result"></div>
                 <br>
                 <br>
             </div>
@@ -213,7 +214,11 @@ async function buttonPressed(event) {
                 // Display the clear button
                 clear = true;
                 updateGuess(buttonInputs);
+                // reset guesses
                 room = false;
+                buttonInputs = [];
+                room = true;
+                
             }
             else if (event.target.id === 'back') {
                 buttonInputs.pop();
@@ -231,8 +236,12 @@ async function buttonPressed(event) {
                 buttonInputs.length = 0;
                 const guessDiv = document.getElementById("letters");
                 const clearbtn = document.getElementById("clear");
+                const resultsDiv = document.getElementById("guess-history")
                 if (guessDiv) guessDiv.remove();
                 if (clearbtn) clearbtn.remove();
+                if (resultsDiv) resultsDiv.remove();
+                attempts = 0;
+                document.getElementById('strokes-value').textContent = attempts;
                 room = true;
                 clear = false;
             }
@@ -347,7 +356,7 @@ function displayFeedback(guess, similarity, percentage) {
     if (!feedbackContainer) {
         feedbackContainer = document.createElement('div');
         feedbackContainer.id = 'guess-history';
-        feedbackContainer.style.cssText = `
+        /*feedbackContainer.style.cssText = `
             margin-top: 20px;
             padding: 15px;
             background: rgba(255,255,255,0.1);
@@ -355,7 +364,8 @@ function displayFeedback(guess, similarity, percentage) {
             max-height: 300px;
             overflow-y: auto;
         `;
-        document.getElementById('top-left-game').appendChild(feedbackContainer);
+        */
+        document.getElementById('result').appendChild(feedbackContainer);
     }
     
     let message = '';
@@ -379,14 +389,17 @@ function displayFeedback(guess, similarity, percentage) {
     }
     
     const feedbackItem = document.createElement('div');
+    feedbackItem.classList.add('result');
     feedbackItem.style.cssText = `
-        margin-bottom: 10px;
-        padding: 10px;
         background: ${color};
+    `;
+    /*  padding: 10px;
+        margin-bottom: 10px;
         color: white;
         border-radius: 5px;
         font-weight: bold;
     `;
+    */
     feedbackItem.innerHTML = `
         <div style="display: flex; justify-content: space-between;">
             <span>${attempts}. ${guess.toUpperCase()}</span>
