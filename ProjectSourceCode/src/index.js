@@ -425,13 +425,26 @@ app.post('/game', async(req,res) => {
 
 app.post('/exitGame', async(req, res) => {
   //Delete the connection to the user in userGame to prevent the user from getting points from a game they didn't finish
-  let gameID=req.session.gameSession.gameid;
-  let userID=req.session.user.userid;
+  /*
+  let gameID=req.session.gameSession.gameID;
+  const user=req.session.user;
 
   let deleteGameFromUserQuery=`DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
+  let checkGameExistsQuery=`SELECT FROM userGame WHERE game_id=$1`;
 
+  //First check if gameID has been entered into the DB
   try {
-    await db.none(deleteGameFromUserQuery, [gameID, userID]);
+    await db.one(checkGameExistsQuery, [gameID]);
+    console.log("Game exists!");
+  }
+  catch(err) {
+    console.log("No game session exists. Now exiting.");
+    res.status(500).redirect('/');
+  }
+
+  //If so, attempt to delete it
+  try {
+    await db.none(deleteGameFromUserQuery, [gameID, user.userid]);
     delete req.session.gameSession;
     console.log("User has succesfully exited game");
     res.status(200).redirect('/');
@@ -441,6 +454,9 @@ app.post('/exitGame', async(req, res) => {
     const error=true;
     res.status(500).redirect('/');
   }
+    */
+  //Temporary redirecting back home
+  res.status(200).redirect('/');
 });
 
 app.post("/api/submitGuess", async (req, res) => {
@@ -455,6 +471,7 @@ app.post("/api/submitGuess", async (req, res) => {
       const game = await db.one(
         "INSERT INTO game (score, wordid) VALUES (0, NULL) RETURNING gameid"
       );
+      req.session.gameSession.gameID=game.gameid;
       gameID = game.gameid;
     }
 
