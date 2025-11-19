@@ -10,19 +10,48 @@
                 </a>
             </button>
             <div id="myModal" class="modal">
-                <div class="modal-content w3-animate-top">
-                    <span class="close">&times;</span>
-                    <h2>Account Information</h2>
-                    <p class="useninfo-text">Username: {{currentUser.username}}</p>
-                    <p class="useninfo-text">Email: {{email}}</p>
-                        {{#if profile}}
-                            <img class="profile-img" src="{{profile}}" alt="user avatar">
-                        {{else}}
-                            <img class="profile-img" src="/img/userProfile.png" alt="user avatar">
-                        {{/if}}
-                    <form method="POST" action="/logout">
-                        <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
-                    </form>
+                <div class="profile-content w3-animate-top">
+                    <div class="container-fluid">
+                        <span class="close">&times;</span>
+                        <h2 class="profile-header">Account Information</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{#if profile}}
+                                    <img class="profile-img" src="{{profile}}" alt="user avatar">
+                                {{else}}
+                                    <img class="profile-img" src="/img/userProfile.png" alt="user avatar">
+                                {{/if}}
+                                <p class="profile-text">Username: {{currentUser.username}}</p>
+                                <p class="profile-text">Email: {{email}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <form class="changeUserInfo">
+                                    <select class="form-select" id="changeInfo" placeholder="Change User Information">
+                                        <option value="" selected disabled hidden>Change User Information</option>
+                                        <option value="username">Change Username</option>
+                                        <option value="password">Change Password</option>
+                                        <option value="email">Change Email</option>
+                                        <option value="image">Change Profile Picture</option>
+                                    </select>
+                                        <div id="usernameChange" class="change-form" >
+                                            <div>
+                                                <label for="currentUsername" class="profile-label">Current Username</label>
+                                                <input name="currentUsername" class="usernameInput" type="text" id="originalUser" placeholder="Current Username" maxlength="50" required>
+                                            </div>
+                                            <div>
+                                                <label for="newUsername" class="profile-label">New Username</label>
+                                                <input name="newUsername" class="usernameInput" type="text" id="newUser" placeholder="New Username" maxlength="50" required>
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <form method="POST" action="/logout">
+                                <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

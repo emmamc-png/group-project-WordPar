@@ -318,22 +318,93 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 /* HOME PAGE USER MODAL */
 
-.useninfo-text{
-  font-size: 20px;
+.profile-label {
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    font-size: medium;
+    color:white;
+}
+
+.usernameInput {
+  border:2px #000;
+  background-color: white;
+  font-size:medium;
+  font-family:'Open Sans', sans-serif;
+  color: black;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  text-align: center;
+  width: 100%;
+  border-radius: 6px;
+  padding:2%
+}
+
+.profile-img {
+    box-shadow:10%;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+.profile-text{
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    font-size: x-large;
+    color:white;
+}
+
+.profile-header {
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    font-size: xx-large;
+    color: white;
+}
+
+/* Modal Content */
+.form-select {
+  border:2px #000;
+  background-color: white;
+  font-size:medium;
+  font-family:'Open Sans', sans-serif;
+  color: black;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  text-align: center;
+  width: 100%;
+  border-radius: 6px;
+  padding:2%;
+}
+
+.divider {
+  width: 1%; /* Thickness of the divider */
+  background-color: rgb(192, 189, 189); /* Color of the divider */
+  margin: 0 5%; /* Spacing around the divider */
+}
+
+.profile-content {
+  background-color: #9cc280;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5%;
+  border: 1px solid #a0bf8b;
+  width: 40%;
 }
 
 .btn-logout{
-  background-color: red;
-  color: #000;
+  background-color: white;
+  color: black;
+  font-family:'Open Sans', sans-serif;
+  font-size: large;
   border-radius: 4px;
-  width: 15%;
-  height: 10%;
+  width: 20%;
+  height: 100%;
   border: none;
   transition: ease 0.2s;
 }
 
 .btn-logout:hover{
-  transform: scale(1.05);
+  transform: scale(1.10);
 }
 
 body {font-family: Arial, Helvetica, sans-serif;}
@@ -783,12 +854,4 @@ body {font-family: Arial, Helvetica, sans-serif;}
   100%{
     background-position-x:-600px;
   }
-}
-
-.profile-img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
 }
