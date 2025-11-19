@@ -49,10 +49,11 @@ describe('Testing Registration API', () => {
     // and expects the API to return a status of 200.
     it('positive : /registration', done => {
         var name=Math.random().toString(36).substring(7);
+        var email=name+'@gmail.com'
         chai
             .request(server)
             .post('/registration')
-            .send({username: name, email: 't@gmail.com', password: 'pass', password_retype: 'pass'}) //password is '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'
+            .send({username: name, email: email, password: 'pass', password_retype: 'pass'}) //password is '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'
             .end((err, res) => {
                 console.log('testing positive');
                 expect(res).to.have.status(200);
@@ -79,6 +80,7 @@ describe('Testing Registration API', () => {
       });
   });
 });
+
 
 //EC Testing
 //We are testing the login session by attempting to login using a test user through doing POST /login.
@@ -108,7 +110,7 @@ describe('Testing Login API', () => {
   // Result: This test case should pass and return a status 400.
   // Explanation: The testcase will call the /login API with the following invalid inputs
   // and expects the API to return a status of 400.
-  it('Negative : /registration, attempts to login to a user with an invalid password', done => {
+  it('Negative : /login, attempts to login to a user with an invalid password', done => {
     chai
       .request(server)
       .post('/login')

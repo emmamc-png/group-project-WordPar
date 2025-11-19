@@ -2,58 +2,212 @@
     <div class="page-box">
         <h1 class="top-center">WORD PAR</h1>
         <div class="top-right">
-            <button class="btn btn-user">
-                <a> <!-- To implment route to page game page -->
+            <button class="btn btn-user" id="myBtn">
+                <a>
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" class="bi bi-person-fill" viewBox="0 0 16 16">
-                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                     </svg>
                 </a>
             </button>
+            <div id="myModal" class="modal">
+                <div class="modal-content w3-animate-top">
+                    <span class="close">&times;</span>
+                    <h2>Account Information</h2>
+                    <p class="useninfo-text">Username: {{currentUser.username}}</p>
+                    <p class="useninfo-text">Email: {{email}}</p>
+                    <form method="POST" action="/logout">
+                        <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
+                    </form>
+                </div>
+            </div>
         </div>
+
         <div class="above-center">
             <div class="leaderboard-container">
                 <h2 class="leaderboard-title">Leaderboard</h2>
-                <div class="leaderboard-scroll"> <!-- To implement user data for the leader board -->
+                <div class="leaderboard-scroll">
                     {{#each leaderboard}}
-                        <div class="entry"> {{indexPlusOne @index}}. {{this.username}} - {{this.score}} pts</div>
+                        <div class="entry">{{indexPlusOne @index}}. {{this.username}} - {{this.score}} pts</div>
                     {{/each}}
                 </div>
-                {{#if currentUser.position}} 
-                    <p3>Current Position: {{currentUser.position}}. {{currentUser.username}} - {{currentUser.score}} pts</p3> <!-- To implement user information and there current position -->
+                {{#if currentUser.position}}
+                    <p3>Current Position: {{currentUser.position}}. {{currentUser.username}} - {{currentUser.score}} pts</p3>
                 {{else}}
                     <p3>Current Position: Unranked. {{currentUser.username}} - {{currentUser.score}} pts</p3>
                 {{/if}}
             </div>
         </div>
+
         <div class="logoContainer logo-position">
             <img src="/img/logoImage.png" class="logo"/>
         </div>
+
         <div class="below-center">
-            <button class="play-btn" onclick="window.location.href='/game'">
-                <a> <!-- To implment route to page settings page -->
-                    <p class="play-text">PLAY</p>
-                </a>
+            <button class="play-btn" id="playButton">
+                <p class="play-text">PLAY</p>
             </button>
         </div>
-        <div>
-            <!-- Button to display modal -->
-            <div  class="how-to-play">
-                <!-- Trigger Button -->
-                    <button class='btn how-to-btn' id="openModal">How to Play</button>
-            </div>
 
-            <!-- Modal Overlay -->
-            <div id="customModal" class="modal-overlay">
-                <div class="modal-box">
-                    <button class="close-btn" id="closeModal">&times;</button>
-                    <h2>How to Play</h2>
-                    <div class="modal-body">
-                        <p>
-                            REPLACE WITH INSTRUCTIONS ON HOW TO PLAY THE GAME
-                        </p>
-                    </div>
+        <!-- Category Selection Modal -->
+        <div id="categoryModal" class="modal-overlay" style="display: none;">
+            <div class="modal-box" style=" margin-top:150px; height: 600px; width: 400px; margin-left: 70px;">
+                <button class="close-btn" id="closeCategoryModal">&times;</button>
+                <h2 style="text-align: center; margin-bottom: 10px;">Choose a Category</h2>
+                <div class="category-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px;">
+                    <button class="category-btn" data-category="music">
+                        <span style="font-size: 2em;">🎵</span>
+                        <span>Music</span>
+                    </button>
+                    <button class="category-btn" data-category="sports">
+                        <span style="font-size: 2em;">⚽</span>
+                        <span>Sports</span>
+                    </button>
+                    <button class="category-btn" data-category="food">
+                        <span style="font-size: 2em;">🍕</span>
+                        <span>Food</span>
+                    </button>
+                    <button class="category-btn" data-category="animals">
+                        <span style="font-size: 2em;">🐾</span>
+                        <span>Animals</span>
+                    </button>
+                    <button class="category-btn" data-category="nature">
+                        <span style="font-size: 2em;">🌲</span>
+                        <span>Nature</span>
+                    </button>
+                    <button class="category-btn" data-category="technology">
+                        <span style="font-size: 2em;">💻</span>
+                        <span>Technology</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div class="how-to-play">
+            <button class='btn how-to-btn' id="openModal">How to Play</button>
+        </div>
+
+        <div id="customModal" class="modal-overlay">
+            <div class="modal-box w3-animate-bottom">
+                <button class="close-btn" id="closeModal">&times;</button>
+                <h2>How to Play</h2>
+                <div class="modal-body">
+                    <p><strong>🎯 Objective:</strong> Guess the secret word based on semantic similarity!</p>
+                    <br>
+                    <p><strong>📋 How it works:</strong></p>
+                    <ul style="text-align: left; padding-left: 20px;">
+                        <li>Choose a category to start the game</li>
+                        <li>The AI generates a secret word from that category</li>
+                        <li>Type your guess using the keyboard</li>
+                        <li>Press ENTER to submit</li>
+                        <li>Get feedback on how close your guess is (0-100%)</li>
+                        <li>🔥 90%+ = Almost there!</li>
+                        <li>🌟 70-90% = Very close!</li>
+                        <li>😊 50-70% = Getting warmer!</li>
+                        <li>🤔 30-50% = On the right track</li>
+                        <li>❄️ Below 30% = Cold!</li>
+                    </ul>
+                    <br>
+                    <p><strong>🏆 Goal:</strong> Guess the word in as few attempts as possible!</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.category-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 15px;
+    padding: 30px 20px;
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 150px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.category-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.category-btn:active {
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+// Script for how to play modal
+const howToPlayModal = document.getElementById('customModal');
+const openHowToPlay = document.getElementById('openModal');
+const closeHowToPlay = document.getElementById('closeModal');
+
+openHowToPlay.addEventListener('click', () => {
+    howToPlayModal.style.display = 'flex';
+});
+
+closeHowToPlay.addEventListener('click', () => {
+    howToPlayModal.style.display = 'none';
+});
+
+howToPlayModal.addEventListener('click', (e) => {
+    if (e.target === howToPlayModal) {
+        howToPlayModal.style.display = 'none';
+    }
+});
+
+// Script for user profile modal
+const modal2 = document.getElementById("myModal");
+const btn = document.getElementById("myBtn");
+const span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+    modal2.style.display = "block";
+}
+
+span.onclick = function() {
+    modal2.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal2) {
+        modal2.style.display = "none";
+    }
+}
+
+// Category Selection Modal (YOUR NEW FEATURE)
+const playButton = document.getElementById('playButton');
+const categoryModal = document.getElementById('categoryModal');
+const closeCategoryModal = document.getElementById('closeCategoryModal');
+const categoryButtons = document.querySelectorAll('.category-btn');
+
+playButton.addEventListener('click', () => {
+    categoryModal.style.display = 'flex';
+});
+
+closeCategoryModal.addEventListener('click', () => {
+    categoryModal.style.display = 'none';
+});
+
+categoryModal.addEventListener('click', (e) => {
+    if (e.target === categoryModal) {
+        categoryModal.style.display = 'none';
+    }
+});
+
+// Handle category selection - redirects to game with category
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        window.location.href = `/game?category=${category}`;
+    });
+});
+</script>

@@ -8,18 +8,6 @@ services:
       - group-project:/var/lib/postgresql/data
       - ./src/init_data:/docker-entrypoint-initdb.d
 
-
-  #i_service:
-    #build:
-      #context: ./src/wordpar_ai
-    #env_file: .env
-    #ports:
-      #- "5001:5000"
-    #volumes:
-     # - ./src/wordpar_ai:/app
-    #depends_on:
-     # - db
-
   web:
     image: node:lts
     user: 'node'
@@ -29,13 +17,10 @@ services:
       - NODE_ENV=development
     depends_on:
       - db
-      #- ai_service
     ports:
       - '3000:3000'
     volumes:
       - ./:/repository
-    command: 'npm start'
-
-
+    command: 'npm run testandrun'
 volumes:
   group-project:
