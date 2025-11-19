@@ -318,6 +318,14 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 
 /* HOME PAGE USER MODAL */
 
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
 .useninfo-text{
   font-size: 20px;
 }
@@ -784,7 +792,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
     background-position-x:-600px;
   }
 }
-
 /* RESULTS POPUP */
 .modal {
   display: none; /* hidden by default */

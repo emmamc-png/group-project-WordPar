@@ -154,14 +154,7 @@ app.post("/registration", async (req, res) => {
   const password_retype = req.body.password_retype;
   const email = req.body.email;
 
-  if (
-    !username ||
-    !password ||
-    !email ||
-    !password_retype ||
-    username.length > 50 ||
-    email.length > 100
-  ) {
+  if (!username || !password || !email || !password_retype || username.length > 50 || email.length > 100) {
     const error = true;
     res.status(400).render("pages/registration", {
       bodyClass: "auth-page",
@@ -363,12 +356,18 @@ app.get("/", async (req, res) => {
     try {
       users=await db.any(query);
       console.log("Leaderboard data retrieved");
-      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData, email: userEmail.email}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      if(req.session.user.userimage) {
+        console.log("Image found!");
+      }
+      else {
+        console.log("No image found!");
+      }
+      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData, email: userEmail.email, profile: req.session.user.userimage}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
     catch(err) {
       console.log(err);
       //If error occurs, render page with empty leaderboard
-      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData, email: userEmail.email}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData, email: userEmail.email, profile: null}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
     }
 });
 
