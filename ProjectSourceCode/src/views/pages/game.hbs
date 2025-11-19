@@ -103,6 +103,33 @@
     </div>
 </div>
 
+{{!-- 
+// ========================================
+// RESULTS POPUP
+// ======================================== 
+--}}
+<div id="resultModal" class="modal">
+  <div class="modal-content1 w3-animate-zoom">
+    <h2 class="result-title" id="resultTitle"></h2>
+    <div class="modal-textbox">
+        <div class="results-leaderboard-container">
+            <h2 class="results-leaderboard-title">Leaderboard</h2>
+            <div class="results-leaderboard-scroll"> <!-- To implement user data for the leader board -->
+                {{#each leaderboard}}
+                  <div class="entry"> {{indexPlusOne @index}}. {{this.username}} - {{this.score}} pts</div>
+                {{/each}}
+            </div>
+        </div>
+        <p class="text-center resultmessage-font-size" id="resultMessage"></p>
+    </div>
+    <div>
+        <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+    </div>
+    <button class="return-home-btn" onclick="window.location.href='/'">Return Home</button>
+  </div>
+</div>
+
+
 <script>
 // ========================================
 // Get Category from URL API Parameter
@@ -148,6 +175,10 @@ window.addEventListener('DOMContentLoaded', () => {
     startNewGame();
 });
 
+document.getElementById("playAgainBtn").addEventListener("click", function () {
+    location.reload();
+});
+
 // ========================================
 // Keyboard Input Handling 
 // ========================================
@@ -157,6 +188,8 @@ let prevKey = "";
 let buttonInputs = [];
 let room = true;
 let clear = false;
+const resultModal = document.getElementById("resultModal");
+const openBtn = document.getElementById("openModalBtn");
 
 function updateGuess(buttonInputs) {
     // Truncate the size of the input guess into the correct size
@@ -368,12 +401,14 @@ async function submitGuess(userGuess) {
         displayFeedback(userGuess, similarity, percentage);
         
         // Check win condition
-        if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()) {
+        /*if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()) {
             setTimeout(() => {
+                users = await db.any(query);
                 alert(`🎉 YOU WON! The word was "${secretWord}"!\nAttempts: ${attempts}`);
                 if (confirm('Play again?')) {
                     location.reload();
                 }
+                resultModal.style.display = "flex"; // show modal
             }, 500);
         }
         else if (attempts >= MAX_ATTEMPTS) {
@@ -383,6 +418,17 @@ async function submitGuess(userGuess) {
                     location.reload();
                 }
             }, 500);
+        }*/
+        if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()){
+            await new Promise(resolve => setTimeout(resolve, 500));
+            document.getElementById("resultTitle").innerText = "🎉 YOU WON!";
+            document.getElementById("resultMessage").innerText = `Attempts: ${attempts}`
+            resultModal.style.display = "flex"; // show modal
+        } else if (attempts >= MAX_ATTEMPTS) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            document.getElementById("resultTitle").innerText = "😢 Game Over!";
+            document.getElementById("resultMessage").innerText = `The word was "${secretWord}".\nBetter luck next time!`;
+            resultModal.style.display = "flex"; // show modal
         }
         
     } catch (error) {
@@ -458,3 +504,4 @@ function displayFeedback(guess, similarity, percentage) {
     feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
 }
 </script>
+
