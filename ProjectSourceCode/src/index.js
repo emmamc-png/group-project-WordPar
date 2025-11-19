@@ -154,7 +154,14 @@ app.post("/registration", async (req, res) => {
   const password_retype = req.body.password_retype;
   const email = req.body.email;
 
-  if (!username || !password || !email || !password_retype || username.length > 50 || email.length > 100) {
+  if (
+    !username ||
+    !password ||
+    !email ||
+    !password_retype ||
+    username.length > 50 ||
+    email.length > 100
+  ) {
     const error = true;
     res.status(400).render("pages/registration", {
       bodyClass: "auth-page",
@@ -190,13 +197,11 @@ app.post("/registration", async (req, res) => {
   } catch (err) {
     const error = true;
     console.log("Username already exists: " + err);
-    res
-      .status(400)
-      .render("pages/registration", {
-        bodyClass: "auth-page",
-        message: "Username already exists",
-        error,
-      });
+    res.status(400).render("pages/registration", {
+      bodyClass: "auth-page",
+      message: "Username already exists",
+      error,
+    });
     return;
   }
 
@@ -206,13 +211,11 @@ app.post("/registration", async (req, res) => {
   } catch (err) {
     const error = true;
     console.log("Email already in use: " + err);
-    res
-      .status(400)
-      .render("pages/registration", {
-        bodyClass: "auth-page",
-        message: "Email already in use",
-        error,
-      });
+    res.status(400).render("pages/registration", {
+      bodyClass: "auth-page",
+      message: "Email already in use",
+      error,
+    });
     return;
   }
 
@@ -222,13 +225,11 @@ app.post("/registration", async (req, res) => {
     res.status(200).redirect("/login");
   } catch (err) {
     const error = true;
-    res
-      .status(400)
-      .render("pages/registration", {
-        bodyClass: "auth-page",
-        message: "Username already exists or email already in use.",
-        error,
-      });
+    res.status(400).render("pages/registration", {
+      bodyClass: "auth-page",
+      message: "Username already exists or email already in use.",
+      error,
+    });
   }
 });
 
@@ -340,48 +341,65 @@ app.get("/", async (req, res) => {
                     SELECT username, score, position
                     FROM ranked
                     WHERE username=$1`;
-    //generate arrays to store user and leaderboard data
-    let users=[];
-    let currentUserData=[];
-    try {
-      //Attempt to get user information
-      currentUserData=await db.one(userQuery, [currentUser]);
+  //generate arrays to store user and leaderboard data
+  let users = [];
+  let currentUserData = [];
+  try {
+    //Attempt to get user information
+    currentUserData = await db.one(userQuery, [currentUser]);
+  } catch (err) {
+    //If no scores exist, set user score to 0
+    currentUserData = {
+      username: currentUser,
+      score: 0,
+      position: null,
+      email: userEmail.email,
+    };
+    console.log("user has no scores yet");
+  }
+  try {
+    users = await db.any(query);
+    console.log("Leaderboard data retrieved");
+    if (req.session.user.userimage) {
+      console.log("Image found!");
+    } else {
+      console.log("No image found!");
     }
-    
-    catch(err) {
-      //If no scores exist, set user score to 0
-      currentUserData={username: currentUser, score: 0, position: null, email: userEmail.email};
-      console.log('user has no scores yet');
-    }
-    try {
-      users=await db.any(query);
-      console.log("Leaderboard data retrieved");
-      if(req.session.user.userimage) {
-        console.log("Image found!");
-      }
-      else {
-        console.log("No image found!");
-      }
-      res.status(200).render('pages/home', { bodyClass: 'home-page', leaderboard:users, currentUser: currentUserData, email: userEmail.email, profile: req.session.user.userimage}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-    }
-    catch(err) {
-      console.log(err);
-      //If error occurs, render page with empty leaderboard
-      res.status(500).render('pages/home', { bodyClass: 'home-page', leaderboard: [], currentUser: currentUserData, email: userEmail.email, profile: null}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
-    }
+    res
+      .status(200)
+      .render("pages/home", {
+        bodyClass: "home-page",
+        leaderboard: users,
+        currentUser: currentUserData,
+        email: userEmail.email,
+        profile: req.session.user.userimage,
+      }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+  } catch (err) {
+    console.log(err);
+    //If error occurs, render page with empty leaderboard
+    res
+      .status(500)
+      .render("pages/home", {
+        bodyClass: "home-page",
+        leaderboard: [],
+        currentUser: currentUserData,
+        email: userEmail.email,
+        profile: null,
+      }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+  }
 });
 
-app.get('/game', async(req, res) => {         
-  res.status(200).render('pages/game', { bodyClass: 'auth-page'}); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
+app.get("/game", async (req, res) => {
+  res.status(200).render("pages/game", { bodyClass: "auth-page" }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
 
-app.post('/exitGame', async(req, res) => {
+app.post("/exitGame", async (req, res) => {
   //Delete the connection to the user in userGame to prevent the user from getting points from a game they didn't finish
-  let gameID=req.body.gameID;
-  let userID=req.session.user.userid;
+  let gameID = req.body.gameID;
+  let userID = req.session.user.userid;
   //If no userID, they aren't logged in which should not be possible
   if (!userID) {
-    res.status(400).json({success:false});
+    res.status(400).json({ success: false });
   }
   //If no gameID, no need to delete from database
   if (!gameID) {
@@ -389,13 +407,12 @@ app.post('/exitGame', async(req, res) => {
     res.status(200).json({ success: true });
     return;
   }
-  const deleteUserGame=`DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
+  const deleteUserGame = `DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
   try {
     await db.none(deleteUserGame, [gameID, userID]);
     console.log("Successfully deleted");
     res.status(200).json({ success: true });
-  }
-  catch(err) {
+  } catch (err) {
     console.log("Error exiting game. Attempt again");
     res.status(500).json({ success: false });
   }
@@ -449,16 +466,23 @@ app.get("/game", async (req, res) => {
     console.log("user has no scores yet");
   }
   users = await db.any(query);
-  res.status(200).render("pages/game", { bodyClass: "auth-page", leaderboard: users, currentUser: currentUserData, email: userEmail.email,});
+  res
+    .status(200)
+    .render("pages/game", {
+      bodyClass: "auth-page",
+      leaderboard: users,
+      currentUser: currentUserData,
+      email: userEmail.email,
+    });
 });
 
-app.post('/exitGame', async(req, res) => {
+app.post("/exitGame", async (req, res) => {
   //Delete the connection to the user in userGame to prevent the user from getting points from a game they didn't finish
-  let gameID=req.body.gameID;
-  let userID=req.session.user.userid;
+  let gameID = req.body.gameID;
+  let userID = req.session.user.userid;
   //If no userID, they aren't logged in which should not be possible
   if (!userID) {
-    res.status(400).json({success:false});
+    res.status(400).json({ success: false });
   }
   //If no gameID, no need to delete from database
   if (!gameID) {
@@ -466,13 +490,12 @@ app.post('/exitGame', async(req, res) => {
     res.status(200).json({ success: true });
     return;
   }
-  const deleteUserGame=`DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
+  const deleteUserGame = `DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
   try {
     await db.none(deleteUserGame, [gameID, userID]);
     console.log("Successfully deleted");
     res.status(200).json({ success: true });
-  }
-  catch(err) {
+  } catch (err) {
     console.log("Error exiting game. Attempt again");
     res.status(500).json({ success: false });
   }
