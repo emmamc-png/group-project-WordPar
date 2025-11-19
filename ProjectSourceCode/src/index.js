@@ -401,6 +401,83 @@ app.post('/exitGame', async(req, res) => {
   }
 });
 
+app.get("/game", async (req, res) => {
+  // implementation of leader board for results pop up
+  const query = `SELECT users.username, SUM(game.score) AS score 
+                FROM userGame 
+                JOIN users ON userGame.user_id=users.userID 
+                JOIN game ON userGame.game_id=game.gameID 
+                GROUP BY username 
+                ORDER BY SUM(score) DESC
+                LIMIT 10`;
+
+  const currentUser = req.session.user.username;
+  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  let userEmail;
+
+  try {
+    userEmail = await db.one(getUserEmail, [currentUser]);
+    console.log("User email retrieved: " + userEmail.email);
+  } catch (err) {
+    console.log("Error retrieving user email: " + err);
+    userEmail = { email: "" };
+  }
+
+  const userQuery = `WITH ranked AS (
+                      SELECT username, SUM(game.score) AS score, ROW_NUMBER() OVER (ORDER BY SUM(game.score) DESC) AS position 
+                      FROM userGame 
+                      JOIN users ON userGame.user_id=users.userID 
+                      JOIN game ON userGame.game_id=game.gameID  
+                      GROUP BY users.username
+                      )
+                    SELECT username, score, position
+                    FROM ranked
+                    WHERE username=$1`;
+
+  let users = [];
+  let currentUserData = [];
+
+  try {
+    currentUserData = await db.one(userQuery, [currentUser]);
+  } catch (err) {
+    currentUserData = {
+      username: currentUser,
+      score: 0,
+      position: null,
+      email: userEmail.email,
+    };
+    console.log("user has no scores yet");
+  }
+  users = await db.any(query);
+  res.status(200).render("pages/game", { bodyClass: "auth-page", leaderboard: users, currentUser: currentUserData, email: userEmail.email,});
+});
+
+app.post('/exitGame', async(req, res) => {
+  //Delete the connection to the user in userGame to prevent the user from getting points from a game they didn't finish
+  let gameID=req.body.gameID;
+  let userID=req.session.user.userid;
+  //If no userID, they aren't logged in which should not be possible
+  if (!userID) {
+    res.status(400).json({success:false});
+  }
+  //If no gameID, no need to delete from database
+  if (!gameID) {
+    console.log("No game session started");
+    res.status(200).json({ success: true });
+    return;
+  }
+  const deleteUserGame=`DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
+  try {
+    await db.none(deleteUserGame, [gameID, userID]);
+    console.log("Successfully deleted");
+    res.status(200).json({ success: true });
+  }
+  catch(err) {
+    console.log("Error exiting game. Attempt again");
+    res.status(500).json({ success: false });
+  }
+});
+
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
   const user = req.session.user;
