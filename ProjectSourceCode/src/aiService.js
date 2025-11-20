@@ -96,7 +96,6 @@ const WORD_BANK = {
     "folk",
     "country",
     "reggae",
-    "soul",
     "funk",
     "grunge",
     "indie",
@@ -685,7 +684,7 @@ async function getEmbedding(text) {
       Authorization: `Bearer ${OPENAI_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "text-embedding-3-small",
+      model: "text-embedding-3-large",
       input: text,
     }),
   });
@@ -724,7 +723,7 @@ export async function calculateSimilarity(word1, word2) {
       word2: w2,
       similarity: Math.round(scaledScore * 1000) / 1000,
       raw_similarity: Math.round(rawScore * 1000) / 1000,
-      source: "openai-text-embedding-3-small",
+      source: "openai-text-embedding-3-large",
     };
   } catch (error) {
     console.error("Similarity calculation error:", error);
