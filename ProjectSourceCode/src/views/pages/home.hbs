@@ -33,20 +33,63 @@
                                         <option value="email">Change Email</option>
                                         <option value="image">Change Profile Picture</option>
                                     </select>
-                                        <div id="usernameChange" class="change-form" >
+                                    <hr style="margin: 5 px; height: 10 px;"></hr>
+                                        <div id="usernameChange" class="change-form" style="display:none">
                                             <div>
                                                 <label for="currentUsername" class="profile-label">Current Username</label>
-                                                <input name="currentUsername" class="usernameInput" type="text" id="originalUser" placeholder="Current Username" maxlength="50" required>
+                                                <input name="currentUsername" class="profileInput" type="text" id="originalUser" placeholder="Current Username" maxlength="50" required>
                                             </div>
                                             <div>
                                                 <label for="newUsername" class="profile-label">New Username</label>
-                                                <input name="newUsername" class="usernameInput" type="text" id="newUser" placeholder="New Username" maxlength="50" required>
+                                                <input name="newUsername" class="profileInput" type="text" id="newUser" placeholder="New Username" maxlength="50" required>
                                             </div>
+                                            <div>
+                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                            </div>
+                                        </div>
+                                        <div id="passwordChange" class="change-form" style="display:none">
+                                            <div>
+                                                <label for="currentPassword" class="profile-label">Current Password</label>
+                                                <input name="currentPassword" class="profileInput" type="password" id="oldPass" placeholder="Current Password" required>
+                                            </div>
+                                            <div>
+                                                <label for="newPassword" class="profile-label">New Password</label>
+                                                <input name="newPassword" class="profileInput" type="password" id="newPass" placeholder="New Password" required>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                            </div>
+                                        </div>
+                                        <div id="emailChange" class="change-form" style="display:none">
+                                            <div>
+                                                <label for="currentEmail" class="profile-label">Current Email</label>
+                                                <input name="currentEmail" class="profileInput" type="text" id="currentEmail" placeholder="Current Email" required>
+                                            </div>
+                                            <div>
+                                                <label for="newEmail" class="profile-label">New Email</label>
+                                                <input name="newEmail" class="profileInput" type="text" id="newEmail" placeholder="New Email" required>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                            </div>
+                                        </div>
+                                        <div id="profilePic" class="change-form">
+                                            <div>
+                                                <label for="newPFP" class="profile-label">New Profile Picture</label>
+                                                <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link" required>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <!--For error messages if anything fails-->
+                                            {{<message}}
                                         </div>
                                 </form>
                             </div>
                         </div>
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center mt-3">
                             <form method="POST" action="/logout">
                                 <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
                             </form>

@@ -333,7 +333,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     color:white;
 }
 
-.usernameInput {
+.profileInput {
   border:2px #000;
   background-color: white;
   font-size:medium;
@@ -347,13 +347,26 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 .profile-img {
-    box-shadow:10%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     width: 150px;
     height: 150px;
     border-radius: 100%;
     object-fit: cover;
     display: block;
     margin: 0 auto;
+}
+
+.changeInformationBtn {
+  background-color: black;
+  color: white;
+  font-family:'Open Sans', sans-serif;
+  font-size: large;
+  border-radius: 4px;
+  width: 25%;
+  height: 100%;
+  border: none;
+  transition: ease 0.2s;
+  margin: 10px;
 }
 
 .profile-text{
@@ -382,12 +395,6 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
   width: 100%;
   border-radius: 6px;
   padding:2%;
-}
-
-.divider {
-  width: 1%; /* Thickness of the divider */
-  background-color: rgb(192, 189, 189); /* Color of the divider */
-  margin: 0 5%; /* Spacing around the divider */
 }
 
 .profile-content {
