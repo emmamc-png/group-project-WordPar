@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-md-6">
                                 <form class="changeUserInfo">
-                                    <select class="form-select" id="changeInfo" placeholder="Change User Information">
+                                    <select class="form-select" id="changeInfo" placeholder="Change User Information" onchange="updateChangeItem(this.value)">
                                         <option value="" selected disabled hidden>Change User Information</option>
                                         <option value="username">Change Username</option>
                                         <option value="password">Change Password</option>
@@ -36,51 +36,34 @@
                                     <hr style="margin: 5 px; height: 10 px;"></hr>
                                         <div id="usernameChange" class="change-form" style="display:none">
                                             <div>
-                                                <label for="currentUsername" class="profile-label">Current Username</label>
-                                                <input name="currentUsername" class="profileInput" type="text" id="originalUser" placeholder="Current Username" maxlength="50" required>
-                                            </div>
-                                            <div>
                                                 <label for="newUsername" class="profile-label">New Username</label>
-                                                <input name="newUsername" class="profileInput" type="text" id="newUser" placeholder="New Username" maxlength="50" required>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                                <input name="newUsername" class="profileInput" type="text" id="newUser" placeholder="New Username" maxlength="50">
                                             </div>
                                         </div>
                                         <div id="passwordChange" class="change-form" style="display:none">
                                             <div>
                                                 <label for="currentPassword" class="profile-label">Current Password</label>
-                                                <input name="currentPassword" class="profileInput" type="password" id="oldPass" placeholder="Current Password" required>
+                                                <input name="currentPassword" class="profileInput" type="password" id="oldPass" placeholder="Current Password">
                                             </div>
                                             <div>
                                                 <label for="newPassword" class="profile-label">New Password</label>
-                                                <input name="newPassword" class="profileInput" type="password" id="newPass" placeholder="New Password" required>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                                <input name="newPassword" class="profileInput" type="password" id="newPass" placeholder="New Password">
                                             </div>
                                         </div>
                                         <div id="emailChange" class="change-form" style="display:none">
                                             <div>
-                                                <label for="currentEmail" class="profile-label">Current Email</label>
-                                                <input name="currentEmail" class="profileInput" type="text" id="currentEmail" placeholder="Current Email" required>
-                                            </div>
-                                            <div>
                                                 <label for="newEmail" class="profile-label">New Email</label>
-                                                <input name="newEmail" class="profileInput" type="text" id="newEmail" placeholder="New Email" required>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
+                                                <input name="newEmail" class="profileInput" type="text" id="newEmail" placeholder="New Email">
                                             </div>
                                         </div>
-                                        <div id="profilePic" class="change-form">
+                                        <div id="profilePic" class="change-form" style="display:none">
                                             <div>
                                                 <label for="newPFP" class="profile-label">New Profile Picture</label>
-                                                <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link" required>
+                                                <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link">
                                             </div>
-                                            <div>
-                                                <button type="submit" class="changeInformationBtn" id="changeUserInfo" method="POST" action='/changeInfo'>Submit</button>
-                                            </div>
+                                        </div>
+                                        <div id="submittion button" class="change-form">
+                                            <button type="submit" class="changeInformationBtn" id="changeUserInfo">Submit</button>
                                         </div>
                                         <div>
                                             <!--For error messages if anything fails-->
@@ -287,4 +270,93 @@ categoryButtons.forEach(button => {
         window.location.href = `/game?category=${category}`;
     });
 });
+
+function updateChangeItem(item) {
+    console.log(item);
+
+    pass=document.getElementById("passwordChange");
+    currentPass=document.getElementById("oldPass");
+    newPass=document.getElementById("newPass");
+
+    email=document.getElementById("emailChange");
+    newEmail=document.getElementById("newEmail");
+
+    username=document.getElementById("usernameChange");
+    newUser=document.getElementById("newUser");
+
+    profilePic=document.getElementById("profilePic");
+    newPFP=document.getElementById("newProfilePic");
+
+    if(item=="password") {
+        pass.style.display="block";
+        email.style.display="none";
+        username.style.display="none";
+        profilePic.style.display="none";
+
+
+        newEmail.required=false;
+        newUser.required=false;
+        newPFP.required=false;
+
+
+        currentPass.required=true;
+        newPass.required=true;
+    }
+    else if (item=="email"){
+        email.style.display="block";
+        pass.style.display="none";
+        username.style.display="none";
+        profilePic.style.display="none;"
+
+        newPass.required=false;
+        currentPass.required=false;
+        newUser.required=false;
+        newPFP.required=false;
+
+        email.required=true;
+    }
+    else if (item=="username") {
+        console.log("I'm getting username");
+
+        username.style.display="block";
+        email.style.display="none";
+        username.style.display="none";
+        profilePic.style.display="none;"
+
+        newPass.required=false;
+        currentPass.required=false;
+        email.required=false;
+        newPFP.required=false;
+
+        newUser.required=true;
+    }
+    else if (item=="image") {
+        console.log("I'm getting image");
+
+        profilePic.style.display="block";
+        username.style.display="none";
+        email.style.display="none";
+        username.style.display="none";
+
+        newPass.required=false;
+        currentPass.required=false;
+        email.required=false;
+        newUser.required=false;
+
+        newPFP.required=true;
+    } else {
+        console.log("I'm getting lost");
+
+        pass.style.display="none";
+        username.style.display="none";
+        profilePic.style.display="none;"
+        email.style.display="none";
+
+        newPass.required=false;
+        currentPass.required=false;
+        newUser.required=false;
+        newPFP.required=false;
+        email.required=false;
+    }
+}
 </script>

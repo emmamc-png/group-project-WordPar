@@ -317,13 +317,6 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
 }
 
 /* HOME PAGE USER MODAL */
-.profile-img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-}
 
 .profile-label {
     font-family: 'Open Sans', sans-serif;
@@ -352,7 +345,7 @@ input:focus { /*Adds the highlighted field to the text inputs on the page*/
     border-radius: 100%;
     object-fit: cover;
     display: block;
-    margin: 0 auto;
+    margin: 5px auto;
 }
 
 .changeInformationBtn {
