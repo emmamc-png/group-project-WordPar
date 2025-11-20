@@ -389,6 +389,37 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.post("/changeInfo", async(req,res)=> {
+  //Starting off with only PFP
+  console.log("Recieved: "+req.body.newPFP);
+
+  let username=req.session.user.username;
+  let profilePic=req.body.newPFP;
+  let findUserQuery=`SELECT * FROM users WHERE username=$1`;
+  let insertImageQuery=`UPDATE users SET userimage=$1 WHERE username=$2`;
+  let user
+  try {
+    user=await db.one(findUserQuery, [username]);
+    console.log("User found");
+  }
+  catch(err) {
+    const error=true;
+    console.log(err);
+    res.status(500).json({success:true});
+    return;
+  }
+  try {
+    await db.none(insertImageQuery, [profilePic, username]);
+    res.status(200).json({success:true});
+    console.log("User PFP succesfully changed");
+  }
+  catch(err) {
+    const error=true;
+    console.log(err)
+    res.status(500).json({success:false});
+  }
+});
+
 app.get("/game", async (req, res) => {
   res.status(200).render("pages/game", { bodyClass: "auth-page" }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
