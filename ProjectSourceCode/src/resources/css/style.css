@@ -705,15 +705,18 @@ body {font-family: Arial, Helvetica, sans-serif;}
   font-size: 25px;
 }
 
+/*  */
 .simulate-btn-hover {
   background-color: #d20d58 !important;
   border-color: #934790 !important;
   color: #FFFFFF !important;
+  
 }
 
 .simulate-btn-hover:hover {
   background-color: #01a305 !important;
 }
+/*  */
 
 #letters {
   text-align: center;
