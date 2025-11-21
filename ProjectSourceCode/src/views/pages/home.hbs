@@ -306,26 +306,26 @@ function updateChangeItem(item) {
         email.style.display="block";
         pass.style.display="none";
         username.style.display="none";
-        profilePic.style.display="none;"
+        profilePic.style.display="none";
 
         newPass.required=false;
         currentPass.required=false;
         newUser.required=false;
         newPFP.required=false;
 
-        email.required=true;
+        newEmail.required=true;
     }
     else if (item=="username") {
         console.log("I'm getting username");
 
         username.style.display="block";
         email.style.display="none";
-        username.style.display="none";
-        profilePic.style.display="none;"
+        pass.style.display="none";
+        profilePic.style.display="none";
 
         newPass.required=false;
         currentPass.required=false;
-        email.required=false;
+        newEmail.required=false;
         newPFP.required=false;
 
         newUser.required=true;
@@ -336,11 +336,11 @@ function updateChangeItem(item) {
         profilePic.style.display="block";
         username.style.display="none";
         email.style.display="none";
-        username.style.display="none";
+        pass.style.display="none";
 
         newPass.required=false;
         currentPass.required=false;
-        email.required=false;
+        newEmail.required=false;
         newUser.required=false;
 
         newPFP.required=true;
@@ -356,7 +356,7 @@ function updateChangeItem(item) {
         currentPass.required=false;
         newUser.required=false;
         newPFP.required=false;
-        email.required=false;
+        newEmail.required=false;
     }
 }
 </script>
