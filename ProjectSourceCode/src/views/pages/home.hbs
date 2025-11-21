@@ -62,7 +62,7 @@
                                                 <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link">
                                             </div>
                                         </div>
-                                        <div id="submittion button" class="change-form">
+                                        <div id="submitButton" class="change-form" style="display:none">
                                             <button type="submit" class="changeInformationBtn" id="changeUserInfo">Submit</button>
                                         </div>
                                         <div>
@@ -274,6 +274,8 @@ categoryButtons.forEach(button => {
 function updateChangeItem(item) {
     console.log(item);
 
+    submit=document.getElementById("submitButton");
+
     pass=document.getElementById("passwordChange");
     currentPass=document.getElementById("oldPass");
     newPass=document.getElementById("newPass");
@@ -288,6 +290,7 @@ function updateChangeItem(item) {
     newPFP=document.getElementById("newProfilePic");
 
     if(item=="password") {
+        submit.style.display="block";
         pass.style.display="block";
         email.style.display="none";
         username.style.display="none";
@@ -303,6 +306,7 @@ function updateChangeItem(item) {
         newPass.required=true;
     }
     else if (item=="email"){
+        submit.style.display="block";
         email.style.display="block";
         pass.style.display="none";
         username.style.display="none";
@@ -316,8 +320,7 @@ function updateChangeItem(item) {
         newEmail.required=true;
     }
     else if (item=="username") {
-        console.log("I'm getting username");
-
+        submit.style.display="block";
         username.style.display="block";
         email.style.display="none";
         pass.style.display="none";
@@ -331,8 +334,7 @@ function updateChangeItem(item) {
         newUser.required=true;
     }
     else if (item=="image") {
-        console.log("I'm getting image");
-
+        submit.style.display="block";
         profilePic.style.display="block";
         username.style.display="none";
         email.style.display="none";
@@ -345,8 +347,7 @@ function updateChangeItem(item) {
 
         newPFP.required=true;
     } else {
-        console.log("I'm getting lost");
-
+        submit.style.display="none";
         pass.style.display="none";
         username.style.display="none";
         profilePic.style.display="none;"
