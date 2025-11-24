@@ -320,11 +320,12 @@ app.get("/", async (req, res) => {
                 LIMIT 10`;
 
   const currentUser = req.session.user.username;
-  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  const currentID=req.session.user.userid;
+  const getUserEmail = `SELECT email FROM users WHERE userID=$1`;
   let userEmail;
 
   try {
-    userEmail = await db.one(getUserEmail, [currentUser]);
+    userEmail = await db.one(getUserEmail, [currentID]);
     console.log("User email retrieved: " + userEmail.email);
   } catch (err) {
     console.log("Error retrieving user email: " + err);
@@ -390,14 +391,34 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/changeInfo", async(req,res)=> {
-  //Starting off with only PFP
-  console.log("Recieved: "+req.body.newPFP);
+  let username=req.session.user.username || null;
 
-  let username=req.session.user.username;
-  let profilePic=req.body.newPFP;
+  if (username) {
+    console.log("I found myself!");
+  }
+
+  let profilePic=req.body.newPFP || null;
+  let currPass=req.body.currentPassword || null;
+  let newPass=req.body.newPassword || null;
+  let newEmail=req.body.newEmail || null;
+  let newUser=req.body.newUsername || null;
+
+  if(profilePic)
+ {
+    console.log("Recieved: "+req.body.newPFP);
+ }
+ if (newUser) {
+    console.log("Recieved: "+newUser);
+ }
+  //Query to get the use info
   let findUserQuery=`SELECT * FROM users WHERE username=$1`;
-  let insertImageQuery=`UPDATE users SET userimage=$1 WHERE username=$2`;
-  let user
+  let user;
+  //Queries to change info
+  let insertImageQuery=`UPDATE users SET userimage=$1 WHERE userID=$2`;
+  let emailQuery=`UPDATE users SET email=$1 WHERE userID=$2`;
+  let changePasswordQuery=`UPDATE users SET password=$1 WHERE userID=$2`;
+  let usernameChangeQuery=`UPDATE users SET username=$1 WHERE userID=$2`;
+
   try {
     user=await db.one(findUserQuery, [username]);
     console.log("User found");
@@ -405,18 +426,64 @@ app.post("/changeInfo", async(req,res)=> {
   catch(err) {
     const error=true;
     console.log(err);
-    res.status(500).json({success:true});
-    return;
+    return res.json({message: "User not found", error})
   }
+
   try {
-    await db.none(insertImageQuery, [profilePic, username]);
-    res.status(200).json({success:true});
-    console.log("User PFP succesfully changed");
+    if(newUser) {
+      if(newUser=req.session.user.username) {
+        const error=true;
+        return res.json({error, message: "You cannot change your username to the same as it currently is. Please try again"});
+      }
+      await db.none(usernameChangeQuery, [newUser, user.userid]);
+      console.log("Username sucessfully changed");
+      req.session.user.username=newUser;
+      return res.json({success:true});
+    }
+    else if (profilePic) {
+      if (profilePic==req.session.user.userimage) {
+        const error=true;
+        return res.json({error, message: "You cannot change your profile picture to the same as it currently is. Please try again"});
+      }
+      await db.none(insertImageQuery, [profilePic, user.userid]);
+      console.log("User PFP succesfully changed");
+      req.session.user.userimage=profilePic;
+      return res.json({success:true});
+    }
+    else if (newPass) {
+      console.log("Attempting to change password");
+      const match=await bcrypt.compare(currPass, user.password);
+      if(!match) {
+        const error=true;
+        return res.json({error, message: "Incorrect password. Please try again."});
+      }
+      if(newPass==currPass) {
+        const error=true;
+        return res.json({error, message:"You cannot change your password to the same as it currently is. Please try again"});
+      }
+      newPass=await bcrypt.hash(newPass, 10);
+      await db.none(changePasswordQuery, [newPass, user.userid]);
+      console.log("Password changed!");
+      return res.json({success:true});
+    }
+    else if (newEmail) {
+      if(newEmail==req.session.user.email) {
+        const error=true;
+        return res.json({error, message: "You cannot change your email to the same as it currently is. Please try again"});
+      }
+      await db.none(emailQuery, [newEmail, user.userid]);
+      console.log("Email succesfully changed");
+      return res.json({success:true});
+    }
+    else {
+      const error=true;
+      return res.json({error, message: "User information could not be changed"});
+    }
   }
   catch(err) {
     const error=true;
     console.log(err)
-    res.status(500).json({success:false});
+    return res.json({error, message: "A server error occurred. Please try again."});
   }
 });
 
@@ -460,11 +527,12 @@ app.get("/game", async (req, res) => {
                 LIMIT 10`;
 
   const currentUser = req.session.user.username;
-  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  const currentID=req.session.user.userid;
+  const getUserEmail = `SELECT email FROM users WHERE userID=$1`;
   let userEmail;
 
   try {
-    userEmail = await db.one(getUserEmail, [currentUser]);
+    userEmail = await db.one(getUserEmail, [currentID]);
     console.log("User email retrieved: " + userEmail.email);
   } catch (err) {
     console.log("Error retrieving user email: " + err);

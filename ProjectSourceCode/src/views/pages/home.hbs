@@ -53,16 +53,16 @@
                                         <div id="emailChange" class="change-form" style="display:none">
                                             <div>
                                                 <label for="newEmail" class="profile-label">New Email</label>
-                                                <input name="newEmail" class="profileInput" type="text" id="newEmail" placeholder="New Email">
+                                                <input name="newEmail" class="profileInput" type="email" id="newEmail" placeholder="New Email">
                                             </div>
                                         </div>
                                         <div id="profilePic" class="change-form" style="display:none">
                                             <div>
                                                 <label for="newPFP" class="profile-label">New Profile Picture</label>
-                                                <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link">
+                                                <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link" oninput="checkForImage(this)">
                                             </div>
                                         </div>
-                                        <div style="margin:10px">
+                                        <div style="margin:10px" class="message">
                                             <!--For error messages if anything fails-->
                                             {{>message}}
                                         </div>
@@ -363,29 +363,60 @@ function updateChangeItem(item) {
 
 // Function to handle the different changes the user selects
 document.addEventListener("DOMContentLoaded", () => {
-    const form=document.getElementById("changeUserInfoForm");
-
+    const form=document.querySelector(".changeUserInfo");
     if(!form) {
+        console.log("Form not found");
         return;
     }
 
     console.log("Form found!");
 
-    document.getElementById("changeUserInfoForm").addEventListener("submit", async(e) =>{
+    form.addEventListener("submit", async(e) => {
         //Prevents page reload which would close the modal
-        console.log("I have been called");
+        console.log("User has submitted");
         e.preventDefault();
 
-        const formData=new FormData(e.target);
+        const messageDiv=document.querySelector(".message");
 
-        const response=await fetch("/changeInfo", {
-            method: "POST",
-            body: formData
-        });
+        //If current message, remove it
+        if(messageDiv) {
+            messageDiv.innerHTML="";
+        }
 
-        const result=await response.json();
+        //
+        const formData=Object.fromEntries(new FormData(e.target));
+        try {
+            const response=await fetch("/changeInfo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            const result=await response.json();
 
-        console.log(result);
+            if(result.error) {
+                if(messageDiv) {
+                    messageDiv.innerHTML = `
+                            <div class="alert alert-danger" role="alert">
+                                ${result.message}
+                            </div>`;
+                }
+                return;
+            }
+            else {
+                window.location.href="/";
+            }
+            console.log("Done");
+        }
+        catch(err) {
+            console.log(err);
+            if (messageDiv) {
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        An error occurred. Please try again.
+                    </div>
+                `;
+            };
+        };
     });
-})
+});
 </script>
