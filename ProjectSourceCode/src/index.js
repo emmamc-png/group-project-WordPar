@@ -320,11 +320,12 @@ app.get("/", async (req, res) => {
                 LIMIT 10`;
 
   const currentUser = req.session.user.username;
-  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  const currentID=req.session.user.userid;
+  const getUserEmail = `SELECT email FROM users WHERE userID=$1`;
   let userEmail;
 
   try {
-    userEmail = await db.one(getUserEmail, [currentUser]);
+    userEmail = await db.one(getUserEmail, [currentID]);
     console.log("User email retrieved: " + userEmail.email);
   } catch (err) {
     console.log("Error retrieving user email: " + err);
@@ -389,6 +390,138 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.post("/changeInfo", async(req,res)=> {
+  //Get the form data depending on what the user chose to change
+  let profilePic=req.body.newPFP || null;
+  let currPass=req.body.currentPassword || null;
+  let newPass=req.body.newPassword || null;
+  let newEmail=req.body.newEmail || null;
+  let newUser=req.body.newUsername || null;
+
+    //Check to see if username or PFP gotten
+  if(profilePic)
+ {
+    console.log("Recieved: "+req.body.newPFP);
+ }
+ if (newUser) {
+    console.log("Recieved: "+newUser);
+    console.log("Current username: " + req.session.user.username);
+ }
+
+  //Query to get the user info
+  let findUserQuery=`SELECT * FROM users WHERE userID=$1`;
+  let findUsername=`SELECT username FROM users WHERE username=$1`;
+  let findEmail=`SELECT email FROM users WHERE email=$1`;
+  let user;
+  //Queries to change info
+  let insertImageQuery=`UPDATE users SET userimage=$1 WHERE userID=$2`;
+  let emailQuery=`UPDATE users SET email=$1 WHERE userID=$2`;
+  let changePasswordQuery=`UPDATE users SET password=$1 WHERE userID=$2`;
+  let usernameChangeQuery=`UPDATE users SET username=$1 WHERE userID=$2`;
+
+  //Try to find the user
+  try {
+    user=await db.one(findUserQuery, [req.session.user.userid]);
+    console.log("User found: " + user.username);
+  }
+  //If no user (which shouldn't happen), return an error message
+  catch(err) {
+    const error=true;
+    console.log(err);
+    return res.json({message: "User not found", error})
+  }
+
+  //Try to change the user's information
+  try {
+    //Check if user chose to change username
+    if(newUser) {
+      //If new username is their current, return an error message
+      if(newUser==req.session.user.username) {
+        const error=true;
+        return res.json({error, message: "You cannot change your username to the same as it currently is. Please try again"});
+      }
+      //Check if username is in use
+      let checkForUsername=await db.oneOrNone(findUsername, [newUser]);
+      //If username is in use, return an error message
+      if(checkForUsername) {
+        const error=true;
+        return res.json({error, message: "This username is already in use. Please try a different one"});
+      }
+      //If no errors, change username
+      await db.none(usernameChangeQuery, [newUser, user.userid]);
+      console.log("Username sucessfully changed");
+      //Update the user session information for the username
+      req.session.user.username=newUser;
+      return res.json({success:true});
+    }
+    //Check if user chose to change profile pic
+    else if (profilePic) {
+      //If the new profile pic is their current, return an error message
+      if (profilePic==req.session.user.userimage) {
+        const error=true;
+        return res.json({error, message: "You cannot change your profile picture to the same as it currently is. Please try again"});
+      }
+      //Else, complete the change (check for image is done in the front-end)
+      await db.none(insertImageQuery, [profilePic, user.userid]);
+      console.log("User PFP succesfully changed");
+      req.session.user.userimage=profilePic;
+      return res.json({success:true});
+    }
+    //Check if the user chose to change their password
+    else if (newPass) {
+      console.log("Attempting to change password");
+      //Ensure the password matches to prevent anyone from trying to change someone else's password
+      const match=await bcrypt.compare(currPass, user.password);
+      //If not a match, return an error to inform them they entered the wrong current password
+      if(!match) {
+        const error=true;
+        return res.json({error, message: "Incorrect password. Please try again."});
+      }
+      //If the passwords are the same, return an error that they're changing their password to the same thing (not allowed for safety)
+      if(newPass==currPass) {
+        const error=true;
+        return res.json({error, message:"You cannot change your password to the same as it currently is. Please try again"});
+      }
+      //Hash the new password and change the user's password in the DB
+      newPass=await bcrypt.hash(newPass, 10);
+      await db.none(changePasswordQuery, [newPass, user.userid]);
+      console.log("Password changed!");
+      return res.json({success:true});
+    }
+    //Check if the user wants to change their email
+    else if (newEmail) {
+      //Check if the new email is the same as their current email and if so send an error message that they can't change it to the same one
+      if(newEmail==req.session.user.email) {
+        const error=true;
+        return res.json({error, message: "You cannot change your email to the same as it currently is. Please try again"});
+      }
+      //Check if the email they entered is currently in use
+      const checkEmail=await db.oneOrNone(findEmail, [newEmail]);
+      //If in user, send an error message telling them that
+      if(checkEmail) {
+        const error=true;
+        return res.json({error, message: "This email is already in use. Please use a different one"});
+      }
+      //Else, change the email in the DB and the user session
+      await db.none(emailQuery, [newEmail, user.userid]);
+      req.session.user.email=newEmail;
+      console.log("Email succesfully changed");
+      return res.json({success:true});
+    }
+    //In case no information is sent (somehow), provide user an error message informing them no information was changed
+    else {
+      const error=true;
+      return res.json({error, message: "User information could not be changed"});
+    }
+  }
+  //If an error occurs anywhere, return to the user and error message informing that the server had an issue and they should retry
+  catch(err) {
+    const error=true;
+    console.log(err)
+    return res.json({error, message: "A server error occurred. Please try again."});
+  }
+});
+
 app.get("/game", async (req, res) => {
   res.status(200).render("pages/game", { bodyClass: "auth-page" }); //, {bodyClass: 'auth-page'} selects the body style to be used when rendering the page
 });
@@ -429,11 +562,12 @@ app.get("/game", async (req, res) => {
                 LIMIT 10`;
 
   const currentUser = req.session.user.username;
-  const getUserEmail = `SELECT email FROM users WHERE username=$1`;
+  const currentID=req.session.user.userid;
+  const getUserEmail = `SELECT email FROM users WHERE userID=$1`;
   let userEmail;
 
   try {
-    userEmail = await db.one(getUserEmail, [currentUser]);
+    userEmail = await db.one(getUserEmail, [currentID]);
     console.log("User email retrieved: " + userEmail.email);
   } catch (err) {
     console.log("Error retrieving user email: " + err);

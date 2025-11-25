@@ -6,4 +6,17 @@ function checkPasswords() {
     } else {
         document.getElementById("password_retype").setCustomValidity("");
     }
-}
+};
+
+function checkForImage(input) {
+    console.log("Checking URL");
+
+    document.getElementById("newProfilePic").setCustomValidity("");
+
+    var imageURL=input.value.trim();
+    const regex= /(?:[.=](jpe?g|png|gif|webp)|[?&]fm=(jpe?g|png|gif|webp))/i;
+
+    if(!regex.test(imageURL)) {
+        document.getElementById("newProfilePic").setCustomValidity("Please enter a valid image URL");
+    }
+};
