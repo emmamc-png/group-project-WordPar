@@ -11,6 +11,8 @@ function checkPasswords() {
 function checkForImage(input) {
     console.log("Checking URL");
 
+    document.getElementById("newProfilePic").setCustomValidity("");
+
     var imageURL=input.value.trim();
     const regex= /\.(jpe?g|png|gif|webp|svg)(?:\?.*)?$/i;
 
