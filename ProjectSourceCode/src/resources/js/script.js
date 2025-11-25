@@ -14,7 +14,7 @@ function checkForImage(input) {
     document.getElementById("newProfilePic").setCustomValidity("");
 
     var imageURL=input.value.trim();
-    const regex= /\.(jpe?g|png|gif|webp|svg)(?:\?.*)?$/i;
+    const regex= /(?:[.=](jpe?g|png|gif|webp)|[?&]fm=(jpe?g|png|gif|webp))/i;
 
     if(!regex.test(imageURL)) {
         document.getElementById("newProfilePic").setCustomValidity("Please enter a valid image URL");
