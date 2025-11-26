@@ -1,3 +1,4 @@
+//Functions for checking Inputs
 function checkPasswords() {
     var password = document.getElementById("password").value;
     var password_retype = document.getElementById("password_retype").value;
@@ -20,3 +21,15 @@ function checkForImage(input) {
         document.getElementById("newProfilePic").setCustomValidity("Please enter a valid image URL");
     }
 };
+
+//Functions to re-open modal
+async function openProfileModal() {
+    document.getElementById("myModal").style.display="block";
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    if(localStorage.getItem("modalIsOpen")==="true") {
+        openProfileModal();
+        localStorage.removeItem("modalIsOpen");
+    }
+});

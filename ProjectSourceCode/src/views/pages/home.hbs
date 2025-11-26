@@ -204,6 +204,7 @@
 }
 </style>
 
+
 <script>
 // Script for how to play modal
 const howToPlayModal = document.getElementById('customModal');
@@ -347,6 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
             else {
+                localStorage.setItem('modalIsOpen', 'true');
                 window.location.href="/";
             }
             console.log("Done");
