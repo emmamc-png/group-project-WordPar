@@ -447,6 +447,10 @@ app.post("/changeInfo", async(req,res)=> {
         const error=true;
         return res.json({error, message: "This username is already in use. Please try a different one"});
       }
+      if(newUser.length>50) {
+        const error=true;
+        return res.json({error, message: "This username is too long. Please try a different one"});
+      }
       //If no errors, change username
       await db.none(usernameChangeQuery, [newUser, user.userid]);
       console.log("Username sucessfully changed");
@@ -460,6 +464,10 @@ app.post("/changeInfo", async(req,res)=> {
       if (profilePic==req.session.user.userimage) {
         const error=true;
         return res.json({error, message: "You cannot change your profile picture to the same as it currently is. Please try again"});
+      }
+      if(profilePic.length>512) {
+        const error=true;
+        return res.json({error, message: "This URL is too long. Please use another image"});
       }
       //Else, complete the change (check for image is done in the front-end)
       await db.none(insertImageQuery, [profilePic, user.userid]);
@@ -501,6 +509,10 @@ app.post("/changeInfo", async(req,res)=> {
       if(checkEmail) {
         const error=true;
         return res.json({error, message: "This email is already in use. Please use a different one"});
+      }
+      if(newEmail.length>100) {
+        const error=true;
+        return res.json({error, message: "This email is too long. Please try a different one"});
       }
       //Else, change the email in the DB and the user session
       await db.none(emailQuery, [newEmail, user.userid]);
