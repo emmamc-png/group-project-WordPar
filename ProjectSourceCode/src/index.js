@@ -102,11 +102,13 @@ app.post("/login", async (req, res) => {
     return;
   }
 
-  const query = "SELECT * FROM users WHERE username=$1";
+  //Make the username non-case sensitive for logging in
+  const ncsUsername=username.toLowerCase();
+  const query = "SELECT * FROM users WHERE ncsUsername=$1";
   let user;
 
   try {
-    user = await db.one(query, [username]);
+    user = await db.one(query, [ncsUsername]);
     console.log("User exists: " + user.username);
   } catch (err) {
     const error = true;
@@ -152,8 +154,10 @@ app.post("/registration", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const password_retype = req.body.password_retype;
-  const email = req.body.email;
+  let email = req.body.email;
+  email=email.toLowerCase();
 
+  const ncsUsername=username.toLowerCase();
   if (
     !username ||
     !password ||
@@ -184,15 +188,15 @@ app.post("/registration", async (req, res) => {
   const hash = await bcrypt.hash(req.body.password, 10);
   console.log("Hashed password: " + hash);
   const createUser =
-    "INSERT INTO users(username, email, password) VALUES($1, $2, $3)";
-  const checkUsername = "SELECT * FROM users WHERE username=$1";
+    "INSERT INTO users(username, ncsUsername, email, password) VALUES($1, $2, $3, $4)";
+  const checkUsername = "SELECT * FROM users WHERE ncsUsername=$1";
   const checkEmail = `SELECT * FROM users WHERE email=$1`;
 
   let existingUser;
   let existingEmail;
 
   try {
-    existingUser = await db.none(checkUsername, [username]);
+    existingUser = await db.none(checkUsername, [ncsUsername]);
     console.log("Username is available: " + username);
   } catch (err) {
     const error = true;
@@ -220,10 +224,11 @@ app.post("/registration", async (req, res) => {
   }
 
   try {
-    await db.none(createUser, [username, email, hash]);
+    await db.none(createUser, [username, ncsUsername, email, hash]);
     console.log("User registered");
     res.status(200).redirect("/login");
-  } catch (err) {
+  } 
+  catch (err) {
     const error = true;
     res.status(400).render("pages/registration", {
       bodyClass: "auth-page",
@@ -398,6 +403,14 @@ app.post("/changeInfo", async(req,res)=> {
   let newEmail=req.body.newEmail || null;
   let newUser=req.body.newUsername || null;
 
+  let ncsUser;
+  //transform it to lowercase to prevent any repeated use of emails
+  if(newEmail) {
+    newEmail=newEmail.toLowerCase();
+  }
+  if(newUser) {
+    ncsUser=newUser.toLowerCase();
+  }
     //Check to see if username or PFP gotten
   if(profilePic)
  {
@@ -410,7 +423,7 @@ app.post("/changeInfo", async(req,res)=> {
 
   //Query to get the user info
   let findUserQuery=`SELECT * FROM users WHERE userID=$1`;
-  let findUsername=`SELECT username FROM users WHERE username=$1`;
+  let findUsername=`SELECT ncsUsername FROM users WHERE ncsUsername=$1`;
   let findEmail=`SELECT email FROM users WHERE email=$1`;
   let user;
   //Queries to change info
@@ -418,6 +431,7 @@ app.post("/changeInfo", async(req,res)=> {
   let emailQuery=`UPDATE users SET email=$1 WHERE userID=$2`;
   let changePasswordQuery=`UPDATE users SET password=$1 WHERE userID=$2`;
   let usernameChangeQuery=`UPDATE users SET username=$1 WHERE userID=$2`;
+  let ncsUsernameChangeQuery=`UPDATE users SET ncsUsername=$1 WHERE userID=$2`;
 
   //Try to find the user
   try {
@@ -440,22 +454,29 @@ app.post("/changeInfo", async(req,res)=> {
         const error=true;
         return res.json({error, message: "You cannot change your username to the same as it currently is. Please try again"});
       }
-      //Check if username is in use
-      let checkForUsername=await db.oneOrNone(findUsername, [newUser]);
-      //If username is in use, return an error message
-      if(checkForUsername) {
-        const error=true;
-        return res.json({error, message: "This username is already in use. Please try a different one"});
+      //If the not the same user just trying to change capitals, check if already in use
+      console.log("The ncs username is: "+req.session.user.ncsusername);
+      if(ncsUser!==req.session.user.ncsusername) {
+        //Check if username is in use
+        let checkForUsername=await db.oneOrNone(findUsername, [ncsUser]);
+        //If username is in use, return an error message
+        if(checkForUsername) {
+          const error=true;
+          return res.json({error, message: "This username is already in use. Please try a different one"});
+        }
       }
       if(newUser.length>50) {
         const error=true;
         return res.json({error, message: "This username is too long. Please try a different one"});
       }
-      //If no errors, change username
+      //If no errors, change username and non-case sensitive username
       await db.none(usernameChangeQuery, [newUser, user.userid]);
+      await db.none(ncsUsernameChangeQuery, [ncsUser, user.userid]);
+      console.log("New ncs username: "+ ncsUser);
       console.log("Username sucessfully changed");
       //Update the user session information for the username
       req.session.user.username=newUser;
+      req.session.user.ncsusername=ncsUser;
       return res.json({success:true});
     }
     //Check if user chose to change profile pic
@@ -622,31 +643,6 @@ app.get("/game", async (req, res) => {
     });
 });
 
-app.post("/exitGame", async (req, res) => {
-  //Delete the connection to the user in userGame to prevent the user from getting points from a game they didn't finish
-  let gameID = req.body.gameID;
-  let userID = req.session.user.userid;
-  //If no userID, they aren't logged in which should not be possible
-  if (!userID) {
-    res.status(400).json({ success: false });
-  }
-  //If no gameID, no need to delete from database
-  if (!gameID) {
-    console.log("No game session started");
-    res.status(200).json({ success: true });
-    return;
-  }
-  const deleteUserGame = `DELETE FROM userGame WHERE game_id=$1 AND user_id=$2`;
-  try {
-    await db.none(deleteUserGame, [gameID, userID]);
-    console.log("Successfully deleted");
-    res.status(200).json({ success: true });
-  } catch (err) {
-    console.log("Error exiting game. Attempt again");
-    res.status(500).json({ success: false });
-  }
-});
-
 app.post("/api/submitGuess", async (req, res) => {
   let { userInput, gameID } = req.body;
   const user = req.session.user;
@@ -692,9 +688,7 @@ app.post("/logout", (req, res) => {
     res.status(200).redirect("/login");
   } catch (err) {
     console.log(err);
-    res.status(500).redirect("/settings", {
-      message: "An error occurred while logging out. Please try again.",
-    });
+    res.status(500).redirect("/");
   }
 });
 
