@@ -512,6 +512,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 /*///////// Game Page CSS /////////*/
 /*/////////////////////////////////*/
 
+html, body {margin: 0; height: 100%; overflow: hidden}
+
 .keyboard_row {
   /* position: ; */
   padding: 1%;
@@ -617,7 +619,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 #top-right-game {
   position:absolute;
   top: 1%;
-  left: 89%;
+  left: 88.5%;
 }
 
 #guess {
@@ -705,18 +707,19 @@ body {font-family: Arial, Helvetica, sans-serif;}
   font-size: 25px;
 }
 
-/*  */
 .simulate-btn-hover {
   background-color: #d20d58 !important;
-  border-color: #934790 !important;
   color: #FFFFFF !important;
-  
 }
 
 .simulate-btn-hover:hover {
   background-color: #01a305 !important;
 }
-/*  */
+ 
+.game:hover {
+  background-color: #01a305 !important;
+}
+
 
 #letters {
   text-align: center;
@@ -742,6 +745,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   background-color:#d20d58 !important;
   border-width: 5px !important;
   color: #FFFFFF !important;
+  
 }
 
 .game {
