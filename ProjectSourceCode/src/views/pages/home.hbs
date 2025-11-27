@@ -10,14 +10,74 @@
                 </a>
             </button>
             <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>Account Information</h2>
-                    <p class="useninfo-text">Username: {{currentUser.username}}</p>
-                    <p class="useninfo-text">Email: {{email}}</p>
-                    <form method="POST" action="/logout">
-                        <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
-                    </form>
+                <div class="profile-content w3-animate-top">
+                    <div class="container-fluid">
+                        <span class="close">&times;</span>
+                        <h2 class="profile-header">Account Information</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{#if profile}}
+                                    <img class="profile-img" src="{{profile}}" alt="user avatar">
+                                {{else}}
+                                    <img class="profile-img" src="/img/userProfile.png" alt="user avatar">
+                                {{/if}}
+                                <p class="profile-text">Username: {{currentUser.username}}</p>
+                                <p class="profile-text">Email: {{email}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <form class="changeUserInfo">
+                                    <select class="form-select" id="changeInfo" placeholder="Change User Information" onchange="updateChangeItem(this.value)">
+                                        <option value="" selected disabled hidden>Change User Information</option>
+                                        <option value="username">Change Username</option>
+                                        <option value="password">Change Password</option>
+                                        <option value="email">Change Email</option>
+                                        <option value="image">Change Profile Picture</option>
+                                    </select>
+                                    <hr style="margin: 5 px; height: 10 px;"></hr>
+                                        <div id="usernameChange" class="change-form" style="display:none">
+                                            <div>
+                                                <label for="newUsername" class="profile-label">New Username</label>
+                                                <input name="newUsername" class="profileInput" type="text" id="newUser" placeholder="New Username" maxlength="50">
+                                            </div>
+                                        </div>
+                                        <div id="passwordChange" class="change-form" style="display:none">
+                                            <div>
+                                                <label for="currentPassword" class="profile-label">Current Password</label>
+                                                <input name="currentPassword" class="profileInput" type="password" id="oldPass" placeholder="Current Password">
+                                            </div>
+                                            <div>
+                                                <label for="newPassword" class="profile-label">New Password</label>
+                                                <input name="newPassword" class="profileInput" type="password" id="newPass" placeholder="New Password">
+                                            </div>
+                                        </div>
+                                        <div id="emailChange" class="change-form" style="display:none">
+                                            <div>
+                                                <label for="newEmail" class="profile-label">New Email</label>
+                                                <input name="newEmail" class="profileInput" type="email" id="newEmail" placeholder="New Email">
+                                            </div>
+                                        </div>
+                                        <div id="profilePic" class="change-form" style="display:none">
+                                            <div>
+                                                <label for="newPFP" class="profile-label">New Profile Picture</label>
+                                                <input name="newPFP" class="profileInput" type="url" id="newProfilePic" placeholder="Profile Picture Link" oninput="checkForImage(this)">
+                                            </div>
+                                        </div>
+                                        <div style="margin:10px" class="message">
+                                            <!--For error messages if anything fails-->
+                                            {{>message}}
+                                        </div>
+                                        <div id="submitButton" class="change-form" style="display:none">
+                                            <button type="submit" class="changeInformationBtn" id="changeUserInfo">Submit</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-3">
+                            <form method="POST" action="/logout">
+                                <button type="submit" value="LOGOUT" class="btn-logout">LOGOUT</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,9 +110,9 @@
 
         <!-- Category Selection Modal -->
         <div id="categoryModal" class="modal-overlay" style="display: none;">
-            <div class="modal-box" style="max-width: 600px;">
+            <div class="modal-box" style=" margin-top:150px; height: 600px; width: 400px; margin-left: 70px;">
                 <button class="close-btn" id="closeCategoryModal">&times;</button>
-                <h2 style="text-align: center; margin-bottom: 30px;">Choose a Category</h2>
+                <h2 style="text-align: center; margin-bottom: 10px;">Choose a Category</h2>
                 <div class="category-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px;">
                     <button class="category-btn" data-category="music">
                         <span style="font-size: 2em;">🎵</span>
@@ -88,7 +148,7 @@
         </div>
 
         <div id="customModal" class="modal-overlay">
-            <div class="modal-box">
+            <div class="modal-box w3-animate-bottom">
                 <button class="close-btn" id="closeModal">&times;</button>
                 <h2>How to Play</h2>
                 <div class="modal-body">
@@ -124,6 +184,7 @@
     color: white;
     font-size: 1.2em;
     font-weight: bold;
+    width: 150px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -142,6 +203,7 @@
     transform: translateY(-2px);
 }
 </style>
+
 
 <script>
 // Script for how to play modal
@@ -207,6 +269,100 @@ categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
         const category = button.getAttribute('data-category');
         window.location.href = `/game?category=${category}`;
+    });
+});
+
+function updateChangeItem(item) {
+    console.log(item);
+
+    const messageDiv=document.querySelector(".message");
+    //If current message, remove it
+    if(messageDiv) {
+        messageDiv.innerHTML="";
+    }
+
+    //Reset each option to prevent any overriding from previous user choices
+    document.querySelectorAll(".change-form").forEach(option => {
+        option.style.display="none";
+        option.querySelectorAll(".profileInput").forEach(input => {
+            input.disabled=true;
+            input.setCustomValidity("");
+        })
+    })
+    //Map ID to item
+    const idMap={ username: "usernameChange", password: "passwordChange", email: "emailChange", image: "profilePic"};
+    //Get the selected divison
+    const selectedID=idMap[item];
+    const selectedOption=document.getElementById(selectedID);
+
+    if(selectedOption) {
+        selectedOption.style.display="block";
+        selectedOption.querySelectorAll(".profileInput").forEach(input => {
+            input.disabled=false;
+            input.required=true;
+        });
+    }
+    submit=document.getElementById("submitButton");
+    submit.style.display="block";
+};
+
+// Function to handle the different changes the user selects
+document.addEventListener("DOMContentLoaded", () => {
+    const form=document.querySelector(".changeUserInfo");
+    if(!form) {
+        console.log("Form not found");
+        return;
+    }
+
+    console.log("Form found!");
+
+    form.addEventListener("submit", async(e) => {
+        //Prevents page reload which would close the modal
+        console.log("User has submitted");
+        e.preventDefault();
+
+        const messageDiv=document.querySelector(".message");
+
+        //If current message, remove it
+        if(messageDiv) {
+            messageDiv.innerHTML="";
+        }
+
+        //
+        const formData=Object.fromEntries(new FormData(e.target));
+        try {
+            const response=await fetch("/changeInfo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            const result=await response.json();
+
+            if(result.error) {
+                if(messageDiv) {
+                    messageDiv.innerHTML = `
+                            <div class="alert alert-danger" role="alert">
+                                ${result.message}
+                            </div>`;
+                }
+                return;
+            }
+            else {
+                localStorage.setItem('modalIsOpen', 'true');
+                window.location.href="/";
+            }
+            console.log("Done");
+        }
+        catch(err) {
+            console.log(err);
+            if (messageDiv) {
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        An error occurred. Please try again.
+                    </div>
+                `;
+            };
+        };
     });
 });
 </script>

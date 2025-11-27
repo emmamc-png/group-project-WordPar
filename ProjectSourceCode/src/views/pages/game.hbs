@@ -1,57 +1,69 @@
 <div class="row">
     <div class="col-7">
         <div class="row game-info">
-            <div id="points" class="col-1">Points: <span id="points-value">0</span></div>
-            <div id="category" class="col-5">Category: <span id="category-value">...</span></div>
-            <div id="user-score" class="col-2">
-                Strokes: <span id="strokes-value">0</span>
+            <div id="points" class="col-1">
+                <div id="point">
+                    Points: 
+                </div>
+                 <span id="points-value">100</span>
+            </div>
+            <div id="category" class="col-6"> 
+                <span id="category-value">...</span>
+            </div>
+            <div id="user-score" class="col-1">
+                <div id="strokes">
+                    Strokes: 
+                </div>
+                <span id="strokes-value">0</span>
             </div>
         </div>
         <div id="actual-game" class="row">
             <div id="top-left-game" class="row">
                 <br>
                 <div id="clearbtn"></div>
+                <div id="max-length"></div>
                 <br>
                 <div id="guess"></div>
+                <div id="guessContainer"></div>
                 <br>
                 <br>
             </div>
         </div>
-        <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%"></div>
+        {{!-- <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%;"></div> --}}
         <div id="buttonContainer" class="row">
             <div class="keyboard_row">
-                <button id="q" type="button" class="game btn btn-outline-secondary btn-lg" value="q">q</button>
-                <button id="w" type="button" class="game btn btn-outline-secondary btn-lg" value="w">w</button>
-                <button id="e" type="button" class="game btn btn-outline-secondary btn-lg" value="e">e</button>
-                <button id="r" type="button" class="game btn btn-outline-secondary btn-lg" value="r">r</button>
-                <button id="t" type="button" class="game btn btn-outline-secondary btn-lg" value="t">t</button>
-                <button id="y" type="button" class="game btn btn-outline-secondary btn-lg" value="y">y</button>
-                <button id="u" type="button" class="game btn btn-outline-secondary btn-lg" value="u">u</button>
-                <button id="i" type="button" class="game btn btn-outline-secondary btn-lg" value="i">i</button>
-                <button id="o" type="button" class="game btn btn-outline-secondary btn-lg" value="o">o</button>
-                <button id="p" type="button" class="game btn btn-outline-secondary btn-lg" value="p">p</button>
+                <button id="q" type="button" class="game btn btn-lg" value="q">Q</button>
+                <button id="w" type="button" class="game btn btn-lg" value="w">W</button>
+                <button id="e" type="button" class="game btn btn-lg" value="e">E</button>
+                <button id="r" type="button" class="game btn btn-lg" value="r">R</button>
+                <button id="t" type="button" class="game btn btn-lg" value="t">T</button>
+                <button id="y" type="button" class="game btn btn-lg" value="y">Y</button>
+                <button id="u" type="button" class="game btn btn-lg" value="u">U</button>
+                <button id="i" type="button" class="game btn btn-lg" value="i">I</button>
+                <button id="o" type="button" class="game btn btn-lg" value="o">O</button>
+                <button id="p" type="button" class="game btn btn-lg" value="p">P</button>
             </div>
             <div class="keyboard_row">
-                <button id="a" type="button" class="game btn btn-outline-secondary btn-lg" value="a">a</button>
-                <button id="s" type="button" class="game btn btn-outline-secondary btn-lg" value="s">s</button>
-                <button id="d" type="button" class="game btn btn-outline-secondary btn-lg" value="d">d</button>
-                <button id="f" type="button" class="game btn btn-outline-secondary btn-lg" value="f">f</button>
-                <button id="g" type="button" class="game btn btn-outline-secondary btn-lg" value="g">g</button>
-                <button id="h" type="button" class="game btn btn-outline-secondary btn-lg" value="h">h</button>
-                <button id="j" type="button" class="game btn btn-outline-secondary btn-lg" value="j">j</button>
-                <button id="k" type="button" class="game btn btn-outline-secondary btn-lg" value="k">k</button>
-                <button id="l" type="button" class="game btn btn-outline-secondary btn-lg" value="l">l</button>
+                <button id="a" type="button" class="game btn btn-lg" value="a">A</button>
+                <button id="s" type="button" class="game btn btn-lg" value="s">S</button>
+                <button id="d" type="button" class="game btn btn-lg" value="d">D</button>
+                <button id="f" type="button" class="game btn btn-lg" value="f">F</button>
+                <button id="g" type="button" class="game btn btn-lg" value="g">G</button>
+                <button id="h" type="button" class="game btn btn-lg" value="h">H</button>
+                <button id="j" type="button" class="game btn btn-lg" value="j">J</button>
+                <button id="k" type="button" class="game btn btn-lg" value="k">K</button>
+                <button id="l" type="button" class="game btn btn-lg" value="l">L</button>
             </div>
             <div class="keyboard_row">
-                <button id="enter" type="button" class="game btn btn-outline-secondary btn-lg" value="Enter">ENTER</button>
-                <button id="z" type="button" class="game btn btn-outline-secondary btn-lg" value="z">z</button>
-                <button id="x" type="button" class="game btn btn-outline-secondary btn-lg" value="x">x</button>
-                <button id="c" type="button" class="game btn btn-outline-secondary btn-lg" value="c">c</button>
-                <button id="v" type="button" class="game btn btn-outline-secondary btn-lg" value="v">v</button>
-                <button id="b" type="button" class="game btn btn-outline-secondary btn-lg" value="b">b</button>
-                <button id="n" type="button" class="game btn btn-outline-secondary btn-lg" value="n">n</button>
-                <button id="m" type="button" class="game btn btn-outline-secondary btn-lg" value="m">m</button>
-                <button id="back" type="button" class="game btn btn-outline-secondary btn-lg" value="Back">
+                <button id="enter" type="button" class="game btn btn-lg" value="Enter">ENTER</button>
+                <button id="z" type="button" class="game btn btn-lg" value="z">Z</button>
+                <button id="x" type="button" class="game btn btn-lg" value="x">X</button>
+                <button id="c" type="button" class="game btn btn-lg" value="c">C</button>
+                <button id="v" type="button" class="game btn btn-lg" value="v">V</button>
+                <button id="b" type="button" class="game btn btn-lg" value="b">B</button>
+                <button id="n" type="button" class="game btn btn-lg" value="n">N</button>
+                <button id="m" type="button" class="game btn btn-lg" value="m">M</button>
+                <button id="back" type="button" class="game btn btn-lg" value="Back">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">
                         <path d="M5.83 5.146a.5.5 0 0 0 0 .708L7.975 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z"/>
                         <path d="M13.683 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7.08a2 2 0 0 1-1.519-.698L.241 8.65a1 1 0 0 1 0-1.302L5.084 1.7A2 2 0 0 1 6.603 1zm-7.08 1a1 1 0 0 0-.76.35L1 8l4.844 5.65a1 1 0 0 0 .759.35h7.08a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
@@ -79,7 +91,7 @@
         const canvas = document.getElementById("myCanvas");
         const ctx = canvas.getContext("2d");
         ctx.beginPath();
-        ctx.moveTo(0, 425);
+        ctx.moveTo(0, 445);
         ctx.quadraticCurveTo(190, 15, 30, 0);
         ctx.stroke();
         </script>
@@ -87,11 +99,36 @@
     </div>
 
     <div id="top-right-game" class="col-12">
-        <form method="POST" action="/exitGame">
-            <button id="exit-button" type="submit" class="btn btn-danger" style="background-color: green; color:white">Exit Game</button>
-        </form>
+        <button id="exit-button" class="btn btn-danger" onclick="exitGame()">Exit</button>
     </div>
 </div>
+
+{{!-- 
+// ========================================
+// RESULTS POPUP
+// ======================================== 
+--}}
+<div id="resultModal" class="modal">
+  <div class="modal-content1 w3-animate-zoom">
+    <h2 class="result-title" id="resultTitle"></h2>
+    <div class="modal-textbox">
+        <div class="results-leaderboard-container">
+            <h2 class="results-leaderboard-title">Leaderboard</h2>
+            <div class="results-leaderboard-scroll"> <!-- To implement user data for the leader board -->
+                {{#each leaderboard}}
+                  <div class="entry"> {{indexPlusOne @index}}. {{this.username}} - {{this.score}} pts</div>
+                {{/each}}
+            </div>
+        </div>
+        <p class="text-center resultmessage-font-size" id="resultMessage"></p>
+    </div>
+    <div>
+        <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+    </div>
+    <button class="return-home-btn" onclick="window.location.href='/'">Return Home</button>
+  </div>
+</div>
+
 
 <script>
 // ========================================
@@ -125,7 +162,7 @@ async function startNewGame() {
         secretWord = data.word;
         console.log('🎯 Secret word:', secretWord); // DEBUG - Remove in production
         
-        alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
+        // alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
         
     } catch (error) {
         console.error('Error generating word:', error);
@@ -138,15 +175,30 @@ window.addEventListener('DOMContentLoaded', () => {
     startNewGame();
 });
 
+document.getElementById("playAgainBtn").addEventListener("click", function () {
+    location.reload();
+});
+
 // ========================================
 // Keyboard Input Handling 
 // ========================================
 const buttonContainer = document.getElementById('buttonContainer');
+//let wordLength = secretWord.length;
 let prevKey = "";
 let buttonInputs = [];
 let room = true;
+let clear = false;
+const resultModal = document.getElementById("resultModal");
+const openBtn = document.getElementById("openModalBtn");
 
 function updateGuess(buttonInputs) {
+    // Truncate the size of the input guess into the correct size
+    /*console.log('here')
+    console.log(buttonInputs.length)
+    console.log("word "+ secretWord.length)
+    buttonInputs.length = secretWord.length;
+    console.log("dude" + buttonInputs.length)
+*/
     const guessDiv = document.getElementById("guess");
     let htmlContent = "<div id='letters'>";
     buttonInputs.forEach(item => {
@@ -157,43 +209,71 @@ function updateGuess(buttonInputs) {
     htmlContent += "</div>";
     guessDiv.innerHTML = htmlContent;
 
-    const clearbtnDiv = document.getElementById("clearbtn");
-    let htmlContent2 = "<button id='clear' type='button' class='game btn btn-outline-secondary btn-lg' value='Clear'>Clear</button>"
-    clearbtnDiv.innerHTML = htmlContent2;
-    clearbtnDiv.addEventListener('click', buttonPressed);
+   //console.log(buttonInputs)
+    if (clear) {
+        const clearbtnDiv = document.getElementById("clearbtn");
+        let htmlContent2 = "<button id='clear' type='button' class=' btn btn-lg' value='Clear'>Clear</button>"
+        clearbtnDiv.innerHTML = htmlContent2;
+        clearbtnDiv.addEventListener('click', buttonPressed);
+    }
+
+    const maxLengthDiv = document.getElementById("max-length");
+    let htmlContent3 = "<div id='true-length'>";
+        htmlContent3 += "Maximum: ";
+        htmlContent3 += "<div id='actual-length'>";
+        htmlContent3 += "<div id='maximum'>";
+        htmlContent3 += `${secretWord.length}`;
+        htmlContent3 += "</div>";
+        htmlContent3 += "</div>";
+        htmlContent3 += "</div>";
+    maxLengthDiv.innerHTML = htmlContent3;
 }
 
 async function buttonPressed(event) {
-    if (room) {
-        if (prevKey) {
-            prevKey.classList.remove('simulate-btn-hover');
-        }
-        
-        const correctKey = document.querySelector(`#${event.target.id}`)
-        prevKey = correctKey;
-        if (correctKey) {
-            correctKey.classList.add('simulate-btn-hover');
-        }
-
-        if (event.target.tagName === 'BUTTON') {
-            if(event.target.id == 'enter') {
-                if (buttonInputs.length === 0) {
-                    alert('Please enter a word first!');
-                    return;
+    //  Remove hover bug present in keyboard simulation
+    if (event.target.id != 'buttonContainer') {
+        if (room) {
+            if (prevKey) {
+                prevKey.classList.remove('simulate-btn-hover');
+            } 
+            const correctKey = document.querySelector(`#${event.target.id}`)
+            prevKey = correctKey;
+            if (correctKey) {
+                correctKey.classList.add('simulate-btn-hover');
+                if (event.target.id === 'clear') {
+                    clear = true;
                 }
-                
-                // Submit guess with AI integration (YOUR FEATURE)
-                await submitGuess(buttonInputs.join(''));
-                updateGuess(buttonInputs);
-                room = false;
             }
-            else if (event.target.id === 'back') {
-                buttonInputs.pop();
-                updateGuess(buttonInputs);
-            }
-            else if (event.target.id !== 'clear') {
-                buttonInputs.push(event.target.value);
-                updateGuess(buttonInputs);
+            if (event.target.tagName === 'BUTTON') {
+                if(event.target.id == 'enter') {
+                    if (buttonInputs.length === 0) {
+                        alert('Please enter a word first!');
+                        return;
+                    }
+                    // Submit guess with AI integration (YOUR FEATURE)
+                    await submitGuess(buttonInputs.join(''));
+
+                    // Display the clear button
+                    clear = true;
+                    updateGuess(buttonInputs);
+                    // reset guesses
+                    room = false;
+                    buttonInputs = [];
+                    room = true;
+                    
+                }
+                else if (event.target.id === 'back') {
+                    buttonInputs.pop();
+                    updateGuess(buttonInputs);
+                }
+                else if (event.target.id !== 'clear') {
+                    buttonInputs.push(event.target.value);
+                    updateGuess(buttonInputs);
+                }
+                else {
+                    buttonInputs=[];
+                    updateGuess(buttonInputs);
+                }
             }
         }
     }
@@ -203,9 +283,14 @@ async function buttonPressed(event) {
                 buttonInputs.length = 0;
                 const guessDiv = document.getElementById("letters");
                 const clearbtn = document.getElementById("clear");
+                const resultsDiv = document.getElementById("guess-history")
                 if (guessDiv) guessDiv.remove();
                 if (clearbtn) clearbtn.remove();
+                if (resultsDiv) resultsDiv.remove();
+                attempts = 0;
+                document.getElementById('strokes-value').textContent = attempts;
                 room = true;
+                clear = false;
             }
         }
     }
@@ -239,6 +324,36 @@ document.addEventListener("keydown", function(event) {
         buttonPressed(keyTap);
     }
 });
+
+
+// ========================================
+// Exit Game
+// ========================================
+async function exitGame() {
+    try {
+        const exitGameResponse = await fetch("/exitGame", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                gameID: currentGameID || null
+            })
+        })
+
+        const exit=await exitGameResponse.json();
+        if (exit.success) {
+            //Redirect back to home if a success
+            window.location.href='/';
+            return;
+        }
+        else {
+            console.log("Error exiting");
+        }
+    }
+    catch(err) {
+        console.log("Error exiting: "+err);
+    }
+};
+
 
 // ========================================
 // Submit Guess with AI 
@@ -287,12 +402,14 @@ async function submitGuess(userGuess) {
         displayFeedback(userGuess, similarity, percentage);
         
         // Check win condition
-        if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()) {
+        /*if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()) {
             setTimeout(() => {
+                users = await db.any(query);
                 alert(`🎉 YOU WON! The word was "${secretWord}"!\nAttempts: ${attempts}`);
                 if (confirm('Play again?')) {
                     location.reload();
                 }
+                resultModal.style.display = "flex"; // show modal
             }, 500);
         }
         else if (attempts >= MAX_ATTEMPTS) {
@@ -302,6 +419,17 @@ async function submitGuess(userGuess) {
                     location.reload();
                 }
             }, 500);
+        }*/
+        if (similarity >= 0.95 || userGuess.toLowerCase() === secretWord.toLowerCase()){
+            await new Promise(resolve => setTimeout(resolve, 500));
+            document.getElementById("resultTitle").innerText = "🎉 YOU WON!";
+            document.getElementById("resultMessage").innerText = `Attempts: ${attempts}`
+            resultModal.style.display = "flex"; // show modal
+        } else if (attempts >= MAX_ATTEMPTS) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            document.getElementById("resultTitle").innerText = "😢 Game Over!";
+            document.getElementById("resultMessage").innerText = `The word was "${secretWord}".\nBetter luck next time!`;
+            resultModal.style.display = "flex"; // show modal
         }
         
     } catch (error) {
@@ -318,7 +446,7 @@ function displayFeedback(guess, similarity, percentage) {
     if (!feedbackContainer) {
         feedbackContainer = document.createElement('div');
         feedbackContainer.id = 'guess-history';
-        feedbackContainer.style.cssText = `
+        /*feedbackContainer.style.cssText = `
             margin-top: 20px;
             padding: 15px;
             background: rgba(255,255,255,0.1);
@@ -326,13 +454,18 @@ function displayFeedback(guess, similarity, percentage) {
             max-height: 300px;
             overflow-y: auto;
         `;
-        document.getElementById('top-left-game').appendChild(feedbackContainer);
+        */
+        document.getElementById('guessContainer').appendChild(feedbackContainer);
     }
     
     let message = '';
     let color = '';
     
-    if (similarity > 0.9) {
+    if (similarity == 1) {
+        message = '🔥 YOU GOT IT!! NICE JOB!';
+        color = '#ff4444';
+    }
+    else if (similarity > 0.9) {
         message = '🔥 ALMOST THERE!';
         color = '#ff4444';
     } else if (similarity > 0.7) {
@@ -350,14 +483,17 @@ function displayFeedback(guess, similarity, percentage) {
     }
     
     const feedbackItem = document.createElement('div');
+    feedbackItem.classList.add('result');
     feedbackItem.style.cssText = `
-        margin-bottom: 10px;
-        padding: 10px;
         background: ${color};
+    `;
+    /*  padding: 10px;
+        margin-bottom: 10px;
         color: white;
         border-radius: 5px;
         font-weight: bold;
     `;
+    */
     feedbackItem.innerHTML = `
         <div style="display: flex; justify-content: space-between;">
             <span>${attempts}. ${guess.toUpperCase()}</span>
@@ -369,3 +505,4 @@ function displayFeedback(guess, similarity, percentage) {
     feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
 }
 </script>
+

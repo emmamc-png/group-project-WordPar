@@ -21,6 +21,9 @@ INSERT INTO users (username, email, password) VALUES
 ('rachel', 'rachel@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
 ('sam', 'sam@company.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS');
 
+INSERT INTO users (username, email, userImage, password) VALUES
+('a', 'a@gmail.com', 'https://marketplace.canva.com/8-1Kc/MAGoQJ8-1Kc/1/tl/canva-ginger-cat-with-paws-raised-in-air-MAGoQJ8-1Kc.jpg', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS');
+
 -- word insert-->
 INSERT INTO words (word, length) VALUES
 ('apple', 5),
