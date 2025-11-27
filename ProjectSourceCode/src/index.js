@@ -544,7 +544,7 @@ app.post("/changeInfo", async(req,res)=> {
     //In case no information is sent (somehow), provide user an error message informing them no information was changed
     else {
       const error=true;
-      return res.status(500).json({error, message: "User information could not be changed"});
+      return res.status(400).json({error, message: "User information could not be changed"});
     }
   }
   //If an error occurs anywhere, return to the user and error message informing that the server had an issue and they should retry
