@@ -1,4 +1,4 @@
 .env
 node_modules
 package-lock.json
-push_db.sh
+init_db.sh
