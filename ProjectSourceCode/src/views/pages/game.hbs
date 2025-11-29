@@ -29,7 +29,6 @@
                 <br>
             </div>
         </div>
-        {{!-- <div style="border-style: dashed none none none; border-width: 2px; position:absolute; width:65%;"></div> --}}
         <div id="buttonContainer" class="row">
             <div class="keyboard_row">
                 <button id="q" type="button" class="game btn btn-lg" value="q">Q</button>
@@ -146,10 +145,11 @@ let guessHistory = [];
 let attempts = 0;
 const MAX_ATTEMPTS = 10;
 let currentGameID = null;
+let bored = 1;
 
-// ========================================
+// =====================================================
 // Initialize Game - Generate Secret Word (YOUR FEATURE)
-// ========================================
+// =====================================================
 async function startNewGame() {
     attempts = 0;
     guessHistory = [];
@@ -164,6 +164,14 @@ async function startNewGame() {
         
         // alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
         
+        const maxLengthDiv = document.getElementById("max-length");
+        let htmlContent3 = "<div id='true-length'>";
+            htmlContent3 += "Length: ";
+            htmlContent3 += "<div id='maximum'>";
+            htmlContent3 += `${secretWord.length}`;
+            htmlContent3 += "</div>";
+            htmlContent3 += "</div>";
+        maxLengthDiv.innerHTML = htmlContent3;
     } catch (error) {
         console.error('Error generating word:', error);
         alert('Failed to start game. Please try again.');
@@ -183,54 +191,46 @@ document.getElementById("playAgainBtn").addEventListener("click", function () {
 // Keyboard Input Handling 
 // ========================================
 const buttonContainer = document.getElementById('buttonContainer');
-//let wordLength = secretWord.length;
 let prevKey = "";
 let buttonInputs = [];
 let room = true;
 let clear = false;
+let full = false;
 const resultModal = document.getElementById("resultModal");
 const openBtn = document.getElementById("openModalBtn");
 
 function updateGuess(buttonInputs) {
-    // Truncate the size of the input guess into the correct size
-    /*console.log('here')
-    console.log(buttonInputs.length)
-    console.log("word "+ secretWord.length)
-    buttonInputs.length = secretWord.length;
-    console.log("dude" + buttonInputs.length)
-*/
+
     const guessDiv = document.getElementById("guess");
     let htmlContent = "<div id='letters'>";
     buttonInputs.forEach(item => {
-        htmlContent += "<div class='character rounded'>";
+        htmlContent += "<div class='character rounded'";
+        if (buttonInputs.length < 7) {
+            htmlContent += "style='font-size: xx-large'>"
+        }
+        else if (buttonInputs.length == 7) {
+            htmlContent += "style='font-size: xx-large; padding: 3%;'>"
+        }
+        if (buttonInputs.length == 8) {
+            htmlContent += "style='font-size: x-large; padding: 2.5%; margin: 0.5%'>"
+        }
         htmlContent += `${item}`;
         htmlContent += "</div>";
     });
     htmlContent += "</div>";
     guessDiv.innerHTML = htmlContent;
 
-   //console.log(buttonInputs)
     if (clear) {
         const clearbtnDiv = document.getElementById("clearbtn");
         let htmlContent2 = "<button id='clear' type='button' class=' btn btn-lg' value='Clear'>Clear</button>"
         clearbtnDiv.innerHTML = htmlContent2;
         clearbtnDiv.addEventListener('click', buttonPressed);
     }
-
-    const maxLengthDiv = document.getElementById("max-length");
-    let htmlContent3 = "<div id='true-length'>";
-        htmlContent3 += "Maximum: ";
-        htmlContent3 += "<div id='actual-length'>";
-        htmlContent3 += "<div id='maximum'>";
-        htmlContent3 += `${secretWord.length}`;
-        htmlContent3 += "</div>";
-        htmlContent3 += "</div>";
-        htmlContent3 += "</div>";
-    maxLengthDiv.innerHTML = htmlContent3;
 }
 
 async function buttonPressed(event) {
     //  Remove hover bug present in keyboard simulation
+    console.log('room: ' + room)
     if (event.target.id != 'buttonContainer') {
         if (room) {
             if (prevKey) {
@@ -259,16 +259,21 @@ async function buttonPressed(event) {
                     // reset guesses
                     room = false;
                     buttonInputs = [];
-                    room = true;
                     
                 }
                 else if (event.target.id === 'back') {
                     buttonInputs.pop();
                     updateGuess(buttonInputs);
+                    if (buttonInputs.length < secretWord.length) {
+                        full = false;
+                    }
                 }
                 else if (event.target.id !== 'clear') {
                     buttonInputs.push(event.target.value);
                     updateGuess(buttonInputs);
+                    if (buttonInputs.length == secretWord.length) {
+                        full = true;
+                    }
                 }
                 else {
                     buttonInputs=[];
@@ -276,21 +281,24 @@ async function buttonPressed(event) {
                 }
             }
         }
-    }
-    else {
-        if (event.target.tagName === 'BUTTON') {
-            if (event.target.id === 'clear') {
-                buttonInputs.length = 0;
-                const guessDiv = document.getElementById("letters");
-                const clearbtn = document.getElementById("clear");
-                const resultsDiv = document.getElementById("guess-history")
-                if (guessDiv) guessDiv.remove();
-                if (clearbtn) clearbtn.remove();
-                if (resultsDiv) resultsDiv.remove();
-                attempts = 0;
-                document.getElementById('strokes-value').textContent = attempts;
-                room = true;
-                clear = false;
+        else {
+            console.log('here')
+            if (event.target.tagName === 'BUTTON') {
+                console.log(event.target.id)
+                if (event.target.id === 'clear') {
+                    buttonInputs.length = 0;
+                    const guessDiv = document.getElementById("letters");
+                    const clearbtn = document.getElementById("clear");
+                 //   const resultsDiv = document.getElementById("guess-history")
+                    if (guessDiv) guessDiv.remove();
+                    if (clearbtn) clearbtn.remove();
+                //    if (resultsDiv) resultsDiv.remove();
+                    attempts = 0;
+                    document.getElementById('strokes-value').textContent = attempts;
+                    room = true;
+                    clear = false;
+                    full = false;
+                }
             }
         }
     }
@@ -304,7 +312,7 @@ document.addEventListener("keydown", function(event) {
     if ((event.key.length === 1 && event.key.match(/[a-z]/i)) || event.key == 'Enter' || event.key == 'Backspace') {
         event.preventDefault();
         let keyTap;
-
+        console.log(room)
         if (room) {
             if (event.key == 'Enter') {
                 keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'enter'} };
@@ -313,15 +321,41 @@ document.addEventListener("keydown", function(event) {
                 keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'back'} };
             }
             else {
-                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
+                if (!full)
+                    keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
+                else 
+                    console.log('here');
             }
         }
         else {
+            console.log(event.key)
             if (event.key === 'Backspace') {
                 keyTap = { target: {tagName: 'BUTTON', value: event.key, id: 'clear'} }
             }
+            else if (event.key == 'Enter') {
+                const newBackground = document.querySelector('body');
+                if (bored) {
+                     newBackground.style.cssText = `
+                        background-image: linear-gradient(135deg, #21db91, #ffffff, #21db91);
+                    `;
+                }
+                else {
+                     newBackground.style.cssText = `
+                        background-image: linear-gradient(45deg, #21db91, #ffffff, #21db91);
+                    `
+                }
+                bored = 1-bored;
+            }
+            else {
+                //  Reset screen
+                keyTap = { target: {tagName: 'BUTTON', value: 'Backspace', id: 'clear'} }
+                buttonPressed(keyTap);
+                //  Pass new letter
+                keyTap = { target: {tagName: 'BUTTON', value: event.key, id: event.key} };
+            }
         }
-        buttonPressed(keyTap);
+        if (keyTap) {buttonPressed(keyTap)};
+        console.log('keyTap ' + keyTap)
     }
 });
 
@@ -446,40 +480,50 @@ function displayFeedback(guess, similarity, percentage) {
     if (!feedbackContainer) {
         feedbackContainer = document.createElement('div');
         feedbackContainer.id = 'guess-history';
-        /*feedbackContainer.style.cssText = `
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-        `;
-        */
         document.getElementById('guessContainer').appendChild(feedbackContainer);
     }
     
     let message = '';
     let color = '';
+    const newBackground = document.querySelector('body');
     
     if (similarity == 1) {
         message = '🔥 YOU GOT IT!! NICE JOB!';
         color = '#ff4444';
+        newBackground.style.cssText = `
+            background-image: linear-gradient(135deg, ${color}, #ffffff, ${color});
+        `;
     }
     else if (similarity > 0.9) {
         message = '🔥 ALMOST THERE!';
         color = '#ff4444';
+        newBackground.style.cssText = `
+            background-image: linear-gradient(115deg, ${color}, #ffffff, ${color});
+        `;
     } else if (similarity > 0.7) {
         message = '🌟 VERY CLOSE!';
         color = '#ff8844';
+        newBackground.style.cssText = `
+            background-image: linear-gradient(100deg, ${color}, #ffffff, ${color});
+        `;
     } else if (similarity > 0.5) {
         message = '😊 GETTING WARMER!';
         color = '#ffaa44';
+        newBackground.style.cssText = `
+            background-image: linear-gradient(75deg, ${color}, #ffffff, ${color});
+        `;
     } else if (similarity > 0.3) {
         message = '🤔 ON THE RIGHT TRACK...';
         color = '#88aaff';
+        newBackground.style.cssText = `
+            background-image: linear-gradient(60deg, ${color}, #ffffff, ${color});
+        `;
     } else {
         message = '❄️ COLD!';
         color = '#4488ff';
+        newBackground.style.cssText = `
+            background-image: linear-gradient(45deg, ${color}, #ffffff, ${color});
+        `;
     }
     
     const feedbackItem = document.createElement('div');
@@ -487,13 +531,6 @@ function displayFeedback(guess, similarity, percentage) {
     feedbackItem.style.cssText = `
         background: ${color};
     `;
-    /*  padding: 10px;
-        margin-bottom: 10px;
-        color: white;
-        border-radius: 5px;
-        font-weight: bold;
-    `;
-    */
     feedbackItem.innerHTML = `
         <div style="display: flex; justify-content: space-between;">
             <span>${attempts}. ${guess.toUpperCase()}</span>
@@ -503,6 +540,8 @@ function displayFeedback(guess, similarity, percentage) {
     `;
     
     feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
+   
 }
+
 </script>
 
