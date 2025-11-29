@@ -1,4 +1,4 @@
-# Word Par
+<center> # Word Par </center>
 
 ----
 
