@@ -1,4 +1,4 @@
-<center> # Word Par </center>
+<h1 align="center"> Word Par <h1>
 
 ----
 
