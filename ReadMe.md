@@ -1,6 +1,8 @@
 <h1 align="center"> Word Par </h1>
 
-<p align="center">![Word Par Logo](/ProjectSourceCode/src/resources/img/logoImage.png)</p>
+<p align="center">
+    <img src="/ProjectSourceCode/src/resources/img/logoImage.png" alt="Word Par Logo"/>
+</p>
 
 ----
 
@@ -24,29 +26,40 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
     * **CSS** (Cascading Style Sheets): Holds the styling aspects for the application's user interface (UI)
     * **HTML** (Hyptertext Markup Language): Provides the core aspects and elements of the different pages for Word Par 
     * **HBS** (Handlebars): Adds dynamic elements to the different webpages to allow for changing information (ex. leaderboard)
+    * **React**:
+    * **Axios**:
 * **Backend:**
-    * **NodeJS**: 
-    * **Express**:
-
+    * **NodeJS**: Javascript runtime environment that is the base for Express. NodeJS allows for us to make dynamic HTML pages, collect/process form data, process HTTP requests, and much more
+    * **Express**: Web framework for NodeJS which simplifies routing, middleware handling, and much more. Also supports various templating engines (such as HBS)
+* **Database:**
+    * **PostgresSQL**: Allows us to initalize, store, and interact with data for the application. A relational database mangement system (RDBMS) which uses SQL (structured query language) to interact with the database.
+* **Testing:**
+    * **Mocha**:
+    * **Chai**:
+* **DevOps:**
+    * **Docker**:
 
 ----
 
 ## Prerequisites to run the application:
+* **Downloads Required:**
+    * **Docker:** Must be downloaded on local machine. You can find out information on how to download it depending on your OS [here!](https://www.docker.com/get-started/)
 
+### All other downloads will be handled through the Docker containerization (everything is downloaded and ran inside the container itself)
 
 ----
 
-How to run the application locally:
+## How to run the application locally:
 In the terminal, run docker compose up and wait for everything to initalize.
 Once that is complete, you can visit localhost:3000 to interact with the application.
 
 ----
 
-How to run the tests:
+## How to run the tests:
 
 
 ----
 
-Link to the deployed application:
+## Check out our deployed application [here](https://group-project-wordpar-1.onrender.com/)!
 
 
