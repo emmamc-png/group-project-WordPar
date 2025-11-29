@@ -20,8 +20,9 @@ CREATE TABLE game (
 
 CREATE TABLE users(
     userID SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE,
-    email VARCHAR(100) UNIQUE,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    ncsUsername VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
     userImage VARCHAR(512),
     password VARCHAR(255) NOT NULL
 );
