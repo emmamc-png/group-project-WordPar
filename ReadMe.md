@@ -1,4 +1,4 @@
-#Word Par
+# Word Par
 
 ----
 
@@ -8,11 +8,11 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 ----
 
 Contributers:
-*Emma McArthur
-*Joel Gaikwad
-*Josiah Shehata
-*Reeves Cook
-*Karthik Chandrasekhar
+* Emma McArthur
+* Joel Gaikwad
+* Josiah Shehata
+* Reeves Cook
+* Karthik Chandrasekhar
 
 ----
 
