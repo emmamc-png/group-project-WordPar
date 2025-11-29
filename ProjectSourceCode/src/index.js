@@ -442,7 +442,7 @@ app.post("/changeInfo", async(req,res)=> {
   catch(err) {
     const error=true;
     console.log(err);
-    return res.json({message: "User not found", error})
+    return res.status(400).json({message: "User not found", error})
   }
 
   //Try to change the user's information
@@ -452,22 +452,22 @@ app.post("/changeInfo", async(req,res)=> {
       //If new username is their current, return an error message
       if(newUser==req.session.user.username) {
         const error=true;
-        return res.json({error, message: "You cannot change your username to the same as it currently is. Please try again"});
+        return res.status(400).json({error, message: "You cannot change your username to the same as it currently is. Please try again"});
       }
       //If the not the same user just trying to change capitals, check if already in use
       console.log("The ncs username is: "+req.session.user.ncsusername);
-      if(ncsUser!==req.session.user.ncsusername) {
-        //Check if username is in use
-        let checkForUsername=await db.oneOrNone(findUsername, [ncsUser]);
-        //If username is in use, return an error message
+      //Check if username is in use
+      let checkForUsername=await db.oneOrNone(findUsername, [ncsUser]);
+      //If username is in use, return an error message
+      if(req.session.user.ncsusername!==ncsUser) {
         if(checkForUsername) {
           const error=true;
-          return res.json({error, message: "This username is already in use. Please try a different one"});
+          return res.status(400).json({error, message: "This username is already in use. Please try a different one"});
         }
       }
       if(newUser.length>50) {
         const error=true;
-        return res.json({error, message: "This username is too long. Please try a different one"});
+        return res.status(400).json({error, message: "This username is too long. Please try a different one"});
       }
       //If no errors, change username and non-case sensitive username
       await db.none(usernameChangeQuery, [newUser, user.userid]);
@@ -477,24 +477,24 @@ app.post("/changeInfo", async(req,res)=> {
       //Update the user session information for the username
       req.session.user.username=newUser;
       req.session.user.ncsusername=ncsUser;
-      return res.json({success:true});
+      return res.status(200).json({success:true});
     }
     //Check if user chose to change profile pic
     else if (profilePic) {
       //If the new profile pic is their current, return an error message
       if (profilePic==req.session.user.userimage) {
         const error=true;
-        return res.json({error, message: "You cannot change your profile picture to the same as it currently is. Please try again"});
+        return res.status(400).json({error, message: "You cannot change your profile picture to the same as it currently is. Please try again"});
       }
       if(profilePic.length>512) {
         const error=true;
-        return res.json({error, message: "This URL is too long. Please use another image"});
+        return res.status(400).json({error, message: "This URL is too long. Please use another image"});
       }
       //Else, complete the change (check for image is done in the front-end)
       await db.none(insertImageQuery, [profilePic, user.userid]);
       console.log("User PFP succesfully changed");
       req.session.user.userimage=profilePic;
-      return res.json({success:true});
+      return res.status(200).json({success:true});
     }
     //Check if the user chose to change their password
     else if (newPass) {
@@ -504,54 +504,54 @@ app.post("/changeInfo", async(req,res)=> {
       //If not a match, return an error to inform them they entered the wrong current password
       if(!match) {
         const error=true;
-        return res.json({error, message: "Incorrect password. Please try again."});
+        return res.status(400).json({error, message: "Incorrect password. Please try again."});
       }
       //If the passwords are the same, return an error that they're changing their password to the same thing (not allowed for safety)
       if(newPass==currPass) {
         const error=true;
-        return res.json({error, message:"You cannot change your password to the same as it currently is. Please try again"});
+        return res.status(400).json({error, message:"You cannot change your password to the same as it currently is. Please try again"});
       }
       //Hash the new password and change the user's password in the DB
       newPass=await bcrypt.hash(newPass, 10);
       await db.none(changePasswordQuery, [newPass, user.userid]);
       console.log("Password changed!");
-      return res.json({success:true});
+      return res.status(200).json({success:true});
     }
     //Check if the user wants to change their email
     else if (newEmail) {
       //Check if the new email is the same as their current email and if so send an error message that they can't change it to the same one
       if(newEmail==req.session.user.email) {
         const error=true;
-        return res.json({error, message: "You cannot change your email to the same as it currently is. Please try again"});
+        return res.status(400).json({error, message: "You cannot change your email to the same as it currently is. Please try again"});
       }
       //Check if the email they entered is currently in use
       const checkEmail=await db.oneOrNone(findEmail, [newEmail]);
       //If in user, send an error message telling them that
       if(checkEmail) {
         const error=true;
-        return res.json({error, message: "This email is already in use. Please use a different one"});
+        return res.status(400).json({error, message: "This email is already in use. Please use a different one"});
       }
       if(newEmail.length>100) {
         const error=true;
-        return res.json({error, message: "This email is too long. Please try a different one"});
+        return res.status(400).json({error, message: "This email is too long. Please try a different one"});
       }
       //Else, change the email in the DB and the user session
       await db.none(emailQuery, [newEmail, user.userid]);
       req.session.user.email=newEmail;
       console.log("Email succesfully changed");
-      return res.json({success:true});
+      return res.status(200).json({success:true});
     }
     //In case no information is sent (somehow), provide user an error message informing them no information was changed
     else {
       const error=true;
-      return res.json({error, message: "User information could not be changed"});
+      return res.status(400).json({error, message: "User information could not be changed"});
     }
   }
   //If an error occurs anywhere, return to the user and error message informing that the server had an issue and they should retry
   catch(err) {
     const error=true;
     console.log(err)
-    return res.json({error, message: "A server error occurred. Please try again."});
+    return res.status(500).json({error, message: "A server error occurred. Please try again."});
   }
 });
 
@@ -648,8 +648,10 @@ app.post("/api/submitGuess", async (req, res) => {
   const user = req.session.user;
 
   if (!user) return res.status(401).json({ error: "Not logged in" });
-  if (!userInput) return res.status(400).json({ error: "No guess" });
-
+  if (!userInput)  {
+    console.log("Error finding guess");
+    return res.status(400).json({ error: "No guess" });
+  }
   try {
     if (!gameID) {
       const game = await db.one(
@@ -675,7 +677,7 @@ app.post("/api/submitGuess", async (req, res) => {
       [gameID, user.userid, word.wordid, userInput]
     );
 
-    res.json({ success: true, gameID });
+    res.status(200).json({ success: true, gameID });
   } catch (err) {
     console.error("Error saving guess:", err);
     res.status(500).json({ error: "Database error" });
