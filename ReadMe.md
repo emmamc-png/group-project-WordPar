@@ -1,4 +1,4 @@
-<h1 align="center"> Word Par <h1>
+<h1 align="center"> Word Par </h1>
 
 ----
 
@@ -7,7 +7,7 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 
 ----
 
-Contributers:
+## Contributers:
 * Emma McArthur
 * Joel Gaikwad
 * Josiah Shehata
@@ -16,13 +16,15 @@ Contributers:
 
 ----
 
-Technology Stack:
-Database: postgresSQL
-
+## Technology Stack:
+* **Frontend:**
+    * **CSS** (Cascading Style Sheets): Holds the styling aspects for the application's user interface (UI)
+    * **HTML** (Hyptertext Markup Language): Provides the core aspects and elements of the different pages for Word Par 
+    * **HBS** (Handlebars): Adds dynamic elements to the different webpages to allow for changing information (ex. leaderboard)
 
 ----
 
-Prerequisites to run the application:
+## Prerequisites to run the application:
 
 
 ----
