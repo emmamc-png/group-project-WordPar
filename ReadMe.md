@@ -26,18 +26,17 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
     * **CSS** (Cascading Style Sheets): Holds the styling aspects for the application's user interface (UI)
     * **HTML** (Hyptertext Markup Language): Provides the core aspects and elements of the different pages for Word Par 
     * **HBS** (Handlebars): Adds dynamic elements to the different webpages to allow for changing information (ex. leaderboard)
-    * **React**:
-    * **Axios**:
+    * **Axios**: Tool used to allow for the frontend to fetch data from the backend or for the frontend to send data to the backend
 * **Backend:**
     * **NodeJS**: Javascript runtime environment that is the base for Express. NodeJS allows for us to make dynamic HTML pages, collect/process form data, process HTTP requests, and much more
     * **Express**: Web framework for NodeJS which simplifies routing, middleware handling, and much more. Also supports various templating engines (such as HBS)
 * **Database:**
-    * **PostgresSQL**: Allows us to initalize, store, and interact with data for the application. A relational database mangement system (RDBMS) which uses SQL (structured query language) to interact with the database.
+    * **PostgresSQL**: Allows us to initalize, store, and interact with data for the application. A relational database mangement system (RDBMS) which uses SQL (structured query language) to interact with the database
 * **Testing:**
-    * **Mocha**:
-    * **Chai**:
-* **DevOps:**
-    * **Docker**:
+    * **Mocha**: A test framework and test runner that is utilized as a structure and environment for application testing
+    * **Chai**: A library that offers logic for verifying tests through assertions
+* **Infrastructure/DevOps:**
+    * **Docker**: Infastructure tool utilized as a substitute for a virtual machine which uses containerization which packages all aspects of an application into the container to prevent from any inconsistencies based on the developer's local machine
 
 ----
 
@@ -45,18 +44,46 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 * **Downloads Required:**
     * **Docker:** Must be downloaded on local machine. You can find out information on how to download it depending on your OS [here!](https://www.docker.com/get-started/)
 
-### All other downloads will be handled through the Docker containerization (everything is downloaded and ran inside the container itself)
+#### All other downloads will be handled through the Docker containerization (everything is downloaded and ran inside the container itself)
+
+<br></br>
+
+* **If you choose not to use Docker, you must download these:**
+    * **PostgresSQL**: Can be downloaded from [here](https://www.postgresql.org/download/)
+    * **NodeJS**: Can be downloaded from [here](https://nodejs.org/en)
 
 ----
 
 ## How to run the application locally:
-In the terminal, run docker compose up and wait for everything to initalize.
-Once that is complete, you can visit localhost:3000 to interact with the application.
+
+### 1. Create a '.env' file:
+* **Create a .env file which will include the following:**
+    * POSTGRES_HOST=db
+    * POSTGRES_USER=(your user)
+    * POSTGRES_PASSWORD=(your password)
+    * POSTGRES_DB=(your database)
+    * SESSION_SECRET=(your session secret)
+    * OPENAI_API_KEY(your OpenAI API key) 
+
+### 2. Next Steps
+* **If using Docker:**
+    * Open a terminal and redirect to /ProjectSourceCode/src
+    * In the terminal type "docker compose up" which will automatically run the tests and everything else necessary
+
+* **If NOT using Docker:**
+    * Open a terminal and redirect to /ProjectSourceCode/src where you need to run: npm install
+    * Then, in the terminal use the command: npm testandrun
 
 ----
 
 ## How to run the tests:
+* **If using Docker:**
+    * Open a terminal and redirect to /ProjectSourceCode/src
+    * In the terminal type: docker compose run --rm web npm run testOnly
 
+* **If NOT using Docker:**
+    * Open a terminal and redirect to /ProjectSourceCode/src and if not done previously, run the command: npm install
+    * Then, in the terminal use the command: npm testOnly
 
 ----
 
