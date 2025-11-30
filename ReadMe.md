@@ -46,7 +46,6 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 
 #### All other downloads will be handled through the Docker containerization (everything is downloaded and ran inside the container itself)
 
-<br></br>
 
 * **If you choose not to use Docker, you must download these:**
     * **PostgresSQL**: Can be downloaded from [here](https://www.postgresql.org/download/)
