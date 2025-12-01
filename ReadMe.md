@@ -22,7 +22,7 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 ----
 ## Directory Structure:
 ```text
-├─<ProjectRepository>/
+├─group-project-WordPar/
 │  ├─ TeamMeetingLogs
 │  ├─ MilestoneSubmissions
 |  ├─ ProjectSourceCode
@@ -61,8 +61,8 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 |  |        ├─ server.spec.js
 │  ├─ README.md
 
-----
 ```
+----
 ## Technology Stack:
 * **Frontend:**
     * **CSS** (Cascading Style Sheets): Holds the styling aspects for the application's user interface (UI)
