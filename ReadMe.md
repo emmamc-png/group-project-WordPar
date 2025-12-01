@@ -84,7 +84,7 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 * **Version Control**
     * **Git**: Utilized to have different branches for each user story for collaboration purposes and tracking of changes
 * **Project Management**
-    * **Github Projects**: Utilized to track user stories throughout the project with the ability to assign it to each person and keep track how long it took for said person to complete their task. Allowed for us to follow the agile methodology
+    * **GitHub Projects**: Utilized to track user stories throughout the project with the ability to assign it to each person and keep track how long it took for said person to complete their task. Allowed for us to follow the agile methodology
 
 ----
 
@@ -97,7 +97,7 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 
 * **If you choose not to use Docker, you must download these:**
     * **PostgresSQL**: Can be downloaded from [here](https://www.postgresql.org/download/)
-    * **NodeJS**: Can be downloaded from [here](https://nodejs.org/en)
+    * **Node.js**: Can be downloaded from [here](https://nodejs.org/en)
 
 ----
 
@@ -116,6 +116,7 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 * **If using Docker:**
     * Open a terminal and redirect to /ProjectSourceCode/src
     * In the terminal type "docker compose up" which will automatically run the tests and everything else necessary
+    * To terminate the process, type "docker compose down" in the terminal or "docker compose down -v" if you would like to remove volumes too
 
 * **If NOT using Docker:**
     * Open a terminal and redirect to /ProjectSourceCode/src where you need to run: npm install
@@ -124,11 +125,11 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 ----
 
 ## How to run the tests:
-* **If using Docker:**
+* **If using Docker (Tests ONLY):**
     * Open a terminal and redirect to /ProjectSourceCode/src
     * In the terminal type: docker compose run --rm web npm run testOnly
 
-* **If NOT using Docker:**
+* **If NOT using Docker (Tests ONLY):**
     * Open a terminal and redirect to /ProjectSourceCode/src and if not done previously, run the command: npm install
     * Then, in the terminal use the command: npm testOnly
 
