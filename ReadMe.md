@@ -8,7 +8,7 @@
 
 ## Description:
 
-Within the game Word Par, it offers users the ability to play a word guessing game that provides a random word according to the theme through an OpenAI API. Each game starts with a specific amount of points available depending on the word length (50 points per letter). Then, following each user guess, using the OpenAI API, we will decide how close each guess is to the actual word sementically. If the user guess is cold they lose 20 points, 10 points for in the middle, and 5 points for warm. When the user accesses the home page after logging in to their account, they will be greated with a leaderboard that shows the top 10 players in addition to their current ranking (or unranked in they haven't played yet) and points. The leaderboard is updated everytime a user refreshes the page. When a user selects play, it opens a menu to select a category before being redirected to the game and have a word selected for them to guess which will show them the amount of characters the word is. As they go through the game, the background will change colors as well as providing them a list of their previous guesses and the percentage of "closeness" they are to the actual word. Every player has a maximum of 10 guesses before the game ends. Once a game is completed the points are stored in a database and utilized to find their ranking.
+Within the game Word Par, it offers users the ability to play a word guessing game that provides a random word according to the theme through an OpenAI API. Each game starts with a specific amount of points available depending on the word length (50 points per letter). Then, following each user guess, using the OpenAI API, we will decide how close each guess is to the actual word semantically. If the user guess is cold they lose 20 points, 10 points for in the middle, and 5 points for warm. When the user accesses the home page after logging in to their account, they will be greeted with a leaderboard that shows the top 10 players in addition to their current ranking (or unranked if they haven't played yet) and points. The leaderboard is updated every time a user refreshes the page. When a user selects play, it opens a menu to select a category before being redirected to the game and have a word selected for them to guess which will show them the amount of characters the word is. As they go through the game, the background will change colors as well as providing them a list of their previous guesses and the percentage of "closeness" they are to the actual word. Every player has a maximum of 10 guesses before the game ends. Once a game is completed the points are stored in a database and utilized to find their ranking.
 
 ----
 
@@ -20,6 +20,47 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
 * Karthik Chandrasekhar
 
 ----
+## Directory Structure:
+├─<ProjectRepository>/
+│  ├─ TeamMeetingLogs
+│  ├─ MilestoneSubmissions
+|  ├─ ProjectSourceCode
+|  |    ├─ docker-compose.yaml
+|  |    ├─ .gitignore
+|  |    ├─ package.json
+|  |    ├─ src
+|  |        ├─ views
+|  |            ├─ pages
+|  |                ├─ home.hbs
+|  |                ├─ login.hbs
+|  |                ├─ registration.hbs
+|  |                |- game.hbs
+|  |            ├─ partials
+|  |                ├─ header.hbs
+|  |                ├─ footer.hbs
+|  |                ├─ message.hbs
+|  |                ├─ title.hbs
+|  |            ├─ layouts
+|  |                ├─ main.hbs
+|  |        ├─ resources
+|  |            ├─ css
+|  |                ├─ style.css
+|  |            ├─ js
+|  |                ├─ script.js
+|  |            ├─ img
+|  |                ├─ golfball.jpg
+|  |                ├─ logoImage.png
+|  |                ├─ userProfile.png
+|  |    ├─ index.js
+|  |    ├─ aiService.js
+|  |    ├─ init_data
+|  |        |─ create.sql
+|  |        |─ insert.sql
+|  |    ├─ test
+|  |        ├─ server.spec.js
+│  ├─ README.md
+
+----
 
 ## Technology Stack:
 * **Frontend:**
@@ -28,8 +69,8 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
     * **HBS** (Handlebars): Adds dynamic elements to the different webpages to allow for changing information (ex. leaderboard)
     * **Axios**: Tool used to allow for the frontend to fetch data from the backend or for the frontend to send data to the backend
 * **Backend:**
-    * **NodeJS**: Javascript runtime environment that is the base for Express. NodeJS allows for us to make dynamic HTML pages, collect/process form data, process HTTP requests, and much more
-    * **Express**: Web framework for NodeJS which simplifies routing, middleware handling, and much more. Also supports various templating engines (such as HBS)
+    * **Node.js**: Javascript runtime environment that is the base for Express. NodeJS allows for us to make dynamic HTML pages, collect/process form data, process HTTP requests, and much more
+    * **Express.js**: Web framework for NodeJS which simplifies routing, middleware handling, and much more. Also supports various templating engines (such as HBS)
 * **Database:**
     * **PostgresSQL**: Allows us to initalize, store, and interact with data for the application. A relational database mangement system (RDBMS) which uses SQL (structured query language) to interact with the database
 * **Testing:**
@@ -37,6 +78,12 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
     * **Chai**: A library that offers logic for verifying tests through assertions
 * **Infrastructure/DevOps:**
     * **Docker**: Infastructure tool utilized as a substitute for a virtual machine which uses containerization which packages all aspects of an application into the container to prevent from any inconsistencies based on the developer's local machine
+* **API Integrations**
+    * **OpenAI**: Utilized to provide a word depending on the category and analyze semantically how close the guess is to the actual word
+* **Version Control**
+    * **Git**: Utilized to have different branches for each user story for collaboration purposes and tracking of changes
+* **Project Management**
+    * **Github Projects**: Utilized to track user stories throughout the project with the ability to assign it to each person and keep track how long it took for said person to complete their task. Allowed for us to follow the agile methodology
 
 ----
 
