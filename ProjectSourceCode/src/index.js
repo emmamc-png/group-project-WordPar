@@ -402,44 +402,101 @@ app.post('/exitGame', async(req, res) => {
   }
 });
 
-app.post("/api/submitGuess", async (req, res) => {
-  let { userInput, gameID } = req.body;
-  const user = req.session.user;
+//submit guess x scoring
 
+app.post("/api/submitGuess", async (req, res) => {
+  let { userInput, gameID, targetWord } = req.body;
+
+  const user = req.session.user;
   if (!user) return res.status(401).json({ error: "Not logged in" });
-  if (!userInput) return res.status(400).json({ error: "No guess" });
+
+  // Correct userID property (your DB column is userID)
+  const userID = user.userid || user.userID;
+  if (!userID) return res.status(500).json({ error: "Session userID missing" });
+
+  if (!userInput) return res.status(400).json({ error: "No guess provided" });
+  if (!targetWord) return res.status(400).json({ error: "No target word provided" });
+
+  userInput = userInput.trim().toLowerCase();
+  targetWord = targetWord.trim().toLowerCase();
 
   try {
-    if (!gameID) {
-      const game = await db.one(
-        "INSERT INTO game (score, wordid) VALUES (0, NULL) RETURNING gameid"
+    // 1. Ensure targetWord exists in words table
+    let targetRow = await db.oneOrNone("SELECT wordid FROM words WHERE word = $1", [targetWord]);
+
+    if (!targetRow) {
+      targetRow = await db.one(
+        "INSERT INTO words (word, length) VALUES ($1, $2) RETURNING wordid",
+        [targetWord, targetWord.length]
       );
-      gameID = game.gameid;
     }
 
-    let word = await db.oneOrNone("SELECT wordid FROM words WHERE word = $1", [
-      userInput.toLowerCase(),
+    // 2. Create new game if needed
+    if (!gameID) {
+      const newGame = await db.one(
+        `INSERT INTO game (score, wordid)
+         VALUES (100, $1)
+         RETURNING gameid, score`,
+        [targetRow.wordid]
+      );
+
+      gameID = newGame.gameid;
+
+      // FIX: always use valid userID
+      await db.none(
+        "INSERT INTO userGame (game_id, user_id) VALUES ($1, $2)",
+        [gameID, userID]
+      );
+    }
+
+    // 3. Similarity scoring
+    const sim = await calculateSimilarity(userInput, targetWord);
+    const similarityScore = sim.similarity;
+
+    // Golf scoring mechanic
+    const penalty = Math.round((1 - similarityScore) * 20); // smaller penalty for closer guesses
+
+    const updated = await db.one(
+      `UPDATE game
+       SET score = score - $1
+       WHERE gameid = $2
+       RETURNING score`,
+      [penalty, gameID]
+    );
+
+    // 4. Insert guessed word into words table if necessary
+    let guessRow = await db.oneOrNone("SELECT wordid FROM words WHERE word = $1", [
+      userInput,
     ]);
 
-    if (!word) {
-      word = await db.one(
+    if (!guessRow) {
+      guessRow = await db.one(
         "INSERT INTO words (word, length) VALUES ($1, $2) RETURNING wordid",
-        [userInput.toLowerCase(), userInput.length]
+        [userInput, userInput.length]
       );
     }
 
+    // 5. Insert guess record
     await db.none(
       `INSERT INTO guesses (gameid, userid, wordid, userinput)
        VALUES ($1, $2, $3, $4)`,
-      [gameID, user.userid, word.wordid, userInput]
+      [gameID, userID, guessRow.wordid, userInput]
     );
 
-    res.json({ success: true, gameID });
+    return res.json({
+      success: true,
+      gameID,
+      similarity: similarityScore,
+      penalty,
+      totalScore: updated.score,
+    });
+
   } catch (err) {
-    console.error("Error saving guess:", err);
-    res.status(500).json({ error: "Database error" });
+    console.error("❌ Golf scoring error:", err);
+    return res.status(500).json({ error: "Server error", details: err.message });
   }
 });
+
 
 app.post("/logout", (req, res) => {
   try {
