@@ -1,25 +1,28 @@
 -- user insert-->
-INSERT INTO users (username, email, password) VALUES
-('joel', 'joel@example.com', '$2a$10$795CVgOM/rGoAdlfiiTduexLjvxDZEbudl9oBZYrdkJ0nICvQnhnO'), --password:pass123-->
-('alice', 'alice@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'), --all other passwords are: pass-->
-('bob', 'bob@yahoo.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('carol', 'carol@outlook.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'), 
-('dave', 'dave@icloud.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('eva', 'eva@protonmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('frank', 'frank@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('grace', 'grace@outlook.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('hank', 'hank@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('ivy', 'ivy@school.edu', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('jack', 'jack@work.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('karen', 'karen@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('leo', 'leo@yahoo.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('mia', 'mia@icloud.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('nick', 'nick@college.edu', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('olivia', 'olivia@protonmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('paul', 'paul@gmail.com', '$$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('quinn', 'quinn@outlook.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('rachel', 'rachel@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
-('sam', 'sam@company.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS');
+INSERT INTO users (username,ncsUsername, email, password) VALUES
+('joel', 'joel','joel@example.com', '$2a$10$795CVgOM/rGoAdlfiiTduexLjvxDZEbudl9oBZYrdkJ0nICvQnhnO'), --password:pass123-->
+('alice', 'alice','alice@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'), --all other passwords are: pass-->
+('bob', 'bob','bob@yahoo.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('carol', 'carol', 'carol@outlook.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'), 
+('dave', 'dave', 'dave@icloud.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('eva', 'eva', 'eva@protonmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('frank', 'frank', 'frank@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('grace', 'grace', 'grace@outlook.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('hank', 'hank', 'hank@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('ivy', 'ivy', 'ivy@school.edu', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('jack', 'jack', 'jack@work.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('karen', 'karen', 'karen@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('leo', 'leo', 'leo@yahoo.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('mia', 'mia', 'mia@icloud.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('nick', 'nick', 'nick@college.edu', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('olivia', 'olivia', 'olivia@protonmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('paul', 'paul', 'paul@gmail.com', '$$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('quinn', 'quinn', 'quinn@outlook.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('rachel', 'rachel', 'rachel@gmail.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS'),
+('sam', 'sam', 'sam@company.com', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS');
+
+INSERT INTO users (username, ncsUsername, email, userImage, password) VALUES
+('a', 'a', 'a@gmail.com', 'https://marketplace.canva.com/8-1Kc/MAGoQJ8-1Kc/1/tl/canva-ginger-cat-with-paws-raised-in-air-MAGoQJ8-1Kc.jpg', '$2a$10$hNH/BF2RrZ4gltk98Pmt2.omYMapoVJUp2g8ZrzMOfj.EzqgZPYnS');
 
 -- word insert-->
 INSERT INTO words (word, length) VALUES
