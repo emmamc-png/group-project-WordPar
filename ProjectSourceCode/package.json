@@ -24,6 +24,7 @@
     "prestart": "npm install",
     "start": "nodemon -L src/index.js",
     "test": "mocha",
+    "testOnly": "npm run prestart && npm run test",
     "testandrun": "npm run prestart && npm run test && npm start"
   }
 }
