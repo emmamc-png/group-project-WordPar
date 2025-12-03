@@ -73,7 +73,7 @@ Within the game Word Par, it offers users the ability to play a word guessing ga
     * **Node.js**: Javascript runtime environment that is the base for Express. NodeJS allows for us to make dynamic HTML pages, collect/process form data, process HTTP requests, and much more
     * **Express.js**: Web framework for NodeJS which simplifies routing, middleware handling, and much more. Also supports various templating engines (such as HBS)
 * **Database:**
-    * **PostgresSQL**: Allows us to initalize, store, and interact with data for the application. A relational database mangement system (RDBMS) which uses SQL (structured query language) to interact with the database
+    * **PostgreSQL**: Allows us to initalize, store, and interact with data for the application. A relational database mangement system (RDBMS) which uses SQL (structured query language) to interact with the database
 * **Testing:**
     * **Mocha**: A test framework and test runner that is utilized as a structure and environment for application testing
     * **Chai**: A library that offers logic for verifying tests through assertions

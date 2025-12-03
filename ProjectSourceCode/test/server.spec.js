@@ -318,7 +318,7 @@ describe('Testing submitGuess API', () => {
 
             agent
               .post('/api/submitGuess')
-              .send({userInput: word})
+              .send({userInput: word, targetWord: word})
               .end((err2, res2) => {
                 expect(res2).to.have.status(200);
                 expect(res2.body).to.have.property('success', true);
@@ -328,12 +328,12 @@ describe('Testing submitGuess API', () => {
             });
     });
   // API: /api/submitGuess
-  // Input: a randomly generated user without a word
+  // Input: a randomly generated user without a guess word or a target word
   // Expect: res.status == 400
   // Result: This test case should pass and return a status 400.
   // Explanation: The testcase will call the /api/submitGuess API with the following invalid inputs
   // and expects the API to return a status of 400.
-  it('Negative : /api/submitGuess, attempts to submit without a word', done => {
+  it('Negative : /api/submitGuess, attempts to submit without any words', done => {
     agent
       .post('/login')
           .send({
@@ -350,11 +350,12 @@ describe('Testing submitGuess API', () => {
             })
             .end((err2, res2) => {
               expect(res2).to.have.status(400);
-              expect(res2.body).to.have.property('error', 'No guess');
+              expect(res2.body).to.have.property('error', 'No guess provided');
               done();
             });
           });
   });
 });
+
 
 // ********************************************************************************

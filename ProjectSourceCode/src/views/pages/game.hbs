@@ -3,16 +3,16 @@
         <div class="row game-info">
             <div id="points" class="col-1">
                 <div id="point">
-                    Points: 
+                    Points:
                 </div>
-                 <span id="points-value">100</span>
+                <span id="points-value">100</span>
             </div>
-            <div id="category" class="col-6"> 
+            <div id="category" class="col-6">
                 <span id="category-value">...</span>
             </div>
             <div id="user-score" class="col-1">
                 <div id="strokes">
-                    Strokes: 
+                    Strokes:
                 </div>
                 <span id="strokes-value">0</span>
             </div>
@@ -87,12 +87,12 @@
             Sorry, your browser does not support canvas.
         </canvas>
         <script>
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(0, 445);
-        ctx.quadraticCurveTo(190, 15, 30, 0);
-        ctx.stroke();
+            const canvas = document.getElementById("myCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(0, 445);
+            ctx.quadraticCurveTo(190, 15, 30, 0);
+            ctx.stroke();
         </script>
         <h1 id="golf-logo" class="top-center">WORD PAR</h1>
     </div>
@@ -130,12 +130,12 @@
 
 
 <script>
-// ========================================
-// Get Category from URL API Parameter
-// ========================================
-const urlParams = new URLSearchParams(window.location.search);
-let category = urlParams.get('category') || 'music';
-document.getElementById('category-value').textContent = category.toUpperCase();
+    // ========================================
+    // Get Category from URL API Parameter
+    // ========================================
+    const urlParams = new URLSearchParams(window.location.search);
+    let category = urlParams.get('category') || 'music';
+    document.getElementById('category-value').textContent = category.toUpperCase();
 
 // ========================================
 // Game Variables
@@ -162,8 +162,9 @@ async function startNewGame() {
         secretWord = data.word;
         console.log('🎯 Secret word:', secretWord); // DEBUG - Remove in production
         
+        const currPoints=25*secretWord.length;
         // alert(`Game started! Category: ${category.toUpperCase()}\nGuess the secret word!`);
-        
+        document.getElementById("points-value").textContent=currPoints;
         const maxLengthDiv = document.getElementById("max-length");
         let htmlContent3 = "<div id='true-length'>";
             htmlContent3 += "Length: ";
@@ -293,7 +294,6 @@ async function buttonPressed(event) {
                     if (guessDiv) guessDiv.remove();
                     if (clearbtn) clearbtn.remove();
                 //    if (resultsDiv) resultsDiv.remove();
-                    attempts = 0;
                     document.getElementById('strokes-value').textContent = attempts;
                     room = true;
                     clear = false;
@@ -304,8 +304,8 @@ async function buttonPressed(event) {
     }
 }
 
-// Call the button function every time a key is pressed
-buttonContainer.addEventListener('click', buttonPressed);
+    // Call the button function every time a key is pressed
+    buttonContainer.addEventListener('click', buttonPressed);
 
 // Keyboard support
 document.addEventListener("keydown", function(event) { 
@@ -360,59 +360,66 @@ document.addEventListener("keydown", function(event) {
 });
 
 
-// ========================================
-// Exit Game
-// ========================================
-async function exitGame() {
-    try {
-        const exitGameResponse = await fetch("/exitGame", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                gameID: currentGameID || null
+    // ========================================
+    // Exit Game
+    // ========================================
+    async function exitGame() {
+        try {
+            const exitGameResponse = await fetch("/exitGame", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    gameID: currentGameID || null
+                })
             })
-        })
 
-        const exit=await exitGameResponse.json();
-        if (exit.success) {
-            //Redirect back to home if a success
-            window.location.href='/';
-            return;
+            const exit = await exitGameResponse.json();
+            if (exit.success) {
+                //Redirect back to home if a success
+                window.location.href = '/';
+                return;
+            }
+            else {
+                console.log("Error exiting");
+            }
         }
-        else {
-            console.log("Error exiting");
+        catch (err) {
+            console.log("Error exiting: " + err);
         }
-    }
-    catch(err) {
-        console.log("Error exiting: "+err);
-    }
-};
+    };
 
 
-// ========================================
-// Submit Guess with AI 
-// ========================================
-async function submitGuess(userGuess) {
+    // ========================================
+    // Submit Guess with AI 
+    // ========================================
+   async function submitGuess(userGuess) {
     attempts++;
     document.getElementById('strokes-value').textContent = attempts;
-    
+
     try {
-        // Save to database
+        // Save guess + scoring
         const dbResponse = await fetch("/api/submitGuess", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 userInput: userGuess,
-                gameID: currentGameID || null
+                gameID: currentGameID || null,
+                targetWord: secretWord   
             })
         });
 
         const dbData = await dbResponse.json();
+
         if (dbData.success) {
             currentGameID = dbData.gameID;
+
+           
+            if (dbData.totalScore !== undefined) {
+                document.getElementById("points-value").textContent = dbData.totalScore;
+            }
         }
 
-        // Calculate similarity with AI
+      
         const aiResponse = await fetch('/api/similarity', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -421,18 +428,18 @@ async function submitGuess(userGuess) {
                 word2: secretWord.toLowerCase()
             })
         });
-        
+
         const aiData = await aiResponse.json();
         const similarity = aiData.similarity;
         const percentage = Math.round(similarity * 100);
-        
+
         guessHistory.push({
             word: userGuess,
-            similarity: similarity,
-            percentage: percentage,
+            similarity,
+            percentage,
             attempt: attempts
         });
-        
+
         displayFeedback(userGuess, similarity, percentage);
         
         // Check win condition
@@ -458,19 +465,24 @@ async function submitGuess(userGuess) {
             await new Promise(resolve => setTimeout(resolve, 500));
             document.getElementById("resultTitle").innerText = "🎉 YOU WON!";
             document.getElementById("resultMessage").innerText = `Attempts: ${attempts}`
+
+            await updateLeaderboard();
             resultModal.style.display = "flex"; // show modal
         } else if (attempts >= MAX_ATTEMPTS) {
             await new Promise(resolve => setTimeout(resolve, 500));
             document.getElementById("resultTitle").innerText = "😢 Game Over!";
             document.getElementById("resultMessage").innerText = `The word was "${secretWord}".\nBetter luck next time!`;
+
+            await updateLeaderboard();
             resultModal.style.display = "flex"; // show modal
         }
         
     } catch (error) {
-        console.error('Error processing guess:', error);
-        alert('Error checking your guess. Please try again.');
+        console.error("Error processing guess:", error);
+        alert("Error checking your guess. Please try again.");
     }
 }
+
 
 // ========================================
 // Display Feedback (YOUR FEATURE)
@@ -541,6 +553,33 @@ function displayFeedback(guess, similarity, percentage) {
     
     feedbackContainer.insertBefore(feedbackItem, feedbackContainer.firstChild);
    
+}
+//Function to update the leaderboard
+async function updateLeaderboard() {
+    try {
+        const res=await fetch('/API/getLeaderboard');
+        const data=await res.json();
+
+        if(!data.success) {
+            console.log("No data returned");
+            return;
+        }
+
+        const leaderboard=document.querySelector('.results-leaderboard-scroll');
+        leaderboard.innerHTML="";
+
+        data.leaderboard.forEach((entry, e)=> {
+            const div=document.createElement("div");
+            div.classList.add("entry");
+            div.textContent=`${e+1}. ${entry.username} - ${entry.score} pts`;
+            leaderboard.appendChild(div);
+        })
+
+        console.log("Leaderboard update succesful");
+    }
+    catch(err) {
+        console.log("Leaderboard update failed");
+    }
 }
 
 </script>
